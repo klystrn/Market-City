@@ -13,15 +13,16 @@ import {
 import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import type { Company, Layer, Plot, Snapshot } from "@/domain/types";
-import { createPlots, sectors } from "@/domain/city";
+import type { CityDefinition } from "@/domain/cities/types";
 import { cityStreets } from "@/domain/geography";
-import { landmarks } from "@/domain/geography";
 import { civicSites } from "@/domain/civic";
 import type { Season } from "@/domain/seasons";
 import { subsectorFor } from "@/domain/subsectors";
 import { etMinuteOfIso } from "@/domain/intraday";
 import MarketDisasters from "./MarketDisasters";
 import Terrain from "./Terrain";
+import CityTerrain from "./CityTerrain";
+import CityLandmarks from "./CityLandmarks";
 import RoadSigns from "./RoadSigns";
 import SignatureBuildings, { signatureTickers } from "./SignatureBuildings";
 import Buildings from "./Buildings";
@@ -35,6 +36,7 @@ import { pct, weightedChange } from "@/domain/analytics";
 
 import type { MapFeatures } from "@/domain/map-features";
 type Props = {
+  city: CityDefinition;
   mapFeatures: MapFeatures;
   disasterEffects: boolean;
   season: Season;
@@ -153,12 +155,14 @@ function Traffic({
   ) : null;
 }
 function Camera({
+  city,
   focus,
   focusedSector,
   plots,
   reduced,
   resetKey,
 }: {
+  city: CityDefinition;
   focus: string | null;
   focusedSector: string | null;
   plots: Plot[];
@@ -169,7 +173,11 @@ function Camera({
   const { invalidate, size } = useThree();
   const overviewZoom = Math.max(
     1.1,
-    Math.min(4.2, size.width / 330, size.height / 245),
+    Math.min(
+      city.camera.overviewMax,
+      size.width / city.camera.overviewDivisor[0],
+      size.height / city.camera.overviewDivisor[1],
+    ),
   );
   const desired = useRef<{
     position: THREE.Vector3;
@@ -224,14 +232,14 @@ function Camera({
   }, [invalidate]);
   useEffect(() => {
     const plot = plots.find((p) => p.ticker === focus),
-      district = sectors.find((s) => s.id === focusedSector);
+      district = city.districts.find((s) => s.id === focusedSector);
     const target = plot
       ? new THREE.Vector3(plot.x, plot.height * 0.45, plot.z)
       : district
         ? new THREE.Vector3(district.x, 0, district.z)
-        : new THREE.Vector3(-12, 0, -12);
+        : new THREE.Vector3(...city.camera.target);
     desired.current = {
-      position: target.clone().add(new THREE.Vector3(270, 285, 330)),
+      position: target.clone().add(new THREE.Vector3(...city.camera.offset)),
       target,
       zoom: plot
         ? 15
@@ -240,7 +248,7 @@ function Camera({
           : overviewZoom,
     };
     invalidate();
-  }, [focus, focusedSector, plots, resetKey, invalidate, overviewZoom]);
+  }, [focus, focusedSector, plots, resetKey, invalidate, overviewZoom, city]);
   useFrame(({ camera }, dt) => {
     if (controls.current && keys.current.size) {
       const held = keys.current;
@@ -339,7 +347,7 @@ function Labels({ plots, ...props }: Props & { plots: Plot[] }) {
   return (
     <>
       {!props.focus &&
-        sectors.map((s) => (
+        props.city.districts.map((s) => (
           <Html
             key={s.id}
             position={[s.x, 1, s.z + s.depth / 2 - 1]}
@@ -353,23 +361,25 @@ function Labels({ plots, ...props }: Props & { plots: Plot[] }) {
             >
               <span>{s.short}</span>
               {props.focusedSector === s.id && (
-                <small>{landmarks.find((l) => l.sector === s.id)?.name}</small>
+                <small>
+                  {props.city.landmarks.find((l) => l.sector === s.id)?.name}
+                </small>
               )}
-              <b
-                className={
-                  weightedChange(
-                    props.snapshot.companies.filter((c) => c.sector === s.id),
-                  ) >= 0
-                    ? "positive"
-                    : "negative"
-                }
-              >
-                {pct(
-                  weightedChange(
-                    props.snapshot.companies.filter((c) => c.sector === s.id),
-                  ),
-                )}
-              </b>
+              {(() => {
+                // A sector can be empty when the city's universe excludes all
+                // of its members, and an empty sector is not a flat one.
+                const members = props.snapshot.companies.filter(
+                  (c) => c.sector === s.id,
+                );
+                if (!members.length)
+                  return <b className="muted">No members</b>;
+                const change = weightedChange(members);
+                return (
+                  <b className={change >= 0 ? "positive" : "negative"}>
+                    {pct(change)}
+                  </b>
+                );
+              })()}
             </button>
           </Html>
         ))}
@@ -477,9 +487,9 @@ function CityScene(props: Props) {
   // Quote updates do not change structural data or reallocate geometry.
 
   const plots = useMemo(
-    () => createPlots(props.snapshot.companies),
+    () => props.city.createPlots(props.snapshot.companies),
     // eslint-disable-next-line react-hooks/exhaustive-deps -- Geometry depends on the structural signature, not quote ticks.
-    [structure],
+    [structure, props.city],
   );
   const night =
     props.snapshot.market.session === "closed" ||
@@ -501,7 +511,12 @@ function CityScene(props: Props) {
     <SceneBoundary onFailure={props.onFailure}>
       <Canvas
         orthographic
-        camera={{ position: [270, 285, 330], zoom: 2, near: 0.1, far: 1800 }}
+        camera={{
+          position: props.city.camera.offset,
+          zoom: 2,
+          near: 0.1,
+          far: 1800,
+        }}
         dpr={dpr}
         frameloop={visible ? "demand" : "never"}
         gl={{
@@ -533,25 +548,44 @@ function CityScene(props: Props) {
           ]}
         />
         <group position={[0, -0.5, 0]}>
-          <Terrain
-            mapFeatures={props.mapFeatures}
-            dark={props.dark}
-            plots={plots}
-            season={props.season}
-            relativeVolume={
-              props.snapshot.companies.reduce(
-                (a, c) => a + c.relativeVolume,
-                0,
-              ) / props.snapshot.companies.length
-            }
-          />
+          {props.city.bespokeTerrain ? (
+            <Terrain
+              mapFeatures={props.mapFeatures}
+              dark={props.dark}
+              plots={plots}
+              season={props.season}
+              relativeVolume={
+                props.snapshot.companies.reduce(
+                  (a, c) => a + c.relativeVolume,
+                  0,
+                ) / props.snapshot.companies.length
+              }
+            />
+          ) : (
+            <>
+              <CityTerrain
+                city={props.city}
+                plots={plots}
+                dark={props.dark}
+                season={props.season}
+                districtPads={props.mapFeatures.labels}
+              />
+              {props.mapFeatures.civic && (
+                <CityLandmarks
+                  landmarks={props.city.landmarks}
+                  season={props.season}
+                  labels={props.mapFeatures.labels}
+                />
+              )}
+            </>
+          )}
           <MarketDisasters
             snapshot={props.snapshot}
             plots={plots}
             reduced={props.reduced || !visible || !active}
             enabled={props.disasterEffects}
           />
-          {props.mapFeatures.signs && (
+          {props.mapFeatures.signs && props.city.bespokeTerrain && (
             <RoadSigns
               focusedSector={
                 props.focus
@@ -562,7 +596,7 @@ function CityScene(props: Props) {
               }
             />
           )}
-          {sectors.map((s) => (
+          {props.city.districts.map((s) => (
             <mesh
               key={s.id}
               position={[s.x, 1.07, s.z]}
@@ -578,7 +612,10 @@ function CityScene(props: Props) {
           ))}
           {props.mapFeatures.civic &&
             (() => {
-              const museum = civicSites.find((s) => s.id === "museum")!;
+              const museum = props.city.bespokeTerrain
+                ? civicSites.find((s) => s.id === "museum")!
+                : (props.city.landmarks.find((l) => l.kind === "museum") ??
+                  props.city.landmarks[0]);
               return (
                 <mesh
                   position={[museum.x, 1.13, museum.z]}
@@ -598,7 +635,11 @@ function CityScene(props: Props) {
               );
             })()}
           {props.mapFeatures.breadthGardens && (
-            <BreadthGardens companies={props.snapshot.companies} />
+            <BreadthGardens
+              companies={props.snapshot.companies}
+              districts={props.city.districts}
+              landmarks={props.city.landmarks}
+            />
           )}
           <Buildings
             plots={plots}
@@ -663,12 +704,19 @@ function CityScene(props: Props) {
             <EarningsArrivals
               catalysts={props.snapshot.catalysts}
               now={Date.parse(props.snapshot.generatedAt)}
+              station={
+                props.city.bespokeTerrain
+                  ? civicSites.find((s) => s.id === "station")!
+                  : (props.city.landmarks.find((l) => l.kind === "terminal") ??
+                    props.city.districts[0])
+              }
               onSelect={props.onSelect}
             />
           )}
           {props.mapFeatures.labels && <Labels {...props} plots={plots} />}
         </group>
         <Camera
+          city={props.city}
           focus={props.focus}
           focusedSector={props.focusedSector}
           plots={plots}

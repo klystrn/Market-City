@@ -2738,6 +2738,33 @@ These layouts are **stylised interpretations at an illustrative scale**.
   claim about property ownership, tenancy or headquarters location
 - Zone/borough placement encodes market capitalisation, not a company's real address
 
+## 75.7 Implementation status — shipped
+
+All three cities are built and switchable. `src/domain/cities/` holds one module per
+city behind a shared `CityDefinition`: market-cap tiers, districts, landmarks, land and
+water polygons, roads, a `createPlots` function and an opening camera. A shared terrain
+and landmark renderer draws any data-described city, while Tokyo keeps its bespoke
+terrain, seasons and Fuji through a `bespokeTerrain` flag — nothing about the original
+city changed. Buildings, signature architecture, traffic, labels and every analytical
+overlay are shared.
+
+The header globe control switches cities and the choice persists locally. A city renders
+only the companies in its universe, and the headline index move is recomputed over that
+universe so the pulse, breadth, search, lists and catalysts agree with the skyline; a
+district with no members in the active universe says "No members" rather than reporting
++0.00%. Market capitalisation is encoded as built volume through `domain/massing.ts`,
+and the company card carries the subsector next to the city's own band (Borough ·
+Manhattan, Zone · Zone 3, Town · Technology).
+
+New York opens over the Hudson looking east-south-east down the built length of
+Manhattan, which places Queens across the East River and Brooklyn beyond the bridges in
+the background, as specified.
+
+`tests/cities.test.ts` holds the invariants the layouts must not drift from: complete
+placement, no overlaps, session independence, the New York borough ranking really
+following the seeded sector market-cap order, every lot inside its own borough polygon,
+and London's largest-first zone ordering and single-wedge sectors.
+
 ---
 
 # 76. Idea Backlog

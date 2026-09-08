@@ -1,27 +1,7 @@
 import type { Company, Plot } from "./types";
 import { sectors, cityStreets } from "./geography";
 import { subsectors } from "./subsectors";
-// Curated per company so its signature accents (SignatureBuildings.tsx) land
-// on a flat, centered front face — a taper or drum silhouette would leave a
-// wordmark plaque floating in front of a curved wall.
-const signatureForms: Record<string, number> = {
-  AAPL: 6,
-  MSFT: 7,
-  AMZN: 9,
-  GOOGL: 10,
-  META: 7,
-  NVDA: 8,
-  TSLA: 11,
-  NFLX: 2,
-  JPM: 8,
-  LLY: 0,
-  CAT: 5,
-  WMT: 1,
-  XOM: 2,
-  NEE: 11,
-  LIN: 10,
-  PLD: 1,
-};
+import { signatureForms } from "./forms";
 export { sectors } from "./geography";
 export function createPlots(companies: Company[]): Plot[] {
   const streets = cityStreets();

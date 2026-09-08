@@ -80,6 +80,8 @@ export interface Plot {
   depth: number;
   height: number;
   variant: number;
+  /** London zone or New York borough this lot belongs to, when the city tiers. */
+  tier?: string;
 }
 export type Intent =
   | { type: "reset" }

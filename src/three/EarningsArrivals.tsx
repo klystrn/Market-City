@@ -1,18 +1,19 @@
 import { Html } from "@react-three/drei";
-import { civicSites } from "@/domain/civic";
 import type { Catalyst } from "@/domain/types";
 // A departures-board style readout at the Central Exchange Station, listing
 // the soonest upcoming earnings dates like train arrivals.
 export default function EarningsArrivals({
   catalysts,
   now,
+  station,
   onSelect,
 }: {
   catalysts: Catalyst[];
   now: number;
+  /** The city's transit landmark, where the board hangs. */
+  station: { x: number; z: number };
   onSelect: (ticker: string) => void;
 }) {
-  const station = civicSites.find((s) => s.id === "station")!;
   const upcoming = catalysts
     .filter((c) => c.type === "EARNINGS" && Date.parse(c.date) >= now)
     .sort((a, b) => Date.parse(a.date) - Date.parse(b.date))

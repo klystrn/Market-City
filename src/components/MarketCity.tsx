@@ -30,6 +30,7 @@ import {
   pct,
   themeFor,
   weather,
+  weightedChange,
 } from "@/domain/analytics";
 import { sectors } from "@/domain/city";
 
@@ -48,6 +49,10 @@ import { useCameraBookmarks } from "@/hooks/useCameraBookmarks";
 import type { CameraBookmark } from "@/domain/bookmarks";
 import { decodeScenario } from "@/domain/scenarios";
 import type { Menu } from "./control-types";
+import { companiesForCity, defaultCityId, getCity } from "@/domain/cities";
+import { universeNames } from "@/domain/indexes";
+import type { CityId } from "@/domain/cities/types";
+import { usePersistentValue } from "@/hooks/usePersistentValue";
 const CityScene = dynamic(() => import("@/three/CityScene"), {
   ssr: false,
   loading: () => null,
@@ -75,7 +80,28 @@ export default function MarketCity() {
     () => (tomorrow === null ? today : tomorrowSnapshot(today, tomorrow)),
     [today, tomorrow],
   );
-  const snapshot = dataMode === "snapshot" && cached ? cached : simulated;
+  const [cityId, setCityId] = usePersistentValue(
+    "market-city-city",
+    defaultCityId,
+  );
+  const city = getCity(cityId);
+  const source = dataMode === "snapshot" && cached ? cached : simulated;
+  // A city renders only its own market universe, so the pulse, search, lists
+  // and catalysts all agree with the skyline.
+  const snapshot = useMemo(() => {
+    const companies = companiesForCity(source.companies, city);
+    if (companies.length === source.companies.length) return source;
+    const tickers = new Set(companies.map((c) => c.ticker));
+    return {
+      ...source,
+      companies,
+      // The headline move is recomputed over the narrower universe, so it
+      // describes the same companies as the breadth track beneath it.
+      market: { ...source.market, indexChange: weightedChange(companies) },
+      catalysts: source.catalysts.filter((c) => tickers.has(c.ticker)),
+      news: source.news.filter((n) => n.tickers.some((t) => tickers.has(t))),
+    };
+  }, [source, city]);
   const season =
     seasonMode === "auto"
       ? japanSeason(now || Date.parse(snapshot.generatedAt))
@@ -360,7 +386,20 @@ export default function MarketCity() {
       setLayer("catalysts");
     else setLayer("market");
   }
+  const structuralKey = snapshot.companies
+    .map((c) => `${c.ticker}:${c.marketCap}`)
+    .join("|");
+  const tierByTicker = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const plot of city.createPlots(snapshot.companies))
+      if (plot.tier) map.set(plot.ticker, plot.tier);
+    return map;
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Placement depends on structure, not quote ticks.
+  }, [city, structuralKey]);
   const company = snapshot.companies.find((c) => c.ticker === selected);
+  const tierName = company
+    ? city.tiers.find((t) => t.id === tierByTicker.get(company.ticker))?.name
+    : undefined;
   const b = breadth(snapshot.companies);
   const suggestions = query.trim()
     ? snapshot.companies
@@ -387,6 +426,12 @@ export default function MarketCity() {
         headerMenu={headerMenu}
         reset={reset}
         stale={stale}
+        city={city}
+        setCity={(id: CityId) => {
+          setCityId(id);
+          reset();
+        }}
+        cityCount={snapshot.companies.length}
       />
 
       <GodPanel
@@ -416,6 +461,7 @@ export default function MarketCity() {
       {!listMode && (
         <div className="scene-region" aria-label="Interactive 3D market city">
           <CityScene
+            city={city}
             mapFeatures={mapFeatures}
             disasterEffects={
               dataMode === "demo" && god.effects && mapFeatures.disasters
@@ -443,7 +489,12 @@ export default function MarketCity() {
         </div>
       )}
       {listMode && (
-        <MarketList snapshot={snapshot} matches={matches} onSelect={onSelect} />
+        <MarketList
+          city={city}
+          snapshot={snapshot}
+          matches={matches}
+          onSelect={onSelect}
+        />
       )}
       {!ready && !listMode && (
         <div className="loading-screen" role="status">
@@ -544,6 +595,10 @@ export default function MarketCity() {
             setSelected(null);
             setFocusedSector(null);
           }}
+          cityContext={
+            tierName ? `${city.tierNoun} · ${tierName}` : city.name
+          }
+          indexName={universeNames[city.universe]}
           pinned={watchlist.has(company.ticker)}
           onTogglePin={() => watchlist.toggle(company.ticker)}
           compared={compareSet.includes(company.ticker)}
@@ -562,7 +617,7 @@ export default function MarketCity() {
       {!selected && !listMode && (
         <div className="market-pulse">
           <div className="index-line">
-            <span>S&P 500</span>
+            <span>{universeNames[city.universe]}</span>
             <b
               className={
                 snapshot.market.indexChange >= 0 ? "positive" : "negative"

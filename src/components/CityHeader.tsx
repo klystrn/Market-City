@@ -3,6 +3,8 @@ import type { RefObject } from "react";
 import { ChevronDown, UserRound, ArrowUpRight, X } from "lucide-react";
 import type { Snapshot } from "@/domain/types";
 import type { Menu } from "./control-types";
+import type { CityDefinition, CityId } from "@/domain/cities/types";
+import CityPicker from "./CityPicker";
 export default function CityHeader({
   snapshot,
   dataMode,
@@ -14,6 +16,9 @@ export default function CityHeader({
   headerMenu,
   reset,
   stale,
+  city,
+  setCity,
+  cityCount,
 }: {
   snapshot: Snapshot;
   dataMode: "demo" | "snapshot";
@@ -25,6 +30,9 @@ export default function CityHeader({
   headerMenu: RefObject<HTMLDivElement | null>;
   reset: () => void;
   stale: boolean;
+  city: CityDefinition;
+  setCity: (id: CityId) => void;
+  cityCount: number;
 }) {
   return (
     <header className="topbar">
@@ -40,6 +48,14 @@ export default function CityHeader({
         </span>
       </button>
       <div className="topbar-right" ref={headerMenu}>
+        <CityPicker
+          city={city}
+          setCity={setCity}
+          menu={menu}
+          setMenu={setMenu}
+          count={cityCount}
+        />
+        <span className="header-divider" />
         <button
           className="market-session"
           onClick={() => setMenu(menu === "data" ? null : "data")}

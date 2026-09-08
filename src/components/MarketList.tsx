@@ -2,22 +2,26 @@ import type { Snapshot } from "@/domain/types";
 import { sectors } from "@/domain/city";
 import { subsectors } from '@/domain/subsectors';
 import { pct, weightedChange } from "@/domain/analytics";
+import type { CityDefinition } from "@/domain/cities/types";
 export default function MarketList({
   snapshot,
   matches,
   onSelect,
+  city,
 }: {
   snapshot: Snapshot;
   matches: string[] | null;
   onSelect: (ticker: string) => void;
+  city: CityDefinition;
 }) {
   return (
     <div className="market-list" aria-label="Accessible market overview">
       <div className="list-intro">
         <span className="eyebrow">THE MARKET, AT A GLANCE</span>
-        <h1>Your market towns.</h1>
+        <h1>Your market {city.tierNoun.toLowerCase()}s.</h1>
         <p>
-          Explore companies by sector. All the intelligence, in a lighter view.
+          Explore {city.name}&rsquo;s companies by sector. All the intelligence,
+          in a lighter view.
         </p>
       </div>
       {sectors.map((s) => {

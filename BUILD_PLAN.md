@@ -142,3 +142,39 @@ These are stylised interpretations at an illustrative scale, not georeferenced m
 Landmark shapes are simplified low-poly massing, not architectural reproductions.
 Assigning a real building to a company is an identity cue for exploration; it is not a
 claim about property ownership or occupancy.
+
+### Delivered
+All three cities ship. `src/domain/cities/` holds one module per city — tiers,
+districts, landmarks, land and water polygons, roads, a `createPlots` function and
+an opening camera — behind a shared `CityDefinition`. `src/three/CityTerrain.tsx`
+and `src/three/CityLandmarks.tsx` render any data-described city; Tokyo keeps its
+bespoke terrain, seasons and Fuji through the `bespokeTerrain` flag, so its
+geography module remains the source of truth and nothing about it changed.
+Buildings, signature architecture, traffic, labels and every analytical overlay are
+shared across all three.
+
+- **Universes.** `src/domain/indexes.ts` filters the seeded dataset per city. The
+  headline index move is recomputed over the narrower universe, so the pulse,
+  breadth track, search, lists and catalysts all describe the same companies as
+  the skyline. Districts with no members in the active universe say so rather than
+  reporting a change of +0.00%.
+- **Volume massing.** `src/domain/massing.ts` maps market capitalisation to a
+  footprint and a height on one compressed log scale. Where a dense New York street
+  clips the footprint, the height is raised to preserve volume, capped at 1.7×.
+- **Switching.** The header globe control picks the city; the choice persists in
+  `localStorage` via `usePersistentValue`.
+- **Company card.** Shows the subsector alongside the city's own band — Borough ·
+  Manhattan, Zone · Zone 3, Town · Technology.
+
+### Validation
+`tests/cities.test.ts` asserts, for every city: each universe member is placed
+exactly once, no two lots overlap, and the layout does not depend on the market
+session. For New York it checks that the borough ranking really does follow the
+seeded sector market-cap ordering (so the documented rule cannot drift) and that
+every lot falls inside the borough polygon its neighbourhood belongs to. For London
+it checks that a larger company never sits in a higher zone number than a smaller
+one in the same sector, that each sector stays within its own wedge, and that lots
+land inside the zone they claim — with the companies pinned to a real building
+exempted, since they stand where that building really is. Browser checks cover the
+picker, per-city rendering, persistence across a reload, search-to-zoom, and the
+narrow-viewport header and popover layout.

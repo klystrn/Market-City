@@ -55,6 +55,15 @@ export function parseCommand(input: string, snapshot: Snapshot): Intent {
   );
   if (sector) return { type: "sector", sector: sector.id };
   if (/moving|movers|summary|market today/.test(q)) return { type: "movers" };
+  // Last resort: the same substring match the suggestion list uses, so pressing
+  // Enter on a partial name ("JPMorgan", "Berkshire") lands on the company the
+  // dropdown was already offering instead of reporting no match. It runs after
+  // the structured matches so "energy" still means the sector.
+  const partial = snapshot.companies.find((c) =>
+    `${c.ticker} ${c.name}`.toLowerCase().includes(q),
+  );
+  if (partial)
+    return { type: "company", ticker: partial.ticker, news: q.includes("news") };
   return { type: "unknown", query: input };
 }
 export function resolveIntent(

@@ -1,17 +1,21 @@
 import { useMemo } from "react";
-import { sectors, landmarks } from "@/domain/geography";
 import type { Company } from "@/domain/types";
+import type { CityDistrict, CityLandmark } from "@/domain/cities/types";
 import { sectorBreadthRatio } from "@/domain/analytics";
 // Optional decorative gauge: a small garden beside each sector's gateway
 // landmark, lusher when more of that sector's companies are advancing today.
 export default function BreadthGardens({
   companies,
+  districts,
+  landmarks,
 }: {
   companies: Company[];
+  districts: CityDistrict[];
+  landmarks: CityLandmark[];
 }) {
   const gardens = useMemo(
     () =>
-      sectors
+      districts
         .map((s) => {
           const landmark = landmarks.find((l) => l.sector === s.id);
           if (!landmark) return null;
@@ -26,7 +30,7 @@ export default function BreadthGardens({
           };
         })
         .filter((g): g is NonNullable<typeof g> => g !== null),
-    [companies],
+    [companies, districts, landmarks],
   );
   return (
     <>

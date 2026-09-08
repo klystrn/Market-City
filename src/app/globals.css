@@ -1395,7 +1395,8 @@ select {
     padding: 0 20px;
   }
   .brand {
-    font-size: 21px;
+    font-size: 20px;
+    white-space: nowrap;
   }
   .topbar-right {
     gap: 13px;
@@ -1406,6 +1407,7 @@ select {
   }
   .market-session {
     font-size: 11px;
+    white-space: nowrap;
   }
   .command-wrap {
     top: 80px;
@@ -1415,8 +1417,16 @@ select {
     height: 46px;
   }
   .header-popover {
-    right: 0;
-    width: min(330px, calc(100vw - 40px));
+    /* The command bar drops below the header at this width, so anchor the
+       popovers to the viewport underneath it instead of overlapping it. */
+    position: fixed;
+    top: 138px;
+    right: 20px;
+    left: 20px;
+    width: auto;
+    max-height: calc(100dvh - 250px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
   .market-list {
     inset: 145px 0 115px;
@@ -1567,7 +1577,9 @@ select {
   position: absolute;
   top: 90px;
   right: 24px;
-  z-index: 35;
+  /* Above the other scene overlays but below the header, so the header
+     popovers — the city picker especially — are not clipped by the launcher. */
+  z-index: 28;
 }
 .god-launch span {
   font-size: 10px;
@@ -2228,5 +2240,72 @@ select {
     bottom: 96px;
     width: auto;
     max-height: calc(100dvh - 210px);
+  }
+}
+
+/* City switcher and landmark labels */
+.city-switch {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 10px;
+  border-radius: 100px;
+  font-size: 13px;
+  color: var(--ink);
+}
+.city-switch:hover {
+  background: var(--soft);
+}
+.city-switch > span {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.15;
+}
+.city-switch strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+.city-switch small {
+  font-size: 10px;
+  color: var(--muted);
+}
+.city-popover {
+  width: 340px;
+}
+.city-popover .layer-option {
+  margin-top: 4px;
+}
+.city-popover .fine-print {
+  margin-top: 10px;
+}
+.landmark-label {
+  display: inline-block;
+  padding: 3px 7px;
+  border-radius: 100px;
+  background: color-mix(in srgb, var(--glass) 85%, transparent);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 9px;
+  letter-spacing: 0.3px;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+}
+@media (max-width: 700px) {
+  .city-switch small {
+    display: none;
+  }
+  .city-popover {
+    width: auto;
+  }
+}
+
+/* Below this width the wordmark, the city switch and the session controls no
+   longer fit on one row, so the logo mark carries the brand on its own. Placed
+   last so it wins over the wider breakpoint above. */
+@media (max-width: 460px) {
+  .brand > span:not(.brand-mark) {
+    display: none;
   }
 }

@@ -105,6 +105,8 @@ export default function CompanyPanel({
   onClose,
   onBack,
   now,
+  cityContext,
+  indexName,
   pinned,
   onTogglePin,
   compared,
@@ -118,6 +120,10 @@ export default function CompanyPanel({
   onClose: () => void;
   onBack: () => void;
   now: number;
+  /** Which zone, borough or town this company sits in, in the active city. */
+  cityContext: string;
+  /** Name of the market universe the active city renders. */
+  indexName: string;
   pinned: boolean;
   onTogglePin: () => void;
   compared: boolean;
@@ -189,7 +195,9 @@ export default function CompanyPanel({
               {c.ticker} <span className="dot-divider">·</span> {sector.short}
             </span>
             <span className="company-street">
-              {subsectorFor(c.ticker)?.street}
+              {subsectorFor(c.ticker)?.name}
+              <span className="dot-divider"> · </span>
+              {cityContext}
             </span>
           </div>
         </div>
@@ -381,7 +389,7 @@ export default function CompanyPanel({
                 </b>
               </div>
               <div>
-                <span>S&P 500</span>
+                <span>{indexName}</span>
                 <b>{pct(snapshot.market.indexChange)}</b>
               </div>
               <div>

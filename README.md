@@ -1,6 +1,6 @@
 # Market City
 
-An interactive architectural model of the U.S. stock market. Explore 100 representative companies across 11 sector towns and 29 subsector streets. A Tokyo-inspired city spreads inland from a southeastern bay, with river wards, three sector islands, an elevated rail loop and Mount Fuji in the distance. Search and filter the city, inspect company evidence and catalysts, pin a watchlist, compare companies side by side, and listen to the jazz and lofi radio library.
+An interactive architectural model of the U.S. stock market. Explore 100 representative companies across three cities that arrange the same market three different ways: **New York City** (five boroughs), **London** (nine zones) and **Tokyo** (sector towns and subsector streets). Search and filter the city, inspect company evidence and catalysts, pin a watchlist, compare companies side by side, and listen to the jazz and lofi radio library.
 
 **Status:** Functional demo application with replaceable provider adapters. Demo prices, news, catalysts, index values, and historical charts are explicitly simulated. Live provider operation requires free account credentials; the repository does not contain credentials or real market snapshots.
 
@@ -25,6 +25,22 @@ npm run preview
 
 The production build is a static Next.js export in `out/`. `preview` serves a root-path build. The lockfile pins the installed dependencies.
 
+## Choose your city
+
+The globe control in the header switches between three layouts of the same seeded dataset. The choice is stored in your browser and survives a reload.
+
+| City | Universe | How it is arranged |
+| --- | --- | --- |
+| **New York City** (default) | S&P 500 | Five boroughs rank sectors by market capitalisation — Manhattan, Queens, Staten Island, Brooklyn, the Bronx — with neighbourhoods for sectors and streets for subsectors. Opens over the Hudson looking down Manhattan, with Queens and Brooklyn behind it. |
+| **London** | S&P 500 | Nine concentric zones around a civic core. Each sector is an angular wedge cutting through every zone; the larger the company, the lower its zone number. Subsector appears on the company card instead of in the layout. |
+| **Tokyo** | Nasdaq-100 | The original layout: a sector town for each district and a subsector street inside it, with bay islands, an elevated rail loop and Mount Fuji behind the skyline. |
+
+In the zone and borough cities, market capitalisation is encoded as the **total volume of built space** — land footprint and height together — rather than height alone, so a mega-cap reads as a large site as well as a tall one. Both axes use the same compressed log scale.
+
+Landmarks are simplified low-poly massing of real places: Central Park, One World Trade Center, the Brooklyn Bridge, Grand Central, the Statue of Liberty, Prospect Park, Citi Field and Yankee Stadium in New York; the Shard, Tower Bridge, the London Eye, Buckingham Palace, Canary Wharf, Battersea Power Station and the O2 in London. A handful of companies stand on the building associated with them — JPMorgan at 270 Park Avenue, Alphabet at St John's Terminal, Apple at the Shard. **This is an identity cue for exploration, not a claim about ownership, tenancy or headquarters location**, and the layouts are stylised interpretations at an illustrative scale, not georeferenced maps.
+
+The seeded 100 companies are an S&P 500-style development subset, not the full index. The Nasdaq-100 view renders only the seeded companies that belong to that index (34 of them), compiled from public index descriptions as a static fixture rather than a live constituent feed; NYSE-listed names such as JPM and XOM are absent from it by construction. The headline index move, breadth, search, lists and catalysts are all recomputed for whichever universe is showing.
+
 ## Explore
 
 - Use **WASD or arrow keys** to pan across the ground, drag to orbit, and scroll to zoom. Keyboard movement follows the camera orientation and pauses while typing or interacting with form controls. Click a company building to open its quick drawer.
@@ -34,7 +50,7 @@ The production build is a static Next.js export in `out/`. `preview` serves a ro
 - Try `NVDA`, `News for Apple`, `Show technology`, `software`, `Show semiconductors` (or `semi`), `memory`, `Show Big Tech`, `Magnificent Seven`, `Show stocks down more than 2%`, `Show unusual volume`, `Earnings this week`, `Show strongest sector`, or `What is moving today?`. Picking a company from search moves the camera to its building and opens the company view; `Big Tech` and `Magnificent Seven` are curated cross-sector groups, not index memberships.
 - **Tools** in the bottom bar opens the watchlist, side-by-side comparison, saved camera views, the keyboard district directory and the Museum of Markets.
 - **Demo session** changes the market scenario and session lighting, or enables simulated quote updates.
-- **Layers & view** controls catalysts, traffic, reduced effects, and the accessible list view. Phones start in the list view; WebGL failure falls back to it.
+- **Layers & view** controls catalysts, traffic, reduced effects, and the accessible list view. Phones start in the list view; WebGL failure falls back to it. The list view names the active city and its market-cap band (boroughs, zones or towns).
 - **Season**, inside Layers & view, defaults to the current Japanese calendar in JST: spring March–May, summer June–August, autumn September–November and winter December–February. Manual previews show cherry blossoms, lush summer foliage, autumn colors or bare winter branches and snowier mountains. These are illustrative environments, independent of market-driven weather; they do not claim current weather or blossom conditions.
 - **MC Jazz** attempts to start automatically, with market broadcasts and news enabled. If the browser blocks sound, the first click or keypress starts playback. Pause stops music and speech. Your local jazz/lofi recordings play in sequence with a Next track control. Natural English voices are preferred where available, with a presenter selector and livelier pacing. Unsupported speech falls back to text.
 
@@ -102,14 +118,15 @@ Verified references: [Next.js static exports](https://nextjs.org/docs/app/guides
 ## Structure
 
 ```text
-src/app/          Static application shell and shared visual tokens
-src/components/   DOM controls, company details, charts, radio and list fallback
-src/three/        Instanced geometry, camera, districts, labels and traffic
-src/domain/       Normalized types, layout, encodings and evidence calculations
-src/data/         Deterministic, labeled development fixtures
-src/services/     Commands, replaceable providers, validation, audio and bulletins
-scripts/          Credential-bearing refresh execution (never browser code)
-tests/            Domain, layout and provider contract checks
+src/app/           Static application shell and shared visual tokens
+src/components/    DOM controls, company details, charts, radio and list fallback
+src/three/         Instanced geometry, camera, districts, labels and traffic
+src/domain/        Normalized types, layout, encodings and evidence calculations
+src/domain/cities/ One module per city: tiers, districts, landmarks, roads, plots
+src/data/          Deterministic, labeled development fixtures
+src/services/      Commands, replaceable providers, validation, audio and bulletins
+scripts/           Credential-bearing refresh execution (never browser code)
+tests/             Domain, layout, city and provider contract checks
 ```
 
 Buildings use twelve procedural massing variations, including faceted oval towers, twin towers with skybridges, Art Deco crowns, terraced towers, courtyard campuses and colonnades. Four-sided window grids, cornices, entrances, roof equipment and parapets remain visible when orbiting. Lot sizes and heights use compressed market capitalization.
@@ -120,7 +137,7 @@ Low-rise blocks, trees, mountains and civic landmarks are decorative scenery. En
 
 Geometry is shared and instanced, including roads, crossings, trees and low-poly traffic. Vehicle count is capped at 240. Market updates change color buffers separately from structural matrices. Labels are culled by zoom; hidden tabs pause rendering; traffic stops after 30 seconds of inactivity. Reduced effects removes traffic and motion. Rendering uses a bounded device pixel ratio and no full-city real-time shadows.
 
-Subsectors are a curated exploration taxonomy, not official GICS sub-industry classifications. Streets group related companies, including a dedicated Memory Lane for Micron. The geography interprets Tokyo's mainland, river and bay arrangement at an illustrative scale; it is not a georeferenced map. Fuji uses a triangulated cone with a small crater and elevation-based seasonal snow, on continuous inland terrain.
+Subsectors are a curated exploration taxonomy, not official GICS sub-industry classifications. Streets group related companies, including a dedicated Memory Lane for Micron. Each city interprets its real geography at an illustrative scale and none is a georeferenced map: Tokyo's mainland, river and bay arrangement; London's zones, radial avenues and the Thames; New York's five boroughs, Manhattan grid and river crossings. Fuji uses a triangulated cone with a small crater and elevation-based seasonal snow, on continuous inland terrain.
 
 Environment references: [Tokyo geography](https://www.gotokyo.org/en/plan/tokyo-outline/index.html), [Japan's seasons](https://www.japan.travel/en/gc/when-to-go/), and [Fuji-Hakone-Izu National Park](https://www.japan.travel/national-parks/parks/fuji-hakone-izu/explore/).
 

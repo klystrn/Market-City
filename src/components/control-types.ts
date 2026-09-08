@@ -4,6 +4,7 @@ export type Menu =
   | "info"
   | "data"
   | "tools"
+  | "city"
   | "watchlist"
   | "compare"
   | "camera"
