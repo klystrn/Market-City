@@ -1,5 +1,6 @@
 import { Html } from "@react-three/drei";
 import type { Catalyst } from "@/domain/types";
+import { X } from "lucide-react";
 // A departures-board style readout at the Central Exchange Station, listing
 // the soonest upcoming earnings dates like train arrivals.
 export default function EarningsArrivals({
@@ -7,12 +8,14 @@ export default function EarningsArrivals({
   now,
   station,
   onSelect,
+  onDismiss,
 }: {
   catalysts: Catalyst[];
   now: number;
   /** The city's transit landmark, where the board hangs. */
   station: { x: number; z: number };
   onSelect: (ticker: string) => void;
+  onDismiss: () => void;
 }) {
   const upcoming = catalysts
     .filter((c) => c.type === "EARNINGS" && Date.parse(c.date) >= now)
@@ -26,7 +29,20 @@ export default function EarningsArrivals({
         role="list"
         aria-label="Upcoming earnings arrivals"
       >
-        <span className="earnings-board-title">EARNINGS ARRIVALS</span>
+        <div className="earnings-board-heading">
+          <span className="earnings-board-title">EARNINGS ARRIVALS</span>
+          <button
+            className="earnings-board-close"
+            aria-label="Hide earnings arrivals"
+            title="Hide earnings arrivals"
+            onClick={(event) => {
+              event.stopPropagation();
+              onDismiss();
+            }}
+          >
+            <X size={12} />
+          </button>
+        </div>
         {upcoming.map((c) => {
           const days = Math.max(
             0,

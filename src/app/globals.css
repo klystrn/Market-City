@@ -349,6 +349,10 @@ svg {
   top: 145px;
   width: 165px;
   z-index: 8;
+  padding: 13px 14px 12px;
+  border-radius: 15px;
+  background: color-mix(in srgb, var(--solid) 88%, transparent);
+  box-shadow: 0 8px 28px rgba(38, 54, 34, 0.08);
 }
 .index-line {
   display: flex;
@@ -536,8 +540,14 @@ svg {
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
-  bottom: 2px;
+  bottom: 8px;
   pointer-events: none;
+  min-width: 190px;
+  padding: 7px 14px 8px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--solid) 86%, transparent);
+  box-shadow: 0 5px 18px rgba(38, 54, 34, 0.06);
 }
 .city-legend > span {
   font-size: 8px;
@@ -2188,6 +2198,50 @@ select {
   font-size: 11px;
   min-width: 140px;
   backdrop-filter: blur(6px);
+}
+.earnings-board-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.earnings-board-close {
+  width: 22px;
+  height: 22px;
+  margin: -5px -6px -3px 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: inherit;
+  opacity: 0.72;
+}
+.earnings-board-close:hover,
+.earnings-board-close:focus-visible {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.13);
+}
+.earnings-toggle {
+  position: absolute;
+  top: 207px;
+  left: 43px;
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 650;
+}
+
+@media (max-width: 1350px) and (min-width: 1101px) {
+  .command-wrap {
+    left: 46%;
+    width: 330px;
+  }
+  .topbar-right {
+    gap: 13px;
+  }
 }
 .earnings-board-title {
   font-size: 9px;

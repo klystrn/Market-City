@@ -18,7 +18,7 @@ export class RecordedMusic implements MusicProvider {
   }
   setVolume(value: number) {
     this.volume = Math.max(0, Math.min(1, value));
-    this.audio.volume = this.volume * (this.ducked ? 0.18 : 1);
+    this.audio.volume = this.volume * (this.ducked ? 0.1 : 1);
   }
   duck(value: boolean) {
     this.ducked = value;

@@ -110,7 +110,7 @@ export default function GodPanel({
         }}
       >
         <SlidersHorizontal size={16} />
-        God <span>Simulation</span>
+        God <span>mode</span>
       </button>
       {open && (
         <>

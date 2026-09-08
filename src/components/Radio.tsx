@@ -55,7 +55,9 @@ export default function Radio({ snapshot }: { snapshot: Snapshot }) {
       finish();
       music.current?.duck(true);
       tts.current ??= new BrowserTTS();
-      if (!tts.current.speak(text, finish, voiceURI, Math.min(1, volume * 2))) {
+      if (
+        !tts.current.speak(text, finish, voiceURI, Math.min(1, volume * 2.8))
+      ) {
         finish();
         setError(
           "Speech is unavailable in this browser. The bulletin is shown as text.",

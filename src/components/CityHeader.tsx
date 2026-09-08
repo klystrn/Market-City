@@ -63,7 +63,7 @@ export default function CityHeader({
         >
           <span className="session-dot" />
           {snapshot.market.dataStatus === "demo"
-            ? "God session"
+            ? "Simulated data"
             : snapshot.market.session === "regular"
               ? "Market open"
               : "Market snapshot"}
