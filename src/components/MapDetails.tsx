@@ -10,6 +10,10 @@ import {
   Sparkles,
   Flame,
   Sprout,
+  Flower2,
+  Waypoints,
+  Activity,
+  CircleDashed,
 } from "lucide-react";
 import type { MapFeatures } from "@/domain/map-features";
 const options = [
@@ -23,6 +27,10 @@ const options = [
   ["signs", "Road signs", Signpost],
   ["brands", "Company identities", Sparkles],
   ["disasters", "Market shocks", Flame],
+  ["breadthGardens", "Sector breadth gardens", Flower2],
+  ["connections", "Supply-chain connections", Waypoints],
+  ["trails", "Intraday performance trails", Activity],
+  ["halos", "Volatility halos", CircleDashed],
 ] as const;
 export default function MapDetails({
   features,

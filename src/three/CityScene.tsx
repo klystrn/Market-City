@@ -16,13 +16,21 @@ import type { Company, Layer, Plot, Snapshot } from "@/domain/types";
 import { createPlots, sectors } from "@/domain/city";
 import { cityStreets } from "@/domain/geography";
 import { landmarks } from "@/domain/geography";
+import { civicSites } from "@/domain/civic";
 import type { Season } from "@/domain/seasons";
 import { subsectorFor } from "@/domain/subsectors";
+import { etMinuteOfIso } from "@/domain/intraday";
 import MarketDisasters from "./MarketDisasters";
 import Terrain from "./Terrain";
 import RoadSigns from "./RoadSigns";
 import SignatureBuildings, { signatureTickers } from "./SignatureBuildings";
 import Buildings from "./Buildings";
+import BreadthGardens from "./BreadthGardens";
+import SupplyChainLines from "./SupplyChainLines";
+import EarningsArrivals from "./EarningsArrivals";
+import IntradayTrails from "./IntradayTrails";
+import VolatilityHalos from "./VolatilityHalos";
+import PerformanceMonitor, { type QualityTier } from "./PerformanceMonitor";
 import { pct, weightedChange } from "@/domain/analytics";
 
 import type { MapFeatures } from "@/domain/map-features";
@@ -39,6 +47,7 @@ type Props = {
   layer: Layer;
   reduced: boolean;
   traffic: boolean;
+  adaptiveQuality: boolean;
   resetKey: number;
   onSelect: (ticker: string) => void;
   onSector: (sector: string) => void;
@@ -46,6 +55,7 @@ type Props = {
   onHover: (company: Company | null, x?: number, y?: number) => void;
   onReady: () => void;
   onFailure: () => void;
+  onMuseum: () => void;
 };
 class SceneBoundary extends Component<
   { children: ReactNode; onFailure: () => void },
@@ -438,6 +448,8 @@ function Ready({
 function CityScene(props: Props) {
   const [visible, setVisible] = useState(true);
   const [active, setActive] = useState(true);
+  const [tier, setTier] = useState<QualityTier>(0);
+  const effectiveTier: QualityTier = props.adaptiveQuality ? tier : 0;
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
     const activity = () => {
@@ -472,12 +484,25 @@ function CityScene(props: Props) {
   const night =
     props.snapshot.market.session === "closed" ||
     props.snapshot.market.session === "after-hours";
+  const trailCompanies = useMemo(() => {
+    const byMove = [...props.snapshot.companies].sort(
+      (a, b) => Math.abs(b.changePercent) - Math.abs(a.changePercent),
+    );
+    const selected = props.snapshot.companies.find(
+      (c) => c.ticker === props.selected,
+    );
+    const rest = byMove.filter((c) => c.ticker !== selected?.ticker);
+    return (selected ? [selected, ...rest] : rest).slice(0, 5);
+  }, [props.snapshot.companies, props.selected]);
+  const sessionMinute = etMinuteOfIso(props.snapshot.generatedAt);
+  const dpr: [number, number] =
+    effectiveTier >= 2 ? [1, 1] : effectiveTier === 1 ? [1, 1.25] : [1, 1.6];
   return (
     <SceneBoundary onFailure={props.onFailure}>
       <Canvas
         orthographic
         camera={{ position: [270, 285, 330], zoom: 2, near: 0.1, far: 1800 }}
-        dpr={[1, 1.6]}
+        dpr={dpr}
         frameloop={visible ? "demand" : "never"}
         gl={{
           antialias: true,
@@ -485,6 +510,7 @@ function CityScene(props: Props) {
           powerPreference: "high-performance",
         }}
       >
+        {props.adaptiveQuality && <PerformanceMonitor onTier={setTier} />}
         <ambientLight intensity={props.dark ? 0.95 : 0.85} />
         <hemisphereLight
           args={[
@@ -550,6 +576,30 @@ function CityScene(props: Props) {
               <meshBasicMaterial transparent opacity={0} depthWrite={false} />
             </mesh>
           ))}
+          {props.mapFeatures.civic &&
+            (() => {
+              const museum = civicSites.find((s) => s.id === "museum")!;
+              return (
+                <mesh
+                  position={[museum.x, 1.13, museum.z]}
+                  rotation={[-Math.PI / 2, 0, 0]}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    props.onMuseum();
+                  }}
+                >
+                  <circleGeometry args={[museum.radius, 24]} />
+                  <meshBasicMaterial
+                    transparent
+                    opacity={0}
+                    depthWrite={false}
+                  />
+                </mesh>
+              );
+            })()}
+          {props.mapFeatures.breadthGardens && (
+            <BreadthGardens companies={props.snapshot.companies} />
+          )}
           <Buildings
             plots={plots}
             companies={props.snapshot.companies}
@@ -577,9 +627,45 @@ function CityScene(props: Props) {
             companies={plots.map((p) =>
               props.snapshot.companies.find((c) => c.ticker === p.ticker)!,
             )}
-            enabled={props.traffic && !props.reduced && visible && active}
+            enabled={
+              props.traffic &&
+              !props.reduced &&
+              visible &&
+              active &&
+              effectiveTier < 2
+            }
             dark={props.dark}
           />
+          {props.mapFeatures.connections && (
+            <SupplyChainLines
+              plots={plots}
+              selected={props.selected}
+              dark={props.dark}
+              onSelect={props.onSelect}
+            />
+          )}
+          {props.mapFeatures.trails && effectiveTier < 2 && !props.reduced && (
+            <IntradayTrails
+              plots={plots}
+              companies={trailCompanies}
+              minute={sessionMinute}
+              dark={props.dark}
+            />
+          )}
+          {props.mapFeatures.halos && effectiveTier < 2 && (
+            <VolatilityHalos
+              plots={plots}
+              companies={props.snapshot.companies}
+              dark={props.dark}
+            />
+          )}
+          {props.mapFeatures.transit && (
+            <EarningsArrivals
+              catalysts={props.snapshot.catalysts}
+              now={Date.parse(props.snapshot.generatedAt)}
+              onSelect={props.onSelect}
+            />
+          )}
           {props.mapFeatures.labels && <Labels {...props} plots={plots} />}
         </group>
         <Camera

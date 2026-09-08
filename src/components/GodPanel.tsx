@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { X, SlidersHorizontal } from "lucide-react";
+import { X, SlidersHorizontal, Share2, Save, Trash2, Play } from "lucide-react";
 import { sectors } from "@/domain/city";
 import {
   defaultGod,
@@ -9,6 +9,8 @@ import {
 } from "@/domain/simulation";
 import type { Snapshot, Catalyst } from "@/domain/types";
 import { money, pct } from "@/domain/analytics";
+import { encodeScenario } from "@/domain/scenarios";
+import { useSavedScenarios } from "@/hooks/useSavedScenarios";
 function Slider({
   label,
   value,
@@ -67,6 +69,24 @@ export default function GodPanel({
     [sector, setSector] = useState("technology"),
     [event, setEvent] = useState<Catalyst["type"]>("EARNINGS"),
     [positive, setPositive] = useState(true);
+  const [scenarioName, setScenarioName] = useState("");
+  const [shareStatus, setShareStatus] = useState("");
+  const {
+    scenarios,
+    save: saveScenario,
+    remove: removeScenario,
+  } = useSavedScenarios();
+  async function copyShareLink() {
+    const code = encodeScenario({ god: settings, tomorrow });
+    const url = new URL(window.location.href);
+    url.searchParams.set("scenario", code);
+    try {
+      await navigator.clipboard.writeText(url.toString());
+      setShareStatus("Link copied to clipboard.");
+    } catch {
+      setShareStatus(url.toString());
+    }
+  }
   const company = today.companies.find((c) => c.ticker === ticker)!;
   const projection = projectTomorrow(today).find((c) => c.ticker === ticker)!;
   const change = (s: GodSettings) => {
@@ -289,6 +309,67 @@ export default function GodPanel({
               {settings.events.length} injected events. Announcements feed news
               and beacons; set their price impact above.
             </p>
+            <div className="settings-divider" />
+            <h3>Save & share this scenario</h3>
+            <p className="fine-print">
+              Every setting above — index, sector and company targets, VIX,
+              session time and announcements — travels with the link.
+            </p>
+            <button className="text-button" onClick={copyShareLink}>
+              <Share2 size={15} /> Copy share link
+            </button>
+            {shareStatus && (
+              <p className="fine-print" role="status">
+                {shareStatus}
+              </p>
+            )}
+            <div className="scenario-save-row">
+              <input
+                aria-label="Scenario name"
+                placeholder="Name this scenario…"
+                value={scenarioName}
+                onChange={(e) => setScenarioName(e.target.value)}
+              />
+              <button
+                className="icon-button"
+                aria-label="Save scenario"
+                disabled={!scenarioName.trim()}
+                onClick={() => {
+                  saveScenario(scenarioName.trim(), {
+                    god: settings,
+                    tomorrow,
+                  });
+                  setScenarioName("");
+                }}
+              >
+                <Save size={16} />
+              </button>
+            </div>
+            {scenarios.length > 0 && (
+              <ul className="scenario-list">
+                {scenarios.map((s) => (
+                  <li key={s.id}>
+                    <button
+                      className="scenario-load"
+                      onClick={() => {
+                        change(s.god);
+                        setTomorrow(s.tomorrow);
+                      }}
+                    >
+                      <Play size={13} />
+                      {s.name}
+                    </button>
+                    <button
+                      className="icon-button"
+                      aria-label={`Delete scenario ${s.name}`}
+                      onClick={() => removeScenario(s.id)}
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
             <label className="toggle-row">
               Fire & earthquake effects
               <input

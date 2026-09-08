@@ -19,6 +19,7 @@ import {
   List,
   CloudSun,
   ArrowLeft,
+  Columns3,
 } from "lucide-react";
 import { createDemo } from "@/data/demo";
 import type { Company, Layer, Snapshot } from "@/domain/types";
@@ -30,11 +31,23 @@ import {
   themeFor,
   weather,
 } from "@/domain/analytics";
+import { sectors } from "@/domain/city";
 
 import { parseCommand, resolveIntent } from "@/services/commands";
 import CompanyPanel from "./CompanyPanel";
 import MarketList from "./MarketList";
 import { validateSnapshot } from "@/services/snapshot";
+import Dialog from "./Dialog";
+import WatchlistPanel from "./WatchlistPanel";
+import ComparePanel from "./ComparePanel";
+import CameraBookmarks from "./CameraBookmarks";
+import DistrictDirectory from "./DistrictDirectory";
+import MarketHistoryTimeline from "./MarketHistoryTimeline";
+import { usePersistentSet } from "@/hooks/usePersistentSet";
+import { useCameraBookmarks } from "@/hooks/useCameraBookmarks";
+import type { CameraBookmark } from "@/domain/bookmarks";
+import { decodeScenario } from "@/domain/scenarios";
+import type { Menu } from "./control-types";
 const CityScene = dynamic(() => import("@/three/CityScene"), {
   ssr: false,
   loading: () => null,
@@ -75,16 +88,29 @@ export default function MarketCity() {
   const [query, setQuery] = useState(""),
     [searchOpen, setSearchOpen] = useState(false),
     [layer, setLayer] = useState<Layer>("market"),
-    [menu, setMenu] = useState<"layers" | "profile" | "info" | "data" | null>(
-      null,
-    );
+    [menu, setMenu] = useState<Menu>(null);
   const [dark, setDark] = useState(false),
     [reduced, setReduced] = useState(false),
     [traffic, setTraffic] = useState(true),
+    [adaptiveQuality, setAdaptiveQuality] = useState(true),
     [listMode, setListMode] = useState(false),
     [webglFailed, setWebglFailed] = useState(false),
     [ready, setReady] = useState(false),
     [resetKey, setResetKey] = useState(0);
+  const watchlist = usePersistentSet("market-city-watchlist");
+  const [compareSet, setCompareSet] = useState<string[]>([]);
+  const cameraBookmarks = useCameraBookmarks();
+  const toggleCompare = useCallback(
+    (ticker: string) =>
+      setCompareSet((prev) =>
+        prev.includes(ticker)
+          ? prev.filter((t) => t !== ticker)
+          : prev.length >= 4
+            ? prev
+            : [...prev, ticker],
+      ),
+    [],
+  );
   const [hover, setHover] = useState<{
     company: Company;
     x: number;
@@ -122,6 +148,70 @@ export default function MarketCity() {
     setResultLabel("");
     setQuery("");
     setResetKey((n) => n + 1);
+  }, []);
+  const focusSector = useCallback(
+    (id: string) => {
+      setFocusedSector(id);
+      setSelected(null);
+      setDeep(false);
+      setMatches(
+        snapshot.companies.filter((c) => c.sector === id).map((c) => c.ticker),
+      );
+      setSearchOpen(false);
+      setResultLabel("Sector view");
+      setResetKey((n) => n + 1);
+    },
+    [snapshot.companies],
+  );
+  const focusSubsector = useCallback(
+    (id: string) => {
+      const result = resolveIntent(
+        { type: "subsector", subsector: id },
+        snapshot,
+      );
+      setMatches(result.tickers);
+      setResultLabel(result.label);
+      setFocusedSector(result.sector ?? null);
+      setSelected(null);
+      setDeep(false);
+      setSearchOpen(false);
+      setResetKey((n) => n + 1);
+    },
+    [snapshot],
+  );
+  const goToBookmark = useCallback(
+    (b: CameraBookmark) => {
+      setMenu(null);
+      if (b.ticker) {
+        setSelected(b.ticker);
+        setDeep(b.deep);
+        setFocusedSector(null);
+        setMatches(null);
+        setResultLabel("");
+      } else if (b.sector) {
+        focusSector(b.sector);
+      } else {
+        reset();
+      }
+      setResetKey((n) => n + 1);
+    },
+    [focusSector, reset],
+  );
+  // Hydrate a scenario shared via ?scenario= link, once on mount.
+  useEffect(() => {
+    const code = new URLSearchParams(window.location.search).get("scenario");
+    if (!code) return;
+    const decoded = decodeScenario(code);
+    if (!decoded) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Hydrate a scenario from a shared link, once on mount.
+    setDataMode("demo");
+    setSelected(null);
+    setDeep(false);
+    setGod(decoded.god);
+    setTomorrow(decoded.tomorrow);
+    const url = new URL(window.location.href);
+    url.searchParams.delete("scenario");
+    window.history.replaceState({}, "", url.toString());
   }, []);
   // Initial browser preference hydration; subsequent changes use the media subscription.
 
@@ -224,6 +314,7 @@ export default function MarketCity() {
       )
         setMenu(null);
       if (menu === "layers" && !target.closest(".layers-wrap")) setMenu(null);
+      if (menu === "tools" && !target.closest(".tools-wrap")) setMenu(null);
     };
     document.addEventListener("pointerdown", down, true);
     document.addEventListener("click", dismiss, true);
@@ -337,25 +428,15 @@ export default function MarketCity() {
             layer={layer}
             reduced={reduced}
             traffic={traffic}
+            adaptiveQuality={adaptiveQuality}
             resetKey={resetKey}
             onSelect={onSelect}
-            onSector={(id) => {
-              setFocusedSector(id);
-              setSelected(null);
-              setDeep(false);
-              setMatches(
-                snapshot.companies
-                  .filter((c) => c.sector === id)
-                  .map((c) => c.ticker),
-              );
-              setSearchOpen(false);
-              setResultLabel("Sector view");
-              setResetKey((n) => n + 1);
-            }}
+            onSector={focusSector}
             onExplore={onExplore}
             onHover={onHover}
             onReady={onReady}
             onFailure={onFailure}
+            onMuseum={() => setMenu("history")}
           />
         </div>
       )}
@@ -461,7 +542,20 @@ export default function MarketCity() {
             setSelected(null);
             setFocusedSector(null);
           }}
+          pinned={watchlist.has(company.ticker)}
+          onTogglePin={() => watchlist.toggle(company.ticker)}
+          compared={compareSet.includes(company.ticker)}
+          onToggleCompare={() => toggleCompare(company.ticker)}
+          onSelectTicker={onSelect}
         />
+      )}
+      {compareSet.length > 0 && menu !== "compare" && (
+        <button
+          className="glass compare-pill"
+          onClick={() => setMenu("compare")}
+        >
+          <Columns3 size={15} /> Compare ({compareSet.length})
+        </button>
       )}
       {!selected && !listMode && (
         <div className="market-pulse">
@@ -507,12 +601,69 @@ export default function MarketCity() {
         setReduced={setReduced}
         traffic={traffic}
         setTraffic={setTraffic}
+        adaptiveQuality={adaptiveQuality}
+        setAdaptiveQuality={setAdaptiveQuality}
         listMode={listMode}
         setListMode={setListMode}
         webglFailed={webglFailed}
         setReady={setReady}
         reset={reset}
+        watchlistCount={watchlist.items.length}
+        compareCount={compareSet.length}
+        bookmarkCount={cameraBookmarks.bookmarks.length}
       />
+      {menu === "watchlist" && (
+        <WatchlistPanel
+          tickers={watchlist.items}
+          snapshot={snapshot}
+          onSelect={(t) => {
+            onSelect(t);
+            setMenu(null);
+          }}
+          onRemove={watchlist.remove}
+          onClose={() => setMenu(null)}
+          compare={compareSet}
+          onToggleCompare={toggleCompare}
+        />
+      )}
+      {menu === "compare" && (
+        <ComparePanel
+          tickers={compareSet}
+          snapshot={snapshot}
+          onRemove={(t) => setCompareSet((prev) => prev.filter((x) => x !== t))}
+          onClose={() => setMenu(null)}
+        />
+      )}
+      {menu === "camera" && (
+        <CameraBookmarks
+          bookmarks={cameraBookmarks.bookmarks}
+          onSave={(name) =>
+            cameraBookmarks.save(name, selected, deep, focusedSector)
+          }
+          onGo={goToBookmark}
+          onRemove={cameraBookmarks.remove}
+          onClose={() => setMenu(null)}
+          currentLabel={
+            selected
+              ? deep
+                ? `${selected} · deep dive`
+                : `${selected} · in focus`
+              : focusedSector
+                ? `${sectors.find((s) => s.id === focusedSector)?.short ?? focusedSector} district`
+                : "City overview"
+          }
+        />
+      )}
+      {menu === "directory" && (
+        <DistrictDirectory
+          onSector={focusSector}
+          onSubsector={focusSubsector}
+          onClose={() => setMenu(null)}
+        />
+      )}
+      {menu === "history" && (
+        <MarketHistoryTimeline onClose={() => setMenu(null)} />
+      )}
 
       {tomorrow !== null && dataMode === "demo" && (
         <div className="glass result-banner" role="status">
@@ -549,85 +700,54 @@ export default function MarketCity() {
         </span>
       </div>
       {menu === "info" && (
-        <div className="info-scrim" onClick={() => setMenu(null)}>
-          <section
-            className="glass info-panel"
-            role="dialog"
-            aria-modal="true"
-            aria-label="How to explore Market City"
-            onKeyDown={(e) => {
-              if (e.key !== "Tab") return;
-              const controls = Array.from(
-                e.currentTarget.querySelectorAll<HTMLElement>(
-                  "button, a[href], input, select",
-                ),
-              );
-              const first = controls[0],
-                last = controls[controls.length - 1];
-              if (e.shiftKey && document.activeElement === first) {
-                e.preventDefault();
-                last?.focus();
-              } else if (!e.shiftKey && document.activeElement === last) {
-                e.preventDefault();
-                first?.focus();
-              }
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="panel-heading">
-              <span className="eyebrow">WELCOME TO THE NEIGHBORHOOD</span>
-              <button
-                className="icon-button"
-                aria-label="Close guide"
-                onClick={() => setMenu(null)}
-                autoFocus
-              >
-                <X size={18} />
-              </button>
-            </div>
-            <h2>
-              Read the market.
-              <br />
-              Explore the city.
-            </h2>
-            <div className="guide-row">
-              <Building2 />
-              <p>
-                <strong>Bigger company. Bigger building.</strong>Footprint and
-                height represent compressed market capitalization.
-              </p>
-            </div>
-            <div className="guide-row">
-              <ArrowDown />
-              <p>
-                <strong>A daily change of color.</strong>Green is up, red is
-                down. Stronger color means a larger move.
-              </p>
-            </div>
-            <div className="guide-row">
-              <Compass />
-              <p>
-                <strong>Every town is a sector.</strong>Named streets group
-                subsectors. Drag to orbit, use WASD or arrow keys to pan, and
-                scroll to zoom. Click a sector label or its ground to enter the
-                town. Double-click a company building to explore. Road signs
-                appear only at close zoom. Low-rise blocks and civic landmarks
-                are scenery.
-              </p>
-            </div>
-            <div className="guide-row">
-              <List />
-              <p>
-                <strong>A view for everyone.</strong>Search any company with
-                your keyboard or switch to the lightweight list in Layers &
-                view.
-              </p>
-            </div>
-            <button className="primary-button" onClick={() => setMenu(null)}>
-              Let’s explore <ArrowUpRight size={16} />
-            </button>
-          </section>
-        </div>
+        <Dialog
+          label="How to explore Market City"
+          eyebrow="WELCOME TO THE NEIGHBORHOOD"
+          onClose={() => setMenu(null)}
+        >
+          <h2>
+            Read the market.
+            <br />
+            Explore the city.
+          </h2>
+          <div className="guide-row">
+            <Building2 />
+            <p>
+              <strong>Bigger company. Bigger building.</strong>Footprint and
+              height represent compressed market capitalization.
+            </p>
+          </div>
+          <div className="guide-row">
+            <ArrowDown />
+            <p>
+              <strong>A daily change of color.</strong>Green is up, red is down.
+              Stronger color means a larger move.
+            </p>
+          </div>
+          <div className="guide-row">
+            <Compass />
+            <p>
+              <strong>Every town is a sector.</strong>Named streets group
+              subsectors. Drag to orbit, use WASD or arrow keys to pan, and
+              scroll to zoom. Click a sector label or its ground to enter the
+              town. Double-click a company building to explore. Road signs
+              appear only at close zoom. Low-rise blocks and civic landmarks are
+              scenery.
+            </p>
+          </div>
+          <div className="guide-row">
+            <List />
+            <p>
+              <strong>A view for everyone.</strong>Search any company with your
+              keyboard or switch to the lightweight list in Layers & view. Open
+              Tools for your watchlist, comparisons, saved camera views, the
+              district directory and the Museum of Markets.
+            </p>
+          </div>
+          <button className="primary-button" onClick={() => setMenu(null)}>
+            Let’s explore <ArrowUpRight size={16} />
+          </button>
+        </Dialog>
       )}
     </main>
   );

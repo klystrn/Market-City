@@ -86,6 +86,7 @@ export type Intent =
   | { type: "company"; ticker: string; news?: boolean }
   | { type: "sector"; sector: string }
   | { type: "subsector"; subsector: string }
+  | { type: "group"; group: string }
   | { type: "move"; direction: "up" | "down"; threshold: number }
   | { type: "volume" }
   | { type: "earnings" }

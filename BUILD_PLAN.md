@@ -78,3 +78,19 @@ Civic ideas: keep parks and conservatories seasonal scenery. Station platform li
 - [x] Minimum camera zoom now equals responsive overview zoom, limiting zoom-out to the initial city/Fuji composition.
 
 - Broadcast refinement: shared ticker-to-company-name mapping covers all 100 seeded companies and accepts provider names for new companies. Market and news scripts expand complete ticker tokens; original headlines and city labels stay unchanged. News metadata disambiguates one-letter/common-word symbols.
+
+## UI/UX, market visualization, features and optimization batch (owner-selected proposals)
+- [x] Search resolves curated cross-sector groups ("Big Tech", "Magnificent Seven") alongside tickers, sectors and subsectors.
+- [x] Pinnable company cards double as a local watchlist (localStorage), reachable from the new Tools menu; each pin/unpin toggles from the company panel.
+- [x] Bookmarked camera views: save the current company/sector focus with an auto-generated name and jump back to it later.
+- [x] Keyboard-accessible district directory: every sector and subsector street reachable without the 3D map, with arrow-key roving between entries.
+- [x] Optional sector-breadth gardens beside each sector's landmark, lusher when more of that sector's seeded companies are advancing.
+- [x] Selectable supply-chain connections: curated, illustrative ticker-pair relationships drawn as arcs between buildings when a company is selected; also listed as chips on its company card.
+- [x] Earnings arrivals board at Central Exchange Station, listing the soonest upcoming EARNINGS catalysts like a departures board.
+- [x] Intraday performance trails: a deterministic, seeded bridge-random-walk from the session open to the current price, rendered as a small ribbon beside the selected company and the day's biggest movers. Labeled illustrative — this offline demo has no real intraday feed.
+- [x] Optional volatility halos: a ground ring around each building sized and colored by trailing daily-return volatility.
+- [x] Side-by-side company comparison: add up to four companies from a card or the watchlist, compare price, change, market cap, volume and sector in one table.
+- [x] God scenarios can be saved by name (localStorage) or shared as a link (?scenario=… encodes every God setting).
+- [x] Museum of Markets: a verified, curated timeline of real U.S. financial history (Black Tuesday through the 2023 SVB collapse), reachable by clicking the museum building or the Tools menu — clearly separated from this app's simulated data.
+- [x] Adaptive graphics quality: a frame-time monitor trims device pixel ratio and disables traffic/optional layers under sustained low frame rates, and restores them once performance recovers; toggle in Layers & view (default on).
+- [x] Heavier per-minute intraday-trail computation moved to a background Web Worker (self-contained Blob worker, since this project's static-export build does not compile a `new Worker(new URL(...))` reference) so dragging the God session-minute slider never blocks the main thread; falls back to a synchronous compute if Workers are unavailable.
