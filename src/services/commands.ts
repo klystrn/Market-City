@@ -2,6 +2,7 @@ import type { Intent, Snapshot } from "@/domain/types";
 import { sectors } from "@/domain/city";
 import { subsectors } from "@/domain/subsectors";
 import { weightedChange } from "@/domain/analytics";
+import { companyGroups, findGroup } from "@/domain/groups";
 export function parseCommand(input: string, snapshot: Snapshot): Intent {
   const q = input.toLowerCase().trim().replace(/[?!]/g, "");
   if (/^(reset|clear|city|show all|city view|back)$/.test(q))
@@ -21,6 +22,8 @@ export function parseCommand(input: string, snapshot: Snapshot): Intent {
       ticker: company.ticker,
       news: q.includes("news"),
     };
+  const group = findGroup(q);
+  if (group) return { type: "group", group: group.id };
   const sub = subsectors.find(
     (s) =>
       q.includes(s.name.toLowerCase()) ||
@@ -52,6 +55,15 @@ export function parseCommand(input: string, snapshot: Snapshot): Intent {
   );
   if (sector) return { type: "sector", sector: sector.id };
   if (/moving|movers|summary|market today/.test(q)) return { type: "movers" };
+  // Last resort: the same substring match the suggestion list uses, so pressing
+  // Enter on a partial name ("JPMorgan", "Berkshire") lands on the company the
+  // dropdown was already offering instead of reporting no match. It runs after
+  // the structured matches so "energy" still means the sector.
+  const partial = snapshot.companies.find((c) =>
+    `${c.ticker} ${c.name}`.toLowerCase().includes(q),
+  );
+  if (partial)
+    return { type: "company", ticker: partial.ticker, news: q.includes("news") };
   return { type: "unknown", query: input };
 }
 export function resolveIntent(
@@ -59,6 +71,15 @@ export function resolveIntent(
   snapshot: Snapshot,
 ): { tickers: string[]; label: string; sector?: string } {
   const companies = snapshot.companies;
+  if (intent.type === "group") {
+    const g = companyGroups.find((g) => g.id === intent.group)!;
+    return {
+      tickers: companies
+        .filter((c) => g.tickers.includes(c.ticker))
+        .map((c) => c.ticker),
+      label: `${g.name} · across ${new Set(companies.filter((c) => g.tickers.includes(c.ticker)).map((c) => c.sector)).size} sectors`,
+    };
+  }
   if (intent.type === "subsector") {
     const s = subsectors.find((s) => s.id === intent.subsector)!;
     return {

@@ -78,3 +78,124 @@ Civic ideas: keep parks and conservatories seasonal scenery. Station platform li
 - [x] Minimum camera zoom now equals responsive overview zoom, limiting zoom-out to the initial city/Fuji composition.
 
 - Broadcast refinement: shared ticker-to-company-name mapping covers all 100 seeded companies and accepts provider names for new companies. Market and news scripts expand complete ticker tokens; original headlines and city labels stay unchanged. News metadata disambiguates one-letter/common-word symbols.
+
+## UI/UX, market visualization, features and optimization batch (owner-selected proposals)
+- [x] Search resolves curated cross-sector groups ("Big Tech", "Magnificent Seven") alongside tickers, sectors and subsectors.
+- [x] Pinnable company cards double as a local watchlist (localStorage), reachable from the new Tools menu; each pin/unpin toggles from the company panel.
+- [x] Bookmarked camera views: save the current company/sector focus with an auto-generated name and jump back to it later.
+- [x] Keyboard-accessible district directory: every sector and subsector street reachable without the 3D map, with arrow-key roving between entries.
+- [x] Optional sector-breadth gardens beside each sector's landmark, lusher when more of that sector's seeded companies are advancing.
+- [x] Selectable supply-chain connections: curated, illustrative ticker-pair relationships drawn as arcs between buildings when a company is selected; also listed as chips on its company card.
+- [x] Earnings arrivals board at Central Exchange Station, listing the soonest upcoming EARNINGS catalysts like a departures board.
+- [x] Intraday performance trails: a deterministic, seeded bridge-random-walk from the session open to the current price, rendered as a small ribbon beside the selected company and the day's biggest movers. Labeled illustrative — this offline demo has no real intraday feed.
+- [x] Optional volatility halos: a ground ring around each building sized and colored by trailing daily-return volatility.
+- [x] Side-by-side company comparison: add up to four companies from a card or the watchlist, compare price, change, market cap, volume and sector in one table.
+- [x] God scenarios can be saved by name (localStorage) or shared as a link (?scenario=… encodes every God setting).
+- [x] Museum of Markets: a verified, curated timeline of real U.S. financial history (Black Tuesday through the 2023 SVB collapse), reachable by clicking the museum building or the Tools menu — clearly separated from this app's simulated data.
+- [x] Adaptive graphics quality: a frame-time monitor trims device pixel ratio and disables traffic/optional layers under sustained low frame rates, and restores them once performance recovers; toggle in Layers & view (default on).
+- [x] Heavier per-minute intraday-trail computation moved to a background Web Worker (self-contained Blob worker, since this project's static-export build does not compile a `new Worker(new URL(...))` reference) so dragging the God session-minute slider never blocks the main thread; falls back to a synchronous compute if Workers are unavailable.
+
+## Signature buildings and UI/UX pass
+- [x] Every sector now has at least one hand-modeled signature landmark, not just the technology-adjacent giants: JPM (financials), LLY (healthcare), CAT (industrials), WMT (staples), XOM (energy), NEE (utilities), LIN (materials), PLD (real estate) join the original eight. Each got a curated base architecture variant (`signatureForms` in `domain/city.ts`) so its accents land on a flat, centered facade instead of a taper/drum silhouette. JPM's design nods to 270 Park Avenue's diagonal exoskeleton bracing.
+- [x] UI/UX proportion and margin audit across desktop, laptop, tablet and mobile widths (390–1680px): fixed the "Layers & view" and "Tools" dropdown panels going off-screen on narrow viewports (they were anchored to a flex-positioned launcher button rather than the viewport), removed the dead/conflicting CSS rules that caused it, and hid the station's earnings-arrivals board while a company panel is open so the two never compete for the same screen region.
+- [x] JPM's exoskeleton wraps all four elevations with four corner supercolumns planted at ground level, after owner feedback that a single-face brace did not read as 270 Park Avenue.
+- [x] Picking a company from search (suggestion click or Enter) now moves the camera to its building and opens the company view. Building clicks in the 3D scene keep single-click preview / double-click explore.
+
+## Multiple cities (owner scope update)
+
+The owner asked for the market universe and the city geography to become separate,
+switchable choices rather than one fixed map.
+
+### Correction recorded
+The owner described the existing city as showing the Nasdaq-100. The seeded
+development dataset is actually an **S&P 500-style subset of 100 companies** — it
+contains NYSE-listed names (JPM, XOM, CVX, WMT, PG, KO, JNJ, LLY, UNH, CAT, GE,
+NEE, PLD and others) that are not Nasdaq-100 constituents. Rather than relabel the
+data, each seeded company now carries accurate index-membership flags, and the
+Nasdaq-100 city renders only the seeded companies that are genuinely NDX members.
+Completing a true Nasdaq-100 city needs the remaining NDX constituents added to the
+dataset; that is a data task, not a layout task.
+
+### Agreed geography
+- **Tokyo — Nasdaq-100.** The existing inland-sprawl/bay/Fuji layout is preserved
+  unchanged and becomes the Nasdaq-100 city. Sector towns and subsector streets stay.
+- **London — S&P 500.** Concentric zones with zone 1 at the centre (nine as first
+  specified, later trimmed to the seven that hold companies — see Revisions). Every sector
+  cuts through every zone as a wedge, so a district is a radial slice rather than a
+  town. Lower zone number = larger market capitalisation. No subsector sorting in the
+  layout; subsector is shown on the company card instead. Thames, royal parks,
+  museums and recognisable landmarks (the Shard, Tower Bridge, the London Eye,
+  Buckingham Palace, the Gherkin, Canary Wharf). Sector placement follows the real
+  city where it exists — financials at Canary Wharf and the City.
+- **New York City — S&P 500.** Five boroughs ranked by sector market-cap tier:
+  Manhattan (highest), Queens, Staten Island, Brooklyn, Bronx (lowest). Boroughs carry
+  the tier, neighbourhoods carry the sector, streets carry the subsector. Hudson and
+  East rivers, Central Park, museums and landmarks. Real anchoring where it exists —
+  Wall Street for financials, Hudson Yards for technology. Existing skyscrapers stand
+  in for their real occupants. The opening camera looks across Manhattan with Queens
+  and Brooklyn behind it.
+- **Sizing.** Market capitalisation maps to the **total built volume** a company
+  occupies — a combination of land footprint and height — rather than height alone.
+- **Switching.** The user picks the city; the choice persists locally.
+
+### Not claimed
+These are stylised interpretations at an illustrative scale, not georeferenced maps.
+Landmark shapes are simplified low-poly massing, not architectural reproductions.
+Assigning a real building to a company is an identity cue for exploration; it is not a
+claim about property ownership or occupancy.
+
+### Delivered
+All three cities ship. `src/domain/cities/` holds one module per city — tiers,
+districts, landmarks, land and water polygons, roads, a `createPlots` function and
+an opening camera — behind a shared `CityDefinition`. `src/three/CityTerrain.tsx`
+and `src/three/CityLandmarks.tsx` render any data-described city; Tokyo keeps its
+bespoke terrain, seasons and Fuji through the `bespokeTerrain` flag, so its
+geography module remains the source of truth and nothing about it changed.
+Buildings, signature architecture, traffic, labels and every analytical overlay are
+shared across all three.
+
+- **Universes.** `src/domain/indexes.ts` filters the seeded dataset per city. The
+  headline index move is recomputed over the narrower universe, so the pulse,
+  breadth track, search, lists and catalysts all describe the same companies as
+  the skyline. Districts with no members in the active universe say so rather than
+  reporting a change of +0.00%.
+- **Volume massing.** `src/domain/massing.ts` maps market capitalisation to a
+  footprint and a height on one compressed log scale. Where a dense New York street
+  clips the footprint, the height is raised to preserve volume, capped at 1.7×.
+- **Switching.** The header globe control picks the city; the choice persists in
+  `localStorage` via `usePersistentValue`.
+- **Company card.** Shows the subsector alongside the city's own band — Borough ·
+  Manhattan, Zone · Zone 3, Town · Technology.
+
+### Validation
+`tests/cities.test.ts` asserts, for every city: each universe member is placed
+exactly once, no two lots overlap, and the layout does not depend on the market
+session. For New York it checks that the borough ranking really does follow the
+seeded sector market-cap ordering (so the documented rule cannot drift) and that
+every lot falls inside the borough polygon its neighbourhood belongs to. For London
+it checks that a larger company never sits in a higher zone number than a smaller
+one in the same sector, that each sector stays within its own wedge, and that lots
+land inside the zone they claim — with the companies pinned to a real building
+exempted, since they stand where that building really is. Browser checks cover the
+picker, per-city rendering, persistence across a reload, search-to-zoom, and the
+narrow-viewport header and popover layout.
+
+### Revisions — London (owner follow-up)
+1. **Empty zones removed.** Zones 8 and 9 held no companies in the seeded dataset,
+   so the ring count is seven and the built radius drops from 170 to 138 units.
+   `tests/cities.test.ts` fails if any declared zone ends up with no companies, so
+   the model cannot quietly grow empty rings again.
+2. **No zone separation.** The concentric ring roads are gone. Streets front each
+   row of buildings, stop at the avenues either side, and each neighbourhood sits a
+   little further in or out than its neighbours, so nothing lines up into a ring.
+   Radial arterials still run out of the centre and break around any landmark that
+   stands in for a company. A test asserts no road closes into a ring and none
+   crosses a lot.
+3. **Inland, not coastal.** `CityDefinition.surround` is `"land"` for London and
+   `"sea"` for Tokyo and New York. The horizon beyond London's built-up area is open
+   country in the city's own ground colour, set flush with the ground so no shoreline
+   or step appears. The Thames still runs through it.
+4. **Streets follow the buildings.** `CityDefinition.roads` is now a function of the
+   placed lots, so a city draws no road network where it has not built. This also
+   fixed a real bug from the first multi-city commit: traffic ran on Tokyo's street
+   coordinates in every city. Vehicles now travel the active city's own carriageways.

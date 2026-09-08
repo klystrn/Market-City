@@ -15,6 +15,7 @@ import type { Menu } from "./control-types";
 import MapDetails from "./MapDetails";
 import type { MapFeatures } from "@/domain/map-features";
 import Radio from "./Radio";
+import ToolsMenu from "./ToolsMenu";
 import type { SeasonMode } from "@/domain/seasons";
 export default function ViewControls({
   mapFeatures,
@@ -30,11 +31,16 @@ export default function ViewControls({
   setReduced,
   traffic,
   setTraffic,
+  adaptiveQuality,
+  setAdaptiveQuality,
   listMode,
   setListMode,
   webglFailed,
   setReady,
   reset,
+  watchlistCount,
+  compareCount,
+  bookmarkCount,
 }: {
   mapFeatures: MapFeatures;
   setMapFeatures: (v: MapFeatures) => void;
@@ -49,11 +55,16 @@ export default function ViewControls({
   setReduced: (v: boolean) => void;
   traffic: boolean;
   setTraffic: (v: boolean) => void;
+  adaptiveQuality: boolean;
+  setAdaptiveQuality: (v: boolean) => void;
   listMode: boolean;
   setListMode: (v: boolean) => void;
   webglFailed: boolean;
   setReady: (v: boolean) => void;
   reset: () => void;
+  watchlistCount: number;
+  compareCount: number;
+  bookmarkCount: number;
 }) {
   return (
     <footer className="bottom-bar">
@@ -148,6 +159,18 @@ export default function ViewControls({
                 />
               </label>
               <label className="toggle-row">
+                <span>Adaptive graphics quality</span>
+                <input
+                  type="checkbox"
+                  checked={adaptiveQuality}
+                  onChange={(e) => setAdaptiveQuality(e.target.checked)}
+                />
+              </label>
+              <p className="fine-print">
+                Automatically trims resolution and traffic if the frame rate
+                drops, and restores them once it recovers.
+              </p>
+              <label className="toggle-row">
                 <span>Lightweight list view</span>
                 <input
                   type="checkbox"
@@ -177,6 +200,13 @@ export default function ViewControls({
             <ChevronDown size={13} />
           </button>
         </div>
+        <ToolsMenu
+          menu={menu}
+          setMenu={setMenu}
+          watchlistCount={watchlistCount}
+          compareCount={compareCount}
+          bookmarkCount={bookmarkCount}
+        />
         <button
           className="glass icon-control"
           onClick={reset}

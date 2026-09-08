@@ -13,20 +13,28 @@ import {
 import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import type { Company, Layer, Plot, Snapshot } from "@/domain/types";
-import { createPlots, sectors } from "@/domain/city";
-import { cityStreets } from "@/domain/geography";
-import { landmarks } from "@/domain/geography";
+import type { CityDefinition } from "@/domain/cities/types";
+import { civicSites } from "@/domain/civic";
 import type { Season } from "@/domain/seasons";
-import { subsectorFor } from "@/domain/subsectors";
+import { etMinuteOfIso } from "@/domain/intraday";
 import MarketDisasters from "./MarketDisasters";
 import Terrain from "./Terrain";
+import CityTerrain from "./CityTerrain";
+import CityLandmarks from "./CityLandmarks";
 import RoadSigns from "./RoadSigns";
 import SignatureBuildings, { signatureTickers } from "./SignatureBuildings";
 import Buildings from "./Buildings";
+import BreadthGardens from "./BreadthGardens";
+import SupplyChainLines from "./SupplyChainLines";
+import EarningsArrivals from "./EarningsArrivals";
+import IntradayTrails from "./IntradayTrails";
+import VolatilityHalos from "./VolatilityHalos";
+import PerformanceMonitor, { type QualityTier } from "./PerformanceMonitor";
 import { pct, weightedChange } from "@/domain/analytics";
 
 import type { MapFeatures } from "@/domain/map-features";
 type Props = {
+  city: CityDefinition;
   mapFeatures: MapFeatures;
   disasterEffects: boolean;
   season: Season;
@@ -39,6 +47,7 @@ type Props = {
   layer: Layer;
   reduced: boolean;
   traffic: boolean;
+  adaptiveQuality: boolean;
   resetKey: number;
   onSelect: (ticker: string) => void;
   onSector: (sector: string) => void;
@@ -46,6 +55,7 @@ type Props = {
   onHover: (company: Company | null, x?: number, y?: number) => void;
   onReady: () => void;
   onFailure: () => void;
+  onMuseum: () => void;
 };
 class SceneBoundary extends Component<
   { children: ReactNode; onFailure: () => void },
@@ -63,12 +73,16 @@ class SceneBoundary extends Component<
   }
 }
 const box = new THREE.BoxGeometry(1, 1, 1);
+// Vehicles run on the active city's own carriageways, so each city's traffic
+// follows the streets it actually draws rather than another city's grid.
 function Traffic({
+  city,
   plots,
   companies,
   enabled,
   dark,
 }: {
+  city: CityDefinition;
   plots: Plot[];
   companies: Company[];
   enabled: boolean;
@@ -79,42 +93,68 @@ function Traffic({
   const { invalidate } = useThree();
   const object = useMemo(() => new THREE.Object3D(), []);
   const elapsed = useRef(0);
-  const vehicles = useMemo(
-    () =>
-      plots
-        .flatMap((p, i) =>
-          Array.from(
-            {
-              length: Math.min(3, Math.ceil(companies[i]?.relativeVolume ?? 1)),
-            },
-            (_, j) => ({
-              p,
-              street: cityStreets().find(
-                (s) => s.id === subsectorFor(p.ticker)?.id,
-              )!,
+  const vehicles = useMemo(() => {
+    // Every carriageway segment the city draws, as a straight run a vehicle can
+    // travel. Bridges ride higher, matching the deck the terrain renders.
+    const runs = city.roads(plots).flatMap((road) =>
+      road.points.slice(1).map((b, i) => {
+        const a = road.points[i];
+        return {
+          a,
+          b,
+          length: Math.hypot(b[0] - a[0], b[1] - a[1]),
+          angle: Math.atan2(b[1] - a[1], b[0] - a[0]),
+          y: road.bridge ? 1.46 : 1.28,
+        };
+      }),
+    );
+    if (!runs.length) return [];
+    return plots
+      .flatMap((p, i) =>
+        Array.from(
+          { length: Math.min(3, Math.ceil(companies[i]?.relativeVolume ?? 1)) },
+          (_, j) => {
+            // The nearest run, so traffic gathers on the streets that serve the
+            // busiest lots instead of spreading evenly over the whole network.
+            let run = runs[0],
+              best = Infinity;
+            for (const candidate of runs) {
+              const mx = (candidate.a[0] + candidate.b[0]) / 2,
+                mz = (candidate.a[1] + candidate.b[1]) / 2;
+              const d = Math.hypot(p.x - mx, p.z - mz);
+              if (d < best) {
+                best = d;
+                run = candidate;
+              }
+            }
+            return {
+              run,
               offset: j * 2.4 + i,
               speed: 0.8 + (companies[i]?.relativeVolume ?? 1) * 0.5,
-            }),
-          ),
-        )
-        .slice(0, 240),
-    [plots, companies],
-  );
+            };
+          },
+        ),
+      )
+      .slice(0, 240);
+  }, [city, plots, companies]);
   useFrame((_, delta) => {
     if (!enabled || !ref.current) return;
     elapsed.current += Math.min(delta, 0.1);
-    vehicles.forEach(({ street, offset, speed }, i) => {
-      const span = street.end[0] - street.start[0];
-      const t = (elapsed.current * speed + offset) % span;
+    vehicles.forEach(({ run, offset, speed }, i) => {
+      const t = ((elapsed.current * speed + offset) % run.length) / run.length;
+      const along = i % 2 === 0 ? t : 1 - t;
+      // Half a lane either side of the centre line, so the two directions pass.
+      const lane = (i % 2 === 0 ? 0.42 : -0.42);
       object.position.set(
-        i % 2 === 0 ? street.start[0] + t : street.end[0] - t,
-        1.28,
-        street.z + (i % 2 === 0 ? 0.42 : -0.42),
+        run.a[0] + (run.b[0] - run.a[0]) * along - Math.sin(run.angle) * lane,
+        run.y,
+        run.a[1] + (run.b[1] - run.a[1]) * along + Math.cos(run.angle) * lane,
       );
+      object.rotation.set(0, -run.angle, 0);
       object.scale.set(0.85, 0.28, 0.4);
       object.updateMatrix();
       ref.current!.setMatrixAt(i, object.matrix);
-      object.position.y = 1.48;
+      object.position.y = run.y + 0.2;
       object.scale.set(0.44, 0.18, 0.34);
       object.updateMatrix();
       cabins.current?.setMatrixAt(i, object.matrix);
@@ -143,12 +183,14 @@ function Traffic({
   ) : null;
 }
 function Camera({
+  city,
   focus,
   focusedSector,
   plots,
   reduced,
   resetKey,
 }: {
+  city: CityDefinition;
   focus: string | null;
   focusedSector: string | null;
   plots: Plot[];
@@ -159,7 +201,11 @@ function Camera({
   const { invalidate, size } = useThree();
   const overviewZoom = Math.max(
     1.1,
-    Math.min(4.2, size.width / 330, size.height / 245),
+    Math.min(
+      city.camera.overviewMax,
+      size.width / city.camera.overviewDivisor[0],
+      size.height / city.camera.overviewDivisor[1],
+    ),
   );
   const desired = useRef<{
     position: THREE.Vector3;
@@ -214,14 +260,14 @@ function Camera({
   }, [invalidate]);
   useEffect(() => {
     const plot = plots.find((p) => p.ticker === focus),
-      district = sectors.find((s) => s.id === focusedSector);
+      district = city.districts.find((s) => s.id === focusedSector);
     const target = plot
       ? new THREE.Vector3(plot.x, plot.height * 0.45, plot.z)
       : district
         ? new THREE.Vector3(district.x, 0, district.z)
-        : new THREE.Vector3(-12, 0, -12);
+        : new THREE.Vector3(...city.camera.target);
     desired.current = {
-      position: target.clone().add(new THREE.Vector3(270, 285, 330)),
+      position: target.clone().add(new THREE.Vector3(...city.camera.offset)),
       target,
       zoom: plot
         ? 15
@@ -230,7 +276,7 @@ function Camera({
           : overviewZoom,
     };
     invalidate();
-  }, [focus, focusedSector, plots, resetKey, invalidate, overviewZoom]);
+  }, [focus, focusedSector, plots, resetKey, invalidate, overviewZoom, city]);
   useFrame(({ camera }, dt) => {
     if (controls.current && keys.current.size) {
       const held = keys.current;
@@ -329,7 +375,7 @@ function Labels({ plots, ...props }: Props & { plots: Plot[] }) {
   return (
     <>
       {!props.focus &&
-        sectors.map((s) => (
+        props.city.districts.map((s) => (
           <Html
             key={s.id}
             position={[s.x, 1, s.z + s.depth / 2 - 1]}
@@ -343,23 +389,25 @@ function Labels({ plots, ...props }: Props & { plots: Plot[] }) {
             >
               <span>{s.short}</span>
               {props.focusedSector === s.id && (
-                <small>{landmarks.find((l) => l.sector === s.id)?.name}</small>
+                <small>
+                  {props.city.landmarks.find((l) => l.sector === s.id)?.name}
+                </small>
               )}
-              <b
-                className={
-                  weightedChange(
-                    props.snapshot.companies.filter((c) => c.sector === s.id),
-                  ) >= 0
-                    ? "positive"
-                    : "negative"
-                }
-              >
-                {pct(
-                  weightedChange(
-                    props.snapshot.companies.filter((c) => c.sector === s.id),
-                  ),
-                )}
-              </b>
+              {(() => {
+                // A sector can be empty when the city's universe excludes all
+                // of its members, and an empty sector is not a flat one.
+                const members = props.snapshot.companies.filter(
+                  (c) => c.sector === s.id,
+                );
+                if (!members.length)
+                  return <b className="muted">No members</b>;
+                const change = weightedChange(members);
+                return (
+                  <b className={change >= 0 ? "positive" : "negative"}>
+                    {pct(change)}
+                  </b>
+                );
+              })()}
             </button>
           </Html>
         ))}
@@ -438,6 +486,8 @@ function Ready({
 function CityScene(props: Props) {
   const [visible, setVisible] = useState(true);
   const [active, setActive] = useState(true);
+  const [tier, setTier] = useState<QualityTier>(0);
+  const effectiveTier: QualityTier = props.adaptiveQuality ? tier : 0;
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
     const activity = () => {
@@ -465,19 +515,37 @@ function CityScene(props: Props) {
   // Quote updates do not change structural data or reallocate geometry.
 
   const plots = useMemo(
-    () => createPlots(props.snapshot.companies),
+    () => props.city.createPlots(props.snapshot.companies),
     // eslint-disable-next-line react-hooks/exhaustive-deps -- Geometry depends on the structural signature, not quote ticks.
-    [structure],
+    [structure, props.city],
   );
   const night =
     props.snapshot.market.session === "closed" ||
     props.snapshot.market.session === "after-hours";
+  const trailCompanies = useMemo(() => {
+    const byMove = [...props.snapshot.companies].sort(
+      (a, b) => Math.abs(b.changePercent) - Math.abs(a.changePercent),
+    );
+    const selected = props.snapshot.companies.find(
+      (c) => c.ticker === props.selected,
+    );
+    const rest = byMove.filter((c) => c.ticker !== selected?.ticker);
+    return (selected ? [selected, ...rest] : rest).slice(0, 5);
+  }, [props.snapshot.companies, props.selected]);
+  const sessionMinute = etMinuteOfIso(props.snapshot.generatedAt);
+  const dpr: [number, number] =
+    effectiveTier >= 2 ? [1, 1] : effectiveTier === 1 ? [1, 1.25] : [1, 1.6];
   return (
     <SceneBoundary onFailure={props.onFailure}>
       <Canvas
         orthographic
-        camera={{ position: [270, 285, 330], zoom: 2, near: 0.1, far: 1800 }}
-        dpr={[1, 1.6]}
+        camera={{
+          position: props.city.camera.offset,
+          zoom: 2,
+          near: 0.1,
+          far: 1800,
+        }}
+        dpr={dpr}
         frameloop={visible ? "demand" : "never"}
         gl={{
           antialias: true,
@@ -485,6 +553,7 @@ function CityScene(props: Props) {
           powerPreference: "high-performance",
         }}
       >
+        {props.adaptiveQuality && <PerformanceMonitor onTier={setTier} />}
         <ambientLight intensity={props.dark ? 0.95 : 0.85} />
         <hemisphereLight
           args={[
@@ -507,25 +576,44 @@ function CityScene(props: Props) {
           ]}
         />
         <group position={[0, -0.5, 0]}>
-          <Terrain
-            mapFeatures={props.mapFeatures}
-            dark={props.dark}
-            plots={plots}
-            season={props.season}
-            relativeVolume={
-              props.snapshot.companies.reduce(
-                (a, c) => a + c.relativeVolume,
-                0,
-              ) / props.snapshot.companies.length
-            }
-          />
+          {props.city.bespokeTerrain ? (
+            <Terrain
+              mapFeatures={props.mapFeatures}
+              dark={props.dark}
+              plots={plots}
+              season={props.season}
+              relativeVolume={
+                props.snapshot.companies.reduce(
+                  (a, c) => a + c.relativeVolume,
+                  0,
+                ) / props.snapshot.companies.length
+              }
+            />
+          ) : (
+            <>
+              <CityTerrain
+                city={props.city}
+                plots={plots}
+                dark={props.dark}
+                season={props.season}
+                districtPads={props.mapFeatures.labels}
+              />
+              {props.mapFeatures.civic && (
+                <CityLandmarks
+                  landmarks={props.city.landmarks}
+                  season={props.season}
+                  labels={props.mapFeatures.labels}
+                />
+              )}
+            </>
+          )}
           <MarketDisasters
             snapshot={props.snapshot}
             plots={plots}
             reduced={props.reduced || !visible || !active}
             enabled={props.disasterEffects}
           />
-          {props.mapFeatures.signs && (
+          {props.mapFeatures.signs && props.city.bespokeTerrain && (
             <RoadSigns
               focusedSector={
                 props.focus
@@ -536,7 +624,7 @@ function CityScene(props: Props) {
               }
             />
           )}
-          {sectors.map((s) => (
+          {props.city.districts.map((s) => (
             <mesh
               key={s.id}
               position={[s.x, 1.07, s.z]}
@@ -550,6 +638,37 @@ function CityScene(props: Props) {
               <meshBasicMaterial transparent opacity={0} depthWrite={false} />
             </mesh>
           ))}
+          {props.mapFeatures.civic &&
+            (() => {
+              const museum = props.city.bespokeTerrain
+                ? civicSites.find((s) => s.id === "museum")!
+                : (props.city.landmarks.find((l) => l.kind === "museum") ??
+                  props.city.landmarks[0]);
+              return (
+                <mesh
+                  position={[museum.x, 1.13, museum.z]}
+                  rotation={[-Math.PI / 2, 0, 0]}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    props.onMuseum();
+                  }}
+                >
+                  <circleGeometry args={[museum.radius, 24]} />
+                  <meshBasicMaterial
+                    transparent
+                    opacity={0}
+                    depthWrite={false}
+                  />
+                </mesh>
+              );
+            })()}
+          {props.mapFeatures.breadthGardens && (
+            <BreadthGardens
+              companies={props.snapshot.companies}
+              districts={props.city.districts}
+              landmarks={props.city.landmarks}
+            />
+          )}
           <Buildings
             plots={plots}
             companies={props.snapshot.companies}
@@ -573,16 +692,60 @@ function CityScene(props: Props) {
             />
           )}
           <Traffic
+            city={props.city}
             plots={plots}
             companies={plots.map((p) =>
               props.snapshot.companies.find((c) => c.ticker === p.ticker)!,
             )}
-            enabled={props.traffic && !props.reduced && visible && active}
+            enabled={
+              props.traffic &&
+              !props.reduced &&
+              visible &&
+              active &&
+              effectiveTier < 2
+            }
             dark={props.dark}
           />
+          {props.mapFeatures.connections && (
+            <SupplyChainLines
+              plots={plots}
+              selected={props.selected}
+              dark={props.dark}
+              onSelect={props.onSelect}
+            />
+          )}
+          {props.mapFeatures.trails && effectiveTier < 2 && !props.reduced && (
+            <IntradayTrails
+              plots={plots}
+              companies={trailCompanies}
+              minute={sessionMinute}
+              dark={props.dark}
+            />
+          )}
+          {props.mapFeatures.halos && effectiveTier < 2 && (
+            <VolatilityHalos
+              plots={plots}
+              companies={props.snapshot.companies}
+              dark={props.dark}
+            />
+          )}
+          {props.mapFeatures.transit && !props.selected && (
+            <EarningsArrivals
+              catalysts={props.snapshot.catalysts}
+              now={Date.parse(props.snapshot.generatedAt)}
+              station={
+                props.city.bespokeTerrain
+                  ? civicSites.find((s) => s.id === "station")!
+                  : (props.city.landmarks.find((l) => l.kind === "terminal") ??
+                    props.city.districts[0])
+              }
+              onSelect={props.onSelect}
+            />
+          )}
           {props.mapFeatures.labels && <Labels {...props} plots={plots} />}
         </group>
         <Camera
+          city={props.city}
           focus={props.focus}
           focusedSector={props.focusedSector}
           plots={plots}

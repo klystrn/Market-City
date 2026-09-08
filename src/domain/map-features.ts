@@ -9,6 +9,10 @@ export interface MapFeatures {
   brands: boolean;
   mountains: boolean;
   disasters: boolean;
+  breadthGardens: boolean;
+  connections: boolean;
+  trails: boolean;
+  halos: boolean;
 }
 export const defaultMapFeatures: MapFeatures = {
   greenery: true,
@@ -21,4 +25,8 @@ export const defaultMapFeatures: MapFeatures = {
   brands: true,
   mountains: true,
   disasters: true,
+  breadthGardens: false,
+  connections: true,
+  trails: false,
+  halos: false,
 };

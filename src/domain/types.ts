@@ -80,12 +80,15 @@ export interface Plot {
   depth: number;
   height: number;
   variant: number;
+  /** London zone or New York borough this lot belongs to, when the city tiers. */
+  tier?: string;
 }
 export type Intent =
   | { type: "reset" }
   | { type: "company"; ticker: string; news?: boolean }
   | { type: "sector"; sector: string }
   | { type: "subsector"; subsector: string }
+  | { type: "group"; group: string }
   | { type: "move"; direction: "up" | "down"; threshold: number }
   | { type: "volume" }
   | { type: "earnings" }

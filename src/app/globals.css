@@ -1395,7 +1395,8 @@ select {
     padding: 0 20px;
   }
   .brand {
-    font-size: 21px;
+    font-size: 20px;
+    white-space: nowrap;
   }
   .topbar-right {
     gap: 13px;
@@ -1406,6 +1407,7 @@ select {
   }
   .market-session {
     font-size: 11px;
+    white-space: nowrap;
   }
   .command-wrap {
     top: 80px;
@@ -1415,8 +1417,16 @@ select {
     height: 46px;
   }
   .header-popover {
-    right: 0;
-    width: min(330px, calc(100vw - 40px));
+    /* The command bar drops below the header at this width, so anchor the
+       popovers to the viewport underneath it instead of overlapping it. */
+    position: fixed;
+    top: 138px;
+    right: 20px;
+    left: 20px;
+    width: auto;
+    max-height: calc(100dvh - 250px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
   .market-list {
     inset: 145px 0 115px;
@@ -1477,10 +1487,6 @@ select {
     width: 280px;
     max-height: calc(100svh - 150px);
     overflow-y: auto;
-  }
-  .layers-panel {
-    right: -40px;
-    width: 285px;
   }
   .company-panel {
     top: 145px;
@@ -1571,7 +1577,9 @@ select {
   position: absolute;
   top: 90px;
   right: 24px;
-  z-index: 35;
+  /* Above the other scene overlays but below the header, so the header
+     popovers — the city picker especially — are not clipped by the launcher. */
+  z-index: 28;
 }
 .god-launch span {
   font-size: 10px;
@@ -1773,9 +1781,6 @@ select {
     left: 12px;
     width: 195px;
   }
-  .layers-panel {
-    width: min(330px, calc(100vw - 24px));
-  }
 }
 .map-guide {
   border-radius: 14px;
@@ -1786,5 +1791,521 @@ select {
 .layers-panel {
   max-height: calc(100dvh - 245px);
 }
-.radio-panel { max-height:calc(100dvh - 190px); overflow-y:auto; }
-.radio-track { font-size:11px; line-height:1.5; text-transform:capitalize; color:var(--muted); overflow-wrap:anywhere; }
+.radio-panel {
+  max-height: calc(100dvh - 190px);
+  overflow-y: auto;
+}
+.radio-track {
+  font-size: 11px;
+  line-height: 1.5;
+  text-transform: capitalize;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+/* Tools menu (watchlist / compare / camera bookmarks / directory / history) */
+.tools-wrap {
+  position: relative;
+}
+.tools-panel {
+  position: absolute;
+  bottom: 57px;
+  right: 0;
+  width: 280px;
+  border-radius: 18px;
+  padding: 20px;
+  max-height: calc(100dvh - 245px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.tools-panel .panel-heading {
+  margin-bottom: 10px;
+}
+.tool-count {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 100px;
+  background: var(--soft);
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+.icon-button.active {
+  background: #329784;
+  color: #fff;
+}
+.panel-heading-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Shared dialog sizing for the newer scrim panels */
+.info-panel {
+  max-height: 82vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+.compare-panel {
+  width: 620px;
+}
+
+/* Watchlist */
+.watchlist-rows {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.watchlist-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.watchlist-select {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  text-align: left;
+  background: var(--soft);
+}
+.watchlist-select:hover {
+  background: color-mix(in srgb, var(--soft) 70%, var(--ink) 6%);
+}
+.watchlist-select strong {
+  display: block;
+  font-size: 13px;
+}
+.watchlist-select small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 2px;
+}
+.watchlist-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  font-size: 12px;
+}
+.watchlist-price em {
+  font-style: normal;
+  font-size: 11px;
+}
+
+/* Compare */
+.compare-table-wrap {
+  margin-top: 16px;
+  overflow-x: auto;
+}
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.compare-table th,
+.compare-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.compare-table thead th {
+  vertical-align: top;
+}
+.compare-table tbody th {
+  color: var(--muted);
+  font-weight: 500;
+}
+.compare-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.compare-head strong {
+  display: block;
+  font-size: 13px;
+}
+.compare-head small {
+  display: block;
+  color: var(--muted);
+  font-weight: 400;
+  margin-top: 2px;
+}
+.compare-pill {
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  z-index: 15;
+}
+
+/* Camera bookmarks */
+.bookmark-list {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.bookmark-list li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.bookmark-go {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  text-align: left;
+  background: var(--soft);
+}
+.bookmark-go:hover {
+  background: color-mix(in srgb, var(--soft) 70%, var(--ink) 6%);
+}
+.bookmark-go strong {
+  display: block;
+  font-size: 13px;
+}
+.bookmark-go small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+/* District directory */
+.district-directory {
+  margin-top: 14px;
+  display: grid;
+  gap: 14px;
+}
+.directory-sector-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 9px;
+  text-align: left;
+}
+.directory-sector-button:hover,
+.directory-sector-button:focus-visible {
+  background: var(--soft);
+}
+.directory-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.directory-sector-button strong {
+  font-size: 13px;
+}
+.directory-sector ul {
+  list-style: none;
+  margin: 4px 0 0 26px;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+.directory-subsector-button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  padding: 7px 8px;
+  border-radius: 7px;
+  text-align: left;
+  font-size: 12px;
+  color: var(--muted);
+}
+.directory-subsector-button:hover,
+.directory-subsector-button:focus-visible {
+  background: var(--soft);
+  color: var(--ink);
+}
+.directory-subsector-button small {
+  margin-left: auto;
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+/* Market history timeline */
+.history-timeline {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+}
+.history-timeline li {
+  display: flex;
+  gap: 14px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.history-timeline time {
+  flex-shrink: 0;
+  width: 84px;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+  padding-top: 2px;
+}
+.history-timeline strong {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+.history-timeline p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* Scenario save & share (God panel) */
+.scenario-save-row {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0;
+}
+.scenario-save-row input {
+  flex: 1;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  color: var(--ink);
+  background: var(--solid);
+  font-size: 12px;
+  min-width: 0;
+}
+.scenario-list {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.scenario-list li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.scenario-load {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 12px;
+  background: var(--soft);
+}
+.scenario-load:hover {
+  background: color-mix(in srgb, var(--soft) 70%, var(--ink) 6%);
+}
+
+/* Company panel additions: supply-chain chips */
+.supply-chain-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.supply-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 7px 10px;
+  border-radius: 9px;
+  background: var(--soft);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: left;
+}
+.supply-chip:hover {
+  background: color-mix(in srgb, var(--soft) 70%, var(--ink) 6%);
+}
+.supply-chip small {
+  font-weight: 400;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+/* In-scene HTML overlays: supply-chain arc chip and station arrival board */
+.supply-chain-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 5px 9px;
+  border-radius: 100px;
+  background: rgba(37, 49, 43, 0.88);
+  color: #f2f0e4;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  backdrop-filter: blur(6px);
+}
+.supply-chain-chip small {
+  font-weight: 400;
+  opacity: 0.75;
+  font-size: 9px;
+}
+.earnings-board {
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(37, 49, 43, 0.88);
+  color: #f2f0e4;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 11px;
+  min-width: 140px;
+  backdrop-filter: blur(6px);
+}
+.earnings-board-title {
+  font-size: 9px;
+  letter-spacing: 1.2px;
+  opacity: 0.7;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.earnings-board-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 3px 2px;
+  color: inherit;
+}
+.earnings-board-row:hover {
+  color: #cfe6c9;
+}
+
+/* New optional map-detail feature swatches */
+.feature-breadthGardens {
+  color: #4f8a3d;
+}
+.feature-connections {
+  color: #4a6f92;
+}
+.feature-trails {
+  color: #a1663a;
+}
+.feature-halos {
+  color: #b5652f;
+}
+@media (max-width: 700px) {
+  .compare-panel {
+    width: min(620px, 94vw);
+  }
+  .compare-table {
+    font-size: 11px;
+  }
+  /* The launcher button's position inside the bottom bar's flex row varies
+     with viewport width, so anchoring the panel to it (right: 0) can push
+     it off the left edge. Pin to the viewport instead. Placed last so it
+     wins over the unconditional base .layers-panel / .tools-panel rules. */
+  .layers-panel,
+  .tools-panel {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: 96px;
+    width: auto;
+    max-height: calc(100dvh - 210px);
+  }
+}
+
+/* City switcher and landmark labels */
+.city-switch {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 10px;
+  border-radius: 100px;
+  font-size: 13px;
+  color: var(--ink);
+}
+.city-switch:hover {
+  background: var(--soft);
+}
+.city-switch > span {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.15;
+}
+.city-switch strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+.city-switch small {
+  font-size: 10px;
+  color: var(--muted);
+}
+.city-popover {
+  width: 340px;
+}
+.city-popover .layer-option {
+  margin-top: 4px;
+}
+.city-popover .fine-print {
+  margin-top: 10px;
+}
+.landmark-label {
+  display: inline-block;
+  padding: 3px 7px;
+  border-radius: 100px;
+  background: color-mix(in srgb, var(--glass) 85%, transparent);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 9px;
+  letter-spacing: 0.3px;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+}
+@media (max-width: 700px) {
+  .city-switch small {
+    display: none;
+  }
+  .city-popover {
+    width: auto;
+  }
+}
+
+/* Below this width the wordmark, the city switch and the session controls no
+   longer fit on one row, so the logo mark carries the brand on its own. Placed
+   last so it wins over the wider breakpoint above. */
+@media (max-width: 460px) {
+  .brand > span:not(.brand-mark) {
+    display: none;
+  }
+}

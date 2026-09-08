@@ -78,6 +78,7 @@ export default function CommandBar({
             ? [query]
             : [
                 "Show technology",
+                "Show Big Tech",
                 "What is moving today?",
                 "Show unusual volume",
                 "Earnings this week",

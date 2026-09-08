@@ -24,6 +24,27 @@ export function breadth(companies: Company[]) {
     flat: companies.filter((c) => Math.abs(c.changePercent) <= 0.05).length,
   };
 }
+// Share of a sector's companies advancing on the day, in [0, 1]. Powers the
+// optional sector-breadth garden layer; unrelated to market-cap weighting.
+export function sectorBreadthRatio(companies: Company[]): number {
+  if (!companies.length) return 0.5;
+  const b = breadth(companies);
+  return b.up / companies.length;
+}
+// Trailing daily-return volatility (standard deviation of log returns) over
+// up to the last 60 sessions. Purely descriptive; not a forecast.
+export function historicalVolatility(company: Company): number {
+  const closes = company.history
+    .slice(-61)
+    .map((h) => h.close)
+    .filter((n) => n > 0);
+  const returns = closes.slice(1).map((v, i) => Math.log(v / closes[i]));
+  if (returns.length < 2) return 0.01;
+  const mean = returns.reduce((a, b) => a + b, 0) / returns.length;
+  return Math.sqrt(
+    returns.reduce((a, r) => a + (r - mean) ** 2, 0) / (returns.length - 1),
+  );
+}
 export function explain(c: Company, snapshot: Snapshot) {
   const peers = snapshot.companies.filter(
     (p) =>

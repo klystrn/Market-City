@@ -1,16 +1,7 @@
 import type { Company, Plot } from "./types";
 import { sectors, cityStreets } from "./geography";
 import { subsectors } from "./subsectors";
-const signatureForms: Record<string, number> = {
-  AAPL: 6,
-  MSFT: 7,
-  AMZN: 9,
-  GOOGL: 10,
-  META: 7,
-  NVDA: 8,
-  TSLA: 11,
-  NFLX: 2,
-};
+import { signatureForms } from "./forms";
 export { sectors } from "./geography";
 export function createPlots(companies: Company[]): Plot[] {
   const streets = cityStreets();

@@ -7,6 +7,10 @@ import {
   Newspaper,
   CalendarDays,
   ArrowRight,
+  Bookmark,
+  BookmarkCheck,
+  Columns3,
+  Waypoints,
 } from "lucide-react";
 import type { Company, Snapshot } from "@/domain/types";
 import {
@@ -18,6 +22,7 @@ import {
 } from "@/domain/analytics";
 import { sectors } from "@/domain/city";
 import { subsectorFor } from "@/domain/subsectors";
+import { linksFor, partnerOf } from "@/domain/supply-chain";
 function Chart({ company }: { company: Company }) {
   const [range, setRange] = useState(90);
   const history = company.history.slice(-range);
@@ -100,6 +105,13 @@ export default function CompanyPanel({
   onClose,
   onBack,
   now,
+  cityContext,
+  indexName,
+  pinned,
+  onTogglePin,
+  compared,
+  onToggleCompare,
+  onSelectTicker,
 }: {
   company: Company;
   snapshot: Snapshot;
@@ -108,6 +120,15 @@ export default function CompanyPanel({
   onClose: () => void;
   onBack: () => void;
   now: number;
+  /** Which zone, borough or town this company sits in, in the active city. */
+  cityContext: string;
+  /** Name of the market universe the active city renders. */
+  indexName: string;
+  pinned: boolean;
+  onTogglePin: () => void;
+  compared: boolean;
+  onToggleCompare: () => void;
+  onSelectTicker: (ticker: string) => void;
 }) {
   const panel = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -130,13 +151,41 @@ export default function CompanyPanel({
           <span className="eyebrow">
             {deep ? "COMPANY EXPLORER" : "IN FOCUS"}
           </span>
-          <button
-            className="icon-button"
-            onClick={onClose}
-            aria-label="Close company details"
-          >
-            <X size={18} />
-          </button>
+          <span className="panel-heading-actions">
+            <button
+              className={`icon-button ${pinned ? "active" : ""}`}
+              onClick={onTogglePin}
+              aria-pressed={pinned}
+              aria-label={
+                pinned
+                  ? `Unpin ${c.ticker} from watchlist`
+                  : `Pin ${c.ticker} to watchlist`
+              }
+              title={pinned ? "Unpin from watchlist" : "Pin to watchlist"}
+            >
+              {pinned ? <BookmarkCheck size={17} /> : <Bookmark size={17} />}
+            </button>
+            <button
+              className={`icon-button ${compared ? "active" : ""}`}
+              onClick={onToggleCompare}
+              aria-pressed={compared}
+              aria-label={
+                compared
+                  ? `Remove ${c.ticker} from comparison`
+                  : `Add ${c.ticker} to comparison`
+              }
+              title={compared ? "Remove from comparison" : "Add to comparison"}
+            >
+              <Columns3 size={17} />
+            </button>
+            <button
+              className="icon-button"
+              onClick={onClose}
+              aria-label="Close company details"
+            >
+              <X size={18} />
+            </button>
+          </span>
         </div>
         <div className="company-title">
           <div className="ticker-avatar">{c.ticker.slice(0, 2)}</div>
@@ -146,7 +195,9 @@ export default function CompanyPanel({
               {c.ticker} <span className="dot-divider">·</span> {sector.short}
             </span>
             <span className="company-street">
-              {subsectorFor(c.ticker)?.street}
+              {subsectorFor(c.ticker)?.name}
+              <span className="dot-divider"> · </span>
+              {cityContext}
             </span>
           </div>
         </div>
@@ -212,6 +263,34 @@ export default function CompanyPanel({
             <b>{c.relativeVolume.toFixed(1)}×</b>
           </div>
         </div>
+        {linksFor(c.ticker).length > 0 && (
+          <section className="detail-section">
+            <div className="section-title">
+              <Waypoints size={16} />
+              <h3>Supply chain</h3>
+            </div>
+            <div className="supply-chain-chips">
+              {linksFor(c.ticker).map((link) => {
+                const partner = partnerOf(link, c.ticker);
+                return (
+                  <button
+                    key={`${link.a}-${link.b}`}
+                    className="supply-chip"
+                    onClick={() => onSelectTicker(partner)}
+                    title={link.label}
+                  >
+                    {partner}
+                    <small>{link.label}</small>
+                  </button>
+                );
+              })}
+            </div>
+            <p className="fine-print">
+              Curated, illustrative relationships. Enable “Supply-chain
+              connections” in Layers &amp; view to see them drawn on the map.
+            </p>
+          </section>
+        )}
         <section className="detail-section">
           <div className="section-title">
             <CalendarDays size={16} />
@@ -310,7 +389,7 @@ export default function CompanyPanel({
                 </b>
               </div>
               <div>
-                <span>S&P 500</span>
+                <span>{indexName}</span>
                 <b>{pct(snapshot.market.indexChange)}</b>
               </div>
               <div>

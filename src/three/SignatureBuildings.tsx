@@ -2,6 +2,8 @@ import { useEffect, useMemo } from "react";
 import * as THREE from "three";
 import type { Company, Plot } from "@/domain/types";
 import type { ThreeEvent } from "@react-three/fiber";
+// One flagship per sector so every district has at least one instantly
+// recognizable landmark, not just the technology-adjacent giants.
 export const signatureTickers = [
   "AAPL",
   "MSFT",
@@ -11,6 +13,14 @@ export const signatureTickers = [
   "NVDA",
   "TSLA",
   "NFLX",
+  "JPM",
+  "LLY",
+  "CAT",
+  "WMT",
+  "XOM",
+  "NEE",
+  "LIN",
+  "PLD",
 ];
 const apple = new THREE.Shape();
 apple.moveTo(0, -0.78);
@@ -309,32 +319,324 @@ function Signature({ p, active }: { p: Plot; active: boolean }) {
         )}
       </group>
     );
+  if (p.ticker === "NFLX")
+    return (
+      <group>
+        <Wordmark
+          text="N"
+          color="#e72a3b"
+          background="#202b34"
+          width={2.2}
+          height={4.2}
+          position={[-w * 0.28, h * 0.6, d / 2 + 0.13]}
+          active={active}
+        />
+        <Wordmark
+          text="NETFLIX"
+          color="#ffe5df"
+          background="#b62e44"
+          width={w * 0.85}
+          height={0.9}
+          position={[0, 2, d / 2 + 0.7]}
+          active={active}
+        />
+        {block(
+          "cinema-marquee",
+          [0, 2.55, d / 2 + 0.3],
+          [w * 0.95, 0.2, 1],
+          "#d74550",
+        )}
+      </group>
+    );
+  // Financials — a tapering glass tower wrapped on all four sides by a
+  // diagonal exoskeleton, rising off four corner supercolumns planted in
+  // the ground: the single most recognizable feature of JPMorgan's new
+  // 270 Park Avenue headquarters.
+  if (p.ticker === "JPM") {
+    const pillarInset = 0.22;
+    const pillarSize = Math.max(0.22, Math.min(w, d) * 0.14);
+    const corners: [number, number][] = [
+      [w / 2 + pillarInset, d / 2 + pillarInset],
+      [-w / 2 - pillarInset, d / 2 + pillarInset],
+      [w / 2 + pillarInset, -d / 2 - pillarInset],
+      [-w / 2 - pillarInset, -d / 2 - pillarInset],
+    ];
+    const faces = [
+      { rotationY: 0, faceWidth: w, faceOffset: d / 2 + 0.15 },
+      { rotationY: Math.PI, faceWidth: w, faceOffset: d / 2 + 0.15 },
+      { rotationY: Math.PI / 2, faceWidth: d, faceOffset: w / 2 + 0.15 },
+      { rotationY: -Math.PI / 2, faceWidth: d, faceOffset: w / 2 + 0.15 },
+    ];
+    return (
+      <group>
+        {corners.map(([x, z]) => (
+          <mesh key={`${x}-${z}`} position={[x, h / 2, z]}>
+            <boxGeometry args={[pillarSize, h, pillarSize]} />
+            <meshStandardMaterial
+              color={tone("#828d94")}
+              metalness={0.55}
+              roughness={0.35}
+            />
+          </mesh>
+        ))}
+        {faces.map((face, i) => {
+          const braceLength = Math.hypot(face.faceWidth, h) * 0.94;
+          const braceAngle = Math.atan2(h, face.faceWidth);
+          return (
+            <group key={i} rotation={[0, face.rotationY, 0]}>
+              {[braceAngle, -braceAngle].map((angle) => (
+                <mesh
+                  key={angle}
+                  position={[0, h * 0.52, face.faceOffset]}
+                  rotation={[0, 0, angle]}
+                >
+                  <boxGeometry args={[braceLength, 0.2, 0.1]} />
+                  <meshStandardMaterial
+                    color={tone("#a7bac6")}
+                    metalness={0.65}
+                    roughness={0.25}
+                  />
+                </mesh>
+              ))}
+            </group>
+          );
+        })}
+        <Wordmark
+          text="JPMORGAN"
+          color="#ffffff"
+          background="#101b26"
+          width={w * 0.78}
+          height={0.85}
+          position={[0, h * 0.18, d / 2 + 0.18]}
+          active={active}
+        />
+      </group>
+    );
+  }
+  // Healthcare — a rooftop cross and an italic red wordmark, echoing the
+  // universal healthcare symbol alongside the brand's own color.
+  if (p.ticker === "LLY")
+    return (
+      <group>
+        {block("cross-v", [0, h + 1, 0], [0.32, 1.5, 0.32], "#e0182d")}
+        {block("cross-h", [0, h + 1, 0], [1.5, 0.32, 0.32], "#e0182d")}
+        <Wordmark
+          text="Lilly"
+          color="#e0182d"
+          background="#ffffff"
+          width={w * 0.7}
+          height={1.2}
+          position={[0, h * 0.5, d / 2 + 0.13]}
+          active={active}
+        />
+        {block(
+          "canopy",
+          [0, 1.5, d / 2 + 0.35],
+          [w * 0.7, 0.18, 0.5],
+          "#e0182d",
+        )}
+      </group>
+    );
+  // Industrials — Caterpillar yellow crown and a crawler-track base row.
+  if (p.ticker === "CAT")
+    return (
+      <group>
+        {block(
+          "crown-band",
+          [0, h + 0.4, 0],
+          [w * 0.92, 0.8, d * 0.92],
+          "#ffcd11",
+        )}
+        <Wordmark
+          text="CAT"
+          color="#000000"
+          background="#ffcd11"
+          width={w * 0.6}
+          height={1.4}
+          position={[0, h * 0.5, d / 2 + 0.13]}
+          active={active}
+        />
+        {Array.from({ length: 5 }, (_, i) =>
+          block(
+            "tread" + i,
+            [-w * 0.4 + i * w * 0.2, 0.55, d / 2 + 0.3],
+            [w * 0.14, 0.5, 0.22],
+            "#26241f",
+          ),
+        )}
+      </group>
+    );
+  // Staples — a rooftop "spark" of six spokes above the Walmart wordmark.
+  if (p.ticker === "WMT")
+    return (
+      <group>
+        <Wordmark
+          text="walmart"
+          color="#0071ce"
+          background="#ffffff"
+          width={w * 0.85}
+          height={1.1}
+          position={[0, h * 0.45, d / 2 + 0.13]}
+          active={active}
+        />
+        {Array.from({ length: 6 }, (_, i) => {
+          const a = (i / 6) * Math.PI * 2;
+          return (
+            <mesh
+              key={i}
+              position={[Math.cos(a) * 0.55, h + 0.75, Math.sin(a) * 0.55]}
+              rotation={[0, -a, 0]}
+            >
+              <boxGeometry args={[0.9, 0.16, 0.16]} />
+              <meshStandardMaterial
+                color={tone("#ffc220")}
+                metalness={0.3}
+                roughness={0.4}
+              />
+            </mesh>
+          );
+        })}
+      </group>
+    );
+  // Energy — a lit flare stack, the most recognizable refinery silhouette.
+  if (p.ticker === "XOM")
+    return (
+      <group>
+        <Wordmark
+          text="ExxonMobil"
+          color="#e31837"
+          background="#ffffff"
+          width={w * 0.85}
+          height={0.9}
+          position={[0, h * 0.45, d / 2 + 0.13]}
+          active={active}
+        />
+        <mesh position={[w * 0.3, h + 1.3, -d * 0.2]}>
+          <cylinderGeometry args={[0.12, 0.16, 2.2, 8]} />
+          <meshStandardMaterial
+            color={tone("#8a8f92")}
+            metalness={0.7}
+            roughness={0.35}
+          />
+        </mesh>
+        <mesh position={[w * 0.3, h + 2.6, -d * 0.2]}>
+          <coneGeometry args={[0.32, 0.6, 8]} />
+          <meshStandardMaterial
+            color={tone("#f5a623")}
+            emissive={tone("#f5a623")}
+            emissiveIntensity={active ? 0.6 : 0.1}
+          />
+        </mesh>
+      </group>
+    );
+  // Utilities — a rooftop wind turbine, tying the brand to renewables and
+  // to the district's own Wind Garden landmark.
+  if (p.ticker === "NEE")
+    return (
+      <group>
+        <Wordmark
+          text="NextEra"
+          color="#00558c"
+          background="#ffffff"
+          width={w * 0.8}
+          height={1}
+          position={[0, h * 0.45, d / 2 + 0.13]}
+          active={active}
+        />
+        <mesh position={[0, h + 1.3, 0]}>
+          <cylinderGeometry args={[0.08, 0.1, 1.6, 8]} />
+          <meshStandardMaterial color={tone("#e7ece9")} />
+        </mesh>
+        {[0, 1, 2].map((i) => (
+          <group
+            key={i}
+            position={[0, h + 2.1, 0]}
+            rotation={[0, 0, (i * Math.PI * 2) / 3]}
+          >
+            <mesh position={[0.75, 0, 0]}>
+              <boxGeometry args={[1.4, 0.14, 0.05]} />
+              <meshStandardMaterial color={tone("#e7ece9")} />
+            </mesh>
+          </group>
+        ))}
+      </group>
+    );
+  // Materials — an orbiting-molecule motif for an industrial gases maker.
+  if (p.ticker === "LIN")
+    return (
+      <group>
+        <Wordmark
+          text="Linde"
+          color="#00539b"
+          background="#ffffff"
+          width={w * 0.7}
+          height={1.1}
+          position={[0, h * 0.45, d / 2 + 0.13]}
+          active={active}
+        />
+        <mesh position={[0, h + 1, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[0.7, 0.09, 8, 20]} />
+          <meshStandardMaterial
+            color={tone("#00539b")}
+            metalness={0.5}
+            roughness={0.3}
+          />
+        </mesh>
+        {[0, 1, 2].map((i) => {
+          const a = (i / 3) * Math.PI * 2;
+          return (
+            <mesh
+              key={i}
+              position={[Math.cos(a) * 0.7, h + 1, Math.sin(a) * 0.7]}
+            >
+              <sphereGeometry args={[0.22, 10, 8]} />
+              <meshStandardMaterial
+                color={tone("#8ec9e8")}
+                metalness={0.3}
+                roughness={0.2}
+              />
+            </mesh>
+          );
+        })}
+      </group>
+    );
+  // Real estate — an alternating sawtooth roofline, the classic warehouse
+  // and logistics-park silhouette.
+  if (p.ticker === "PLD")
+    return (
+      <group>
+        <Wordmark
+          text="Prologis"
+          color="#f37021"
+          background="#ffffff"
+          width={w * 0.8}
+          height={1}
+          position={[0, h * 0.45, d / 2 + 0.13]}
+          active={active}
+        />
+        {Array.from({ length: 4 }, (_, i) =>
+          block(
+            "sawtooth" + i,
+            [-w * 0.3 + i * w * 0.2, h + 0.35, 0],
+            [w * 0.16, 0.5, d * 0.9],
+            i % 2 ? "#f37021" : "#5b6b73",
+          ),
+        )}
+      </group>
+    );
+  // Defensive fallback for a future signature ticker with no bespoke
+  // geometry yet: still readable as a landmark via its own wordmark.
   return (
     <group>
       <Wordmark
-        text="N"
-        color="#e72a3b"
-        background="#202b34"
-        width={2.2}
-        height={4.2}
-        position={[-w * 0.28, h * 0.6, d / 2 + 0.13]}
+        text={p.ticker}
+        color="#283d35"
+        background="#ffffff"
+        width={w * 0.7}
+        height={1.2}
+        position={[0, h * 0.5, d / 2 + 0.13]}
         active={active}
       />
-      <Wordmark
-        text="NETFLIX"
-        color="#ffe5df"
-        background="#b62e44"
-        width={w * 0.85}
-        height={0.9}
-        position={[0, 2, d / 2 + 0.7]}
-        active={active}
-      />
-      {block(
-        "cinema-marquee",
-        [0, 2.55, d / 2 + 0.3],
-        [w * 0.95, 0.2, 1],
-        "#d74550",
-      )}
     </group>
   );
 }
