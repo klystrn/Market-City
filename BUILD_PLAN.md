@@ -98,3 +98,47 @@ Civic ideas: keep parks and conservatories seasonal scenery. Station platform li
 ## Signature buildings and UI/UX pass
 - [x] Every sector now has at least one hand-modeled signature landmark, not just the technology-adjacent giants: JPM (financials), LLY (healthcare), CAT (industrials), WMT (staples), XOM (energy), NEE (utilities), LIN (materials), PLD (real estate) join the original eight. Each got a curated base architecture variant (`signatureForms` in `domain/city.ts`) so its accents land on a flat, centered facade instead of a taper/drum silhouette. JPM's design nods to 270 Park Avenue's diagonal exoskeleton bracing.
 - [x] UI/UX proportion and margin audit across desktop, laptop, tablet and mobile widths (390–1680px): fixed the "Layers & view" and "Tools" dropdown panels going off-screen on narrow viewports (they were anchored to a flex-positioned launcher button rather than the viewport), removed the dead/conflicting CSS rules that caused it, and hid the station's earnings-arrivals board while a company panel is open so the two never compete for the same screen region.
+- [x] JPM's exoskeleton wraps all four elevations with four corner supercolumns planted at ground level, after owner feedback that a single-face brace did not read as 270 Park Avenue.
+- [x] Picking a company from search (suggestion click or Enter) now moves the camera to its building and opens the company view. Building clicks in the 3D scene keep single-click preview / double-click explore.
+
+## Multiple cities (owner scope update)
+
+The owner asked for the market universe and the city geography to become separate,
+switchable choices rather than one fixed map.
+
+### Correction recorded
+The owner described the existing city as showing the Nasdaq-100. The seeded
+development dataset is actually an **S&P 500-style subset of 100 companies** — it
+contains NYSE-listed names (JPM, XOM, CVX, WMT, PG, KO, JNJ, LLY, UNH, CAT, GE,
+NEE, PLD and others) that are not Nasdaq-100 constituents. Rather than relabel the
+data, each seeded company now carries accurate index-membership flags, and the
+Nasdaq-100 city renders only the seeded companies that are genuinely NDX members.
+Completing a true Nasdaq-100 city needs the remaining NDX constituents added to the
+dataset; that is a data task, not a layout task.
+
+### Agreed geography
+- **Tokyo — Nasdaq-100.** The existing inland-sprawl/bay/Fuji layout is preserved
+  unchanged and becomes the Nasdaq-100 city. Sector towns and subsector streets stay.
+- **London — S&P 500.** Nine concentric zones with zone 1 at the centre. Every sector
+  cuts through every zone as a wedge, so a district is a radial slice rather than a
+  town. Lower zone number = larger market capitalisation. No subsector sorting in the
+  layout; subsector is shown on the company card instead. Thames, royal parks,
+  museums and recognisable landmarks (the Shard, Tower Bridge, the London Eye,
+  Buckingham Palace, the Gherkin, Canary Wharf). Sector placement follows the real
+  city where it exists — financials at Canary Wharf and the City.
+- **New York City — S&P 500.** Five boroughs ranked by sector market-cap tier:
+  Manhattan (highest), Queens, Staten Island, Brooklyn, Bronx (lowest). Boroughs carry
+  the tier, neighbourhoods carry the sector, streets carry the subsector. Hudson and
+  East rivers, Central Park, museums and landmarks. Real anchoring where it exists —
+  Wall Street for financials, Hudson Yards for technology. Existing skyscrapers stand
+  in for their real occupants. The opening camera looks across Manhattan with Queens
+  and Brooklyn behind it.
+- **Sizing.** Market capitalisation maps to the **total built volume** a company
+  occupies — a combination of land footprint and height — rather than height alone.
+- **Switching.** The user picks the city; the choice persists locally.
+
+### Not claimed
+These are stylised interpretations at an illustrative scale, not georeferenced maps.
+Landmark shapes are simplified low-poly massing, not architectural reproductions.
+Assigning a real building to a company is an identity cue for exploration; it is not a
+claim about property ownership or occupancy.

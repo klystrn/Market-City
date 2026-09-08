@@ -2633,7 +2633,159 @@ The project's key differentiator should be obvious within approximately **one mi
 
 ---
 
-# 75. Final Product Statement
+# 75. Multiple Cities and Market Universes (owner update)
+
+The city geography and the market universe are **separate, switchable choices**.
+
+One rendering engine, several maps. A user picks which index they want to explore and
+which city they want to explore it in.
+
+---
+
+## 75.1 Universes
+
+| Universe | Meaning |
+|---|---|
+| Nasdaq-100 | Nasdaq-listed large caps |
+| S&P 500 | Broad U.S. large-cap market |
+
+Companies carry accurate index-membership flags. A universe filters the dataset; it
+does not relabel it.
+
+> **Recorded correction.** The original seeded 100-company development set is an S&P
+> 500-style subset, not the Nasdaq-100. It contains NYSE-listed names that are not NDX
+> constituents. The Nasdaq-100 city therefore renders only the seeded companies that
+> genuinely belong to that index until the remaining constituents are added.
+
+---
+
+## 75.2 Tokyo — Nasdaq-100
+
+The existing layout, unchanged: inland sprawl, eastern river wards, a southeastern bay
+with three sector islands, an elevated rail loop and Mount Fuji behind the skyline.
+
+- Sector = town
+- Subsector = street
+- Company = plot on a street
+
+---
+
+## 75.3 London — S&P 500
+
+A **radial** city, not a grid of towns.
+
+- **Nine concentric zones.** Zone 1 is the centre; zone 9 is the outer edge.
+- **Every sector cuts through every zone** as an angular wedge, so a district is a
+  radial slice from the centre to the edge.
+- **Zone = market-cap band.** The larger the company, the lower its zone number.
+- **No subsector sorting in the layout.** Subsector belongs on the company card.
+
+Geography and identity:
+
+- The Thames curves through the city
+- Royal parks and museum quarters as civic space
+- Landmarks: the Shard, Tower Bridge, the London Eye, Buckingham Palace, St Paul's,
+  the Gherkin, Canary Wharf
+- Sector placement follows the real city where a real anchor exists — financials at
+  Canary Wharf and the City
+- Existing skyscrapers may stand in for companies (for example the Shard for Apple)
+
+---
+
+## 75.4 New York City — S&P 500
+
+A **borough-tiered** city.
+
+- **Five boroughs, ranked by sector market-cap tier:** Manhattan (highest), Queens,
+  Staten Island, Brooklyn, Bronx (lowest)
+- **Borough = tier.** Manhattan holds the largest sectors, such as technology and
+  financials
+- **Neighbourhood = sector**
+- **Street = subsector**
+
+Geography and identity:
+
+- Hudson and East rivers, Central Park, museums, iconic landmarks, the NYC skyline
+- Real anchoring where it exists — Wall Street for financials, Hudson Yards and St
+  John's Terminal for technology
+- Existing skyscrapers stand in for their real occupants, such as 270 Park Avenue for
+  JPMorgan
+- **Opening camera:** across Manhattan, with Queens and Brooklyn in the background
+
+---
+
+## 75.5 Market-cap encoding
+
+Market capitalisation maps to the **total volume of built space** a company occupies:
+
+```text
+volume ∝ compressed(market cap)
+footprint × height = volume
+```
+
+Height alone is no longer the sole carrier. Land area and height share the encoding, so
+a very large company reads as a large *site*, not only a tall spike.
+
+---
+
+## 75.6 Honesty constraints for city geography
+
+These layouts are **stylised interpretations at an illustrative scale**.
+
+- Not georeferenced maps
+- Landmarks are simplified low-poly massing, not architectural reproductions
+- Assigning a real building to a company is an **identity cue for exploration**, not a
+  claim about property ownership, tenancy or headquarters location
+- Zone/borough placement encodes market capitalisation, not a company's real address
+
+---
+
+# 76. Idea Backlog
+
+Proposals only. Nothing here is approved scope until the owner selects it.
+
+## UI/UX
+
+1. **City-aware onboarding** — a two-line orientation card that changes per city
+   ("nine zones, centre is biggest" vs "five boroughs, Manhattan is biggest"), shown
+   once per city and dismissible.
+2. **Split-screen city comparison** — the same company or sector rendered in two
+   cities side by side, to show how differently each geography reads.
+3. **Guided tours** — a short, skippable camera path per city that visits three or four
+   landmarks and explains one encoding at each stop.
+
+## Market visualisation
+
+1. **Zone/borough breadth ribbons** — a thin colour band around each London ring or
+   borough shoreline showing what share of that tier is advancing.
+2. **Sector mass column** — an optional glass column over each district whose volume
+   tracks the sector's share of total index market cap, making weight legible from the
+   overview.
+3. **Index-migration ghosts** — when a company would sit in a different zone/borough
+   than it did at the last snapshot, show a faint outline on its previous plot.
+
+## Features
+
+1. **Universe diff** — a panel listing which companies appear in one universe but not
+   the other, so switching indexes is explicable rather than surprising.
+2. **Landmark index** — a browsable list of every real landmark in the active city with
+   its role (scenery, or the company it stands in for), so identity cues are never
+   ambiguous.
+3. **Personal city preferences** — remember per city: last camera bookmark, enabled map
+   layers and preferred season/lighting, so each city keeps its own feel.
+
+## Optimisation
+
+1. **Per-city geometry budget** — a declared instance/label budget per city definition,
+   enforced at build time by a test, so a new city cannot silently regress performance.
+2. **Lazy city loading** — code-split each city's terrain and landmark data so the
+   initial download only carries the active city.
+3. **Precomputed layout snapshots** — bake each city's plot positions into a generated
+   JSON fixture at build time instead of solving placement in the browser on boot.
+
+---
+
+# 77. Final Product Statement
 
 Market City should not be:
 
