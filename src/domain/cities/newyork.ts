@@ -490,8 +490,9 @@ export const newYork: CityDefinition = {
   landmarks: newYorkLandmarks,
   land: boroughs.map((b) => boroughShapes[b.id]),
   water: [],
-  roads: newYorkRoads(),
+  roads: () => newYorkRoads(),
   createPlots: createNewYorkPlots,
+  surround: "sea",
   // Opens over the Hudson looking east-south-east down the built length of
   // Manhattan, which puts Queens across the East River and Brooklyn beyond the
   // bridges in the background rather than beside the island.

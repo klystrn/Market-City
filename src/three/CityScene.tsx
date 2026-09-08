@@ -14,10 +14,8 @@ import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import type { Company, Layer, Plot, Snapshot } from "@/domain/types";
 import type { CityDefinition } from "@/domain/cities/types";
-import { cityStreets } from "@/domain/geography";
 import { civicSites } from "@/domain/civic";
 import type { Season } from "@/domain/seasons";
-import { subsectorFor } from "@/domain/subsectors";
 import { etMinuteOfIso } from "@/domain/intraday";
 import MarketDisasters from "./MarketDisasters";
 import Terrain from "./Terrain";
@@ -75,12 +73,16 @@ class SceneBoundary extends Component<
   }
 }
 const box = new THREE.BoxGeometry(1, 1, 1);
+// Vehicles run on the active city's own carriageways, so each city's traffic
+// follows the streets it actually draws rather than another city's grid.
 function Traffic({
+  city,
   plots,
   companies,
   enabled,
   dark,
 }: {
+  city: CityDefinition;
   plots: Plot[];
   companies: Company[];
   enabled: boolean;
@@ -91,42 +93,68 @@ function Traffic({
   const { invalidate } = useThree();
   const object = useMemo(() => new THREE.Object3D(), []);
   const elapsed = useRef(0);
-  const vehicles = useMemo(
-    () =>
-      plots
-        .flatMap((p, i) =>
-          Array.from(
-            {
-              length: Math.min(3, Math.ceil(companies[i]?.relativeVolume ?? 1)),
-            },
-            (_, j) => ({
-              p,
-              street: cityStreets().find(
-                (s) => s.id === subsectorFor(p.ticker)?.id,
-              )!,
+  const vehicles = useMemo(() => {
+    // Every carriageway segment the city draws, as a straight run a vehicle can
+    // travel. Bridges ride higher, matching the deck the terrain renders.
+    const runs = city.roads(plots).flatMap((road) =>
+      road.points.slice(1).map((b, i) => {
+        const a = road.points[i];
+        return {
+          a,
+          b,
+          length: Math.hypot(b[0] - a[0], b[1] - a[1]),
+          angle: Math.atan2(b[1] - a[1], b[0] - a[0]),
+          y: road.bridge ? 1.46 : 1.28,
+        };
+      }),
+    );
+    if (!runs.length) return [];
+    return plots
+      .flatMap((p, i) =>
+        Array.from(
+          { length: Math.min(3, Math.ceil(companies[i]?.relativeVolume ?? 1)) },
+          (_, j) => {
+            // The nearest run, so traffic gathers on the streets that serve the
+            // busiest lots instead of spreading evenly over the whole network.
+            let run = runs[0],
+              best = Infinity;
+            for (const candidate of runs) {
+              const mx = (candidate.a[0] + candidate.b[0]) / 2,
+                mz = (candidate.a[1] + candidate.b[1]) / 2;
+              const d = Math.hypot(p.x - mx, p.z - mz);
+              if (d < best) {
+                best = d;
+                run = candidate;
+              }
+            }
+            return {
+              run,
               offset: j * 2.4 + i,
               speed: 0.8 + (companies[i]?.relativeVolume ?? 1) * 0.5,
-            }),
-          ),
-        )
-        .slice(0, 240),
-    [plots, companies],
-  );
+            };
+          },
+        ),
+      )
+      .slice(0, 240);
+  }, [city, plots, companies]);
   useFrame((_, delta) => {
     if (!enabled || !ref.current) return;
     elapsed.current += Math.min(delta, 0.1);
-    vehicles.forEach(({ street, offset, speed }, i) => {
-      const span = street.end[0] - street.start[0];
-      const t = (elapsed.current * speed + offset) % span;
+    vehicles.forEach(({ run, offset, speed }, i) => {
+      const t = ((elapsed.current * speed + offset) % run.length) / run.length;
+      const along = i % 2 === 0 ? t : 1 - t;
+      // Half a lane either side of the centre line, so the two directions pass.
+      const lane = (i % 2 === 0 ? 0.42 : -0.42);
       object.position.set(
-        i % 2 === 0 ? street.start[0] + t : street.end[0] - t,
-        1.28,
-        street.z + (i % 2 === 0 ? 0.42 : -0.42),
+        run.a[0] + (run.b[0] - run.a[0]) * along - Math.sin(run.angle) * lane,
+        run.y,
+        run.a[1] + (run.b[1] - run.a[1]) * along + Math.cos(run.angle) * lane,
       );
+      object.rotation.set(0, -run.angle, 0);
       object.scale.set(0.85, 0.28, 0.4);
       object.updateMatrix();
       ref.current!.setMatrixAt(i, object.matrix);
-      object.position.y = 1.48;
+      object.position.y = run.y + 0.2;
       object.scale.set(0.44, 0.18, 0.34);
       object.updateMatrix();
       cabins.current?.setMatrixAt(i, object.matrix);
@@ -664,6 +692,7 @@ function CityScene(props: Props) {
             />
           )}
           <Traffic
+            city={props.city}
             plots={plots}
             companies={plots.map((p) =>
               props.snapshot.companies.find((c) => c.ticker === p.ticker)!,

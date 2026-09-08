@@ -43,8 +43,9 @@ export const tokyo: CityDefinition = {
   landmarks: tokyoLandmarks,
   land: [mainland, ...islands],
   water: [waterOutline, ...channels],
-  roads: cityRoads(),
+  roads: () => cityRoads(),
   createPlots,
+  surround: "sea",
   camera: {
     offset: [270, 285, 330],
     target: [-12, 0, -12],

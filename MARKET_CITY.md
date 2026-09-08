@@ -2738,7 +2738,23 @@ These layouts are **stylised interpretations at an illustrative scale**.
   claim about property ownership, tenancy or headquarters location
 - Zone/borough placement encodes market capitalisation, not a company's real address
 
-## 75.7 Implementation status — shipped
+## 75.7 London revisions (owner follow-up)
+
+- **Seven zones, not nine.** The outer two carried no companies, and an empty ring
+  is only distance for the camera to cross. The built radius falls from 170 to 138.
+- **No zone separation.** Concentric ring roads are replaced by ordinary streets
+  that front each row of buildings and stop at the avenues either side, with each
+  neighbourhood's building line offset slightly from its neighbours so nothing reads
+  as a ring. Radial arterials remain, and break around a landmark standing in for a
+  company rather than passing through it.
+- **Inland.** London is not coastal, so beyond the built-up area is open green
+  country in the city's own ground colour rather than sea. The Thames stays.
+
+The zone still means what it always meant: a market-capitalisation band, with the
+largest companies closest to the centre. Removing the empty rings and the ring roads
+changes how the city reads, not what it encodes.
+
+## 75.8 Implementation status — shipped
 
 All three cities are built and switchable. `src/domain/cities/` holds one module per
 city behind a shared `CityDefinition`: market-cap tiers, districts, landmarks, land and
@@ -2774,7 +2790,7 @@ Proposals only. Nothing here is approved scope until the owner selects it.
 ## UI/UX
 
 1. **City-aware onboarding** — a two-line orientation card that changes per city
-   ("nine zones, centre is biggest" vs "five boroughs, Manhattan is biggest"), shown
+   ("zones, centre is biggest" vs "five boroughs, Manhattan is biggest"), shown
    once per city and dismissible.
 2. **Split-screen city comparison** — the same company or sector rendered in two
    cities side by side, to show how differently each geography reads.

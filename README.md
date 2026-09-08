@@ -1,6 +1,6 @@
 # Market City
 
-An interactive architectural model of the U.S. stock market. Explore 100 representative companies across three cities that arrange the same market three different ways: **New York City** (five boroughs), **London** (nine zones) and **Tokyo** (sector towns and subsector streets). Search and filter the city, inspect company evidence and catalysts, pin a watchlist, compare companies side by side, and listen to the jazz and lofi radio library.
+An interactive architectural model of the U.S. stock market. Explore 100 representative companies across three cities that arrange the same market three different ways: **New York City** (five boroughs), **London** (seven zones) and **Tokyo** (sector towns and subsector streets). Search and filter the city, inspect company evidence and catalysts, pin a watchlist, compare companies side by side, and listen to the jazz and lofi radio library.
 
 **Status:** Functional demo application with replaceable provider adapters. Demo prices, news, catalysts, index values, and historical charts are explicitly simulated. Live provider operation requires free account credentials; the repository does not contain credentials or real market snapshots.
 
@@ -32,10 +32,12 @@ The globe control in the header switches between three layouts of the same seede
 | City | Universe | How it is arranged |
 | --- | --- | --- |
 | **New York City** (default) | S&P 500 | Five boroughs rank sectors by market capitalisation — Manhattan, Queens, Staten Island, Brooklyn, the Bronx — with neighbourhoods for sectors and streets for subsectors. Opens over the Hudson looking down Manhattan, with Queens and Brooklyn behind it. |
-| **London** | S&P 500 | Nine concentric zones around a civic core. Each sector is an angular wedge cutting through every zone; the larger the company, the lower its zone number. Subsector appears on the company card instead of in the layout. |
+| **London** | S&P 500 | Seven zones out from a civic core. Each sector is a wedge running through every zone; the larger the company, the lower its zone number. Ordinary streets front each row of buildings — there are no ring roads dividing one zone from the next — and the city sits on open green country, since London is inland. Subsector appears on the company card instead of in the layout. |
 | **Tokyo** | Nasdaq-100 | The original layout: a sector town for each district and a subsector street inside it, with bay islands, an elevated rail loop and Mount Fuji behind the skyline. |
 
 In the zone and borough cities, market capitalisation is encoded as the **total volume of built space** — land footprint and height together — rather than height alone, so a mega-cap reads as a large site as well as a tall one. Both axes use the same compressed log scale.
+
+London was specified as nine zones; the outer two held no companies in the seeded dataset, so they were removed rather than left as empty rings the camera has to cross. A test fails if any remaining zone ends up empty.
 
 Landmarks are simplified low-poly massing of real places: Central Park, One World Trade Center, the Brooklyn Bridge, Grand Central, the Statue of Liberty, Prospect Park, Citi Field and Yankee Stadium in New York; the Shard, Tower Bridge, the London Eye, Buckingham Palace, Canary Wharf, Battersea Power Station and the O2 in London. A handful of companies stand on the building associated with them — JPMorgan at 270 Park Avenue, Alphabet at St John's Terminal, Apple at the Shard. **This is an identity cue for exploration, not a claim about ownership, tenancy or headquarters location**, and the layouts are stylised interpretations at an illustrative scale, not georeferenced maps.
 

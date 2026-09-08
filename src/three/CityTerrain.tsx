@@ -40,7 +40,7 @@ export default function CityTerrain({
       lines: Part[] = [],
       railings: Part[] = [],
       pillars: Part[] = [];
-    for (const road of city.roads)
+    for (const road of city.roads(plots))
       for (let i = 1; i < road.points.length; i++) {
         const a = road.points[i - 1],
           b = road.points[i];
@@ -94,7 +94,7 @@ export default function CityTerrain({
         }
       }
     return { asphalt, sidewalks, lines, railings, pillars };
-  }, [city]);
+  }, [city, plots]);
   // A tinted pad under every lot carries its district colour, which is how the
   // zone wedges and borough neighbourhoods stay readable from the overview.
   const pads = useMemo(
@@ -116,9 +116,25 @@ export default function CityTerrain({
   );
   return (
     <group>
-      <mesh position={[0, -0.62, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      {/* The horizon beyond the city edge: open sea for a coastal city, or —
+          for an inland one such as London — open country in the city's own
+          ground colour, set flush with the built-up area so no shoreline or
+          step appears where there is none. */}
+      <mesh
+        position={[0, city.surround === "land" ? 0.93 : -0.62, 0]}
+        rotation={[-Math.PI / 2, 0, 0]}
+      >
         <planeGeometry args={[1400, 1400]} />
-        <meshStandardMaterial color={palette.water} roughness={0.42} />
+        <meshStandardMaterial
+          color={
+            city.surround === "land"
+              ? dark
+                ? "#466d56"
+                : palette.ground
+              : palette.water
+          }
+          roughness={city.surround === "land" ? 1 : 0.42}
+        />
       </mesh>
       {geometry.land.map((g, i) => (
         <mesh key={i} geometry={g}>

@@ -6,11 +6,17 @@ import { formFor } from "../forms";
 import type { CityDefinition, CityDistrict, CityLandmark } from "./types";
 // London — S&P 500.
 //
-// A radial city centred on Charing Cross. Nine concentric zones ring the centre;
-// every sector cuts through every zone as an angular wedge, so a district is a
-// slice from the middle to the edge rather than a town. The lower the zone
-// number, the larger the company. Subsector is not used for placement here; it
-// appears on the company card instead.
+// A radial city centred on Charing Cross. Market-capitalisation zones run out
+// from the centre and every sector cuts through all of them as an angular wedge,
+// so a district is a slice from the middle to the edge rather than a town. The
+// lower the zone number, the larger the company. Subsector is not used for
+// placement here; it appears on the company card instead.
+//
+// Zones order the buildings but are not drawn as rings: streets front each row
+// and stop at the avenues either side, and each neighbourhood's building line is
+// offset a little from its neighbours', so nothing reads as a boundary between
+// one zone and the next. London is inland, so the horizon beyond the built-up
+// area is open country rather than sea.
 //
 // Bearings are anchored to the real city where a real anchor exists: financials
 // point east toward the City and Canary Wharf, technology north-east toward
@@ -21,11 +27,18 @@ import type { CityDefinition, CityDistrict, CityLandmark } from "./types";
 // river frontage — so company lots begin on the Zone 1 ring outside it.
 const CENTRE_RADIUS = 26;
 const ZONE_WIDTH = 16;
-const ZONE_COUNT = 9;
+// Seven rings, not nine: the outer two were empty for every sector in the
+// seeded dataset, and empty rings only make the model larger to fly across.
+// tests/cities.test.ts fails if a zone ends up with no companies in it.
+const ZONE_COUNT = 7;
 // Radial avenues between wedges are kept at a constant ground width, so the
 // angle they consume shrinks as the rings grow.
 const AVENUE_ARC = 9;
 const SPACING = 10;
+/** Distance from a row of lots out to the street that fronts it. Lots are
+ *  axis-aligned, so a big diagonal lot reaches hypot(w, d) / 2 ≈ 5.4 radially;
+ *  the gap clears that corner plus the carriageway. */
+const LOT_STREET_GAP = 6.9;
 export const londonZones = Array.from({ length: ZONE_COUNT }, (_, i) => ({
   id: `zone-${i + 1}`,
   name: `Zone ${i + 1}`,
@@ -37,6 +50,9 @@ export const zoneInner = (rank: number) =>
 export const zoneOuter = (rank: number) => CENTRE_RADIUS + rank * ZONE_WIDTH;
 export const zoneMid = (rank: number) => zoneInner(rank) + ZONE_WIDTH / 2;
 export const LONDON_RADIUS = zoneOuter(ZONE_COUNT);
+/** Which zone a distance from the centre falls in, clamped to the built city. */
+export const zoneOf = (radius: number) =>
+  Math.min(ZONE_COUNT, Math.max(1, Math.ceil((radius - CENTRE_RADIUS) / ZONE_WIDTH)));
 // Clockwise from due east, matching the screen frame (+x east, +z south).
 const bearings: Record<string, number> = {
   financials: 0,
@@ -57,6 +73,17 @@ const rad = (deg: number) => (deg * Math.PI) / 180;
 function usableAngle(radius: number) {
   return Math.max(0.1, WEDGE - AVENUE_ARC / radius);
 }
+
+// Each neighbourhood sits a little further in or out than its neighbours, so
+// building lines and the streets that front them never line up into a ring
+// across the whole city. A company's zone is unchanged: this only shifts a wedge
+// within its own band.
+const sectorOrder = Object.keys(bearings);
+const stagger = (sector: string) =>
+  (((sectorOrder.indexOf(sector) * 5) % 7) - 3) * 1.1;
+/** Radius of a sector's building line in a given zone. */
+export const buildingLine = (sector: string, rank: number) =>
+  zoneMid(rank) + stagger(sector);
 export const londonDistricts: CityDistrict[] = sectorIdentities.map((s) => {
   // The label and click target sit in the middle of the wedge, a few zones out.
   const angle = rad(bearings[s.id]);
@@ -209,23 +236,30 @@ function snapToAvenue(landmark: CityLandmark): CityLandmark {
   if (landmark.kind === "park" || landmark.kind === "greenway") return landmark;
   const radius = Math.hypot(landmark.x, landmark.z);
   if (radius < CENTRE_RADIUS || radius > LONDON_RADIUS) return landmark;
-  const angle = Math.atan2(landmark.z, landmark.x);
+  const bearing = Math.atan2(landmark.z, landmark.x);
   const avenues = Object.values(bearings).map((b) => rad(b) + WEDGE / 2);
   let best = avenues[0];
   let bestGap = Infinity;
   for (const avenue of avenues) {
     const gap = Math.abs(
-      Math.atan2(Math.sin(angle - avenue), Math.cos(angle - avenue)),
+      Math.atan2(Math.sin(bearing - avenue), Math.cos(bearing - avenue)),
     );
     if (gap < bestGap) {
       bestGap = gap;
       best = avenue;
     }
   }
+  // A landmark that stands in for a company gets a company-sized lot, so it is
+  // also pulled onto its zone's building line: the same zone, and so the same
+  // market-cap band, but clear of the street that fronts the row. The radial
+  // arterial breaks around it, the way a road passes behind a large building.
+  const line = landmark.ticker
+    ? buildingLine(landmark.sector ?? sectorOrder[0], zoneOf(radius))
+    : radius;
   return {
     ...landmark,
-    x: Math.cos(best) * radius,
-    z: Math.sin(best) * radius,
+    x: Math.cos(best) * line,
+    z: Math.sin(best) * line,
   };
 }
 export const londonLandmarks: CityLandmark[] = rawLandmarks.map(snapToAvenue);
@@ -285,7 +319,7 @@ export function createLondonPlots(companies: Company[]): Plot[] {
       );
     let index = 0;
     for (let rank = 1; rank <= ZONE_COUNT && index < members.length; rank++) {
-      const radius = zoneMid(rank);
+      const radius = buildingLine(sector.id, rank);
       for (const offset of zoneSlots(rank)) {
         if (index >= members.length) break;
         const company = members[index];
@@ -316,7 +350,7 @@ export function createLondonPlots(companies: Company[]): Plot[] {
     while (index < members.length) {
       const company = members[index++];
       const { footprint, height } = massing(company.marketCap);
-      const radius = zoneMid(ZONE_COUNT) + (index % 2) * 6;
+      const radius = buildingLine(sector.id, ZONE_COUNT) + (index % 2) * 4;
       plots.push({
         ticker: company.ticker,
         x: Math.cos(bearing) * radius,
@@ -331,27 +365,107 @@ export function createLondonPlots(companies: Company[]): Plot[] {
   }
   return plots;
 }
-export function londonRoads(): Road[] {
-  const roads: Road[] = [];
-  for (let rank = 1; rank <= ZONE_COUNT; rank++) {
-    const radius = zoneOuter(rank);
-    const points: Point[] = Array.from({ length: 65 }, (_, i) => {
-      const a = (i / 64) * Math.PI * 2;
-      return [Math.cos(a) * radius, Math.sin(a) * radius] as Point;
-    });
-    roads.push({ id: `ring-${rank}`, points, width: rank <= 2 ? 2.6 : 2.2 });
+// A street across one neighbourhood: two long straight runs meeting in a shallow
+// bend, rather than a smooth arc, so it reads as a street rather than as part of
+// a ring. It stops at the avenues on either side.
+function street(
+  id: string,
+  radius: number,
+  centreBearing: number,
+  width: number,
+): Road {
+  const span = usableAngle(radius);
+  const points: Point[] = [-0.5, 0, 0.5].map((t) => {
+    const a = centreBearing + t * span;
+    return [Math.cos(a) * radius, Math.sin(a) * radius] as Point;
+  });
+  return { id, points, width };
+}
+/** How far out each sector actually builds, so no street is drawn past it. */
+function builtDepth(plots: Plot[]): Record<string, number> {
+  const depth: Record<string, number> = {};
+  for (const id of sectorOrder) depth[id] = 0;
+  for (const plot of plots) {
+    const bearing = Math.atan2(plot.z, plot.x);
+    let best = sectorOrder[0],
+      bestGap = Infinity;
+    for (const id of sectorOrder) {
+      const gap = Math.abs(
+        Math.atan2(
+          Math.sin(bearing - rad(bearings[id])),
+          Math.cos(bearing - rad(bearings[id])),
+        ),
+      );
+      if (gap < bestGap) {
+        bestGap = gap;
+        best = id;
+      }
+    }
+    depth[best] = Math.max(depth[best], zoneOf(Math.hypot(plot.x, plot.z)));
   }
+  return depth;
+}
+export function londonRoads(plots: Plot[] = []): Road[] {
+  const roads: Road[] = [];
+  // With no lots yet there is nothing to serve, so the city starts empty rather
+  // than drawing a road network over open ground.
+  const depth = builtDepth(plots);
+  // Radial arterials run out of the centre along the avenues the layout already
+  // reserves between sectors, the way London's A-roads leave the middle.
   for (const [id, bearing] of Object.entries(bearings)) {
     const a = rad(bearing) + WEDGE / 2;
-    roads.push({
-      id: `radial-${id}`,
-      points: [
-        [Math.cos(a) * CENTRE_RADIUS, Math.sin(a) * CENTRE_RADIUS],
-        [Math.cos(a) * LONDON_RADIUS, Math.sin(a) * LONDON_RADIUS],
-      ],
-      width: 2.6,
+    const at = (r: number): Point => [Math.cos(a) * r, Math.sin(a) * r];
+    // Any landmark standing in for a company sits on an avenue, so the arterial
+    // runs up to it and resumes past it rather than through it.
+    const blocking = londonLandmarks
+      .filter(
+        (l) =>
+          l.ticker &&
+          Math.abs(
+            Math.atan2(
+              Math.sin(Math.atan2(l.z, l.x) - a),
+              Math.cos(Math.atan2(l.z, l.x) - a),
+            ),
+          ) < 0.02,
+      )
+      .map((l) => Math.hypot(l.x, l.z))
+      .sort((x, y) => x - y);
+    // Two neighbourhoods share each avenue, so it runs as far as the deeper.
+    const neighbours = sectorOrder.filter(
+      (other) =>
+        Math.abs(
+          Math.atan2(Math.sin(rad(bearings[other]) - a), Math.cos(rad(bearings[other]) - a)),
+        ) <
+        WEDGE * 0.75,
+    );
+    const outermost = Math.max(0, ...neighbours.map((other) => depth[other]));
+    if (!outermost) continue;
+    const edge = buildingLine(id, outermost) + LOT_STREET_GAP + 5;
+    let from = CENTRE_RADIUS;
+    const push = (name: string, a0: number, a1: number) => {
+      // A stub shorter than a block is not a street; drop it.
+      if (a1 - a0 > 8)
+        roads.push({ id: name, points: [at(a0), at(a1)], width: 2.6 });
+    };
+    blocking.forEach((r, i) => {
+      push(`radial-${id}-${i}`, from, r - 7);
+      from = r + 7;
     });
+    push(`radial-${id}`, from, edge);
   }
+  // Ordinary streets front each row of lots inside its own neighbourhood, and
+  // stop at the avenue rather than closing into a ring, so the city reads as a
+  // street network instead of concentric bands dividing one zone from the next.
+  for (const [id, bearing] of Object.entries(bearings))
+    for (let rank = 1; rank <= depth[id]; rank++)
+      roads.push(
+        street(
+          `street-${id}-${rank}`,
+          buildingLine(id, rank) + LOT_STREET_GAP,
+          rad(bearing),
+          rank <= 3 ? 2.1 : 1.8,
+        ),
+      );
   for (const crossing of [-30, -8, 20, 36, 62]) {
     const index = thames.findIndex(([x]) => x >= crossing);
     const z = thames[Math.max(1, index)][1];
@@ -367,10 +481,12 @@ export function londonRoads(): Road[] {
   }
   return roads;
 }
+// London is inland, so this is the built-up area rather than a coastline: it
+// carries the city's ground tint and then meets open country of the same colour,
+// with no shore to read as an island edge.
 const outline: Point[] = Array.from({ length: 97 }, (_, i) => {
   const a = (i / 96) * Math.PI * 2;
-  // A gently irregular edge keeps the city from reading as a perfect disc.
-  const r = LONDON_RADIUS + 9 + Math.sin(a * 3) * 6 + Math.cos(a * 5) * 4;
+  const r = LONDON_RADIUS + 14 + Math.sin(a * 3) * 5 + Math.cos(a * 5) * 3;
   return [Math.cos(a) * r, Math.sin(a) * r] as Point;
 });
 export const london: CityDefinition = {
@@ -378,7 +494,7 @@ export const london: CityDefinition = {
   name: "London",
   region: "United Kingdom",
   universe: "sp500",
-  tagline: "Nine zones around the centre",
+  tagline: "Zones out from the centre",
   tierNoun: "Zone",
   layoutNote:
     "Sectors run outward from the centre as wedges. The larger the company, the lower its zone.",
@@ -395,12 +511,13 @@ export const london: CityDefinition = {
           .reverse(),
       ),
   ],
-  roads: londonRoads(),
+  roads: londonRoads,
   createPlots: createLondonPlots,
+  surround: "land",
   camera: {
     offset: [250, 275, 300],
     target: [6, 0, 4],
-    overviewDivisor: [400, 272],
-    overviewMax: 4.6,
+    overviewDivisor: [284, 194],
+    overviewMax: 6.2,
   },
 };

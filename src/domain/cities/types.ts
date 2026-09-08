@@ -60,7 +60,9 @@ export interface CityDefinition {
   landmarks: CityLandmark[];
   land: Point[][];
   water: Point[][];
-  roads: Road[];
+  /** Streets for the lots actually placed, so a city draws no road network
+   *  where it has no buildings. */
+  roads: (plots: Plot[]) => Road[];
   createPlots: (companies: Company[]) => Plot[];
   /** Camera offset from its target, and the default overview target. */
   camera: {
@@ -70,6 +72,8 @@ export interface CityDefinition {
     /** Upper bound for the overview zoom, which is also the zoom-out limit. */
     overviewMax: number;
   };
+  /** What lies beyond the city edge. London is inland, so its horizon is land. */
+  surround: "sea" | "land";
   /** Tokyo keeps its own bespoke terrain, seasons and Fuji. */
   bespokeTerrain?: boolean;
 }

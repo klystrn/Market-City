@@ -119,7 +119,8 @@ dataset; that is a data task, not a layout task.
 ### Agreed geography
 - **Tokyo — Nasdaq-100.** The existing inland-sprawl/bay/Fuji layout is preserved
   unchanged and becomes the Nasdaq-100 city. Sector towns and subsector streets stay.
-- **London — S&P 500.** Nine concentric zones with zone 1 at the centre. Every sector
+- **London — S&P 500.** Concentric zones with zone 1 at the centre (nine as first
+  specified, later trimmed to the seven that hold companies — see Revisions). Every sector
   cuts through every zone as a wedge, so a district is a radial slice rather than a
   town. Lower zone number = larger market capitalisation. No subsector sorting in the
   layout; subsector is shown on the company card instead. Thames, royal parks,
@@ -178,3 +179,23 @@ land inside the zone they claim — with the companies pinned to a real building
 exempted, since they stand where that building really is. Browser checks cover the
 picker, per-city rendering, persistence across a reload, search-to-zoom, and the
 narrow-viewport header and popover layout.
+
+### Revisions — London (owner follow-up)
+1. **Empty zones removed.** Zones 8 and 9 held no companies in the seeded dataset,
+   so the ring count is seven and the built radius drops from 170 to 138 units.
+   `tests/cities.test.ts` fails if any declared zone ends up with no companies, so
+   the model cannot quietly grow empty rings again.
+2. **No zone separation.** The concentric ring roads are gone. Streets front each
+   row of buildings, stop at the avenues either side, and each neighbourhood sits a
+   little further in or out than its neighbours, so nothing lines up into a ring.
+   Radial arterials still run out of the centre and break around any landmark that
+   stands in for a company. A test asserts no road closes into a ring and none
+   crosses a lot.
+3. **Inland, not coastal.** `CityDefinition.surround` is `"land"` for London and
+   `"sea"` for Tokyo and New York. The horizon beyond London's built-up area is open
+   country in the city's own ground colour, set flush with the ground so no shoreline
+   or step appears. The Thames still runs through it.
+4. **Streets follow the buildings.** `CityDefinition.roads` is now a function of the
+   placed lots, so a city draws no road network where it has not built. This also
+   fixed a real bug from the first multi-city commit: traffic ran on Tokyo's street
+   coordinates in every city. Vehicles now travel the active city's own carriageways.

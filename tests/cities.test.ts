@@ -7,6 +7,7 @@ import {
   LONDON_RADIUS,
   londonDistricts,
   londonLandmarks,
+  londonRoads,
   zoneInner,
   zoneOuter,
 } from "../src/domain/cities/london";
@@ -213,4 +214,58 @@ test("a partial company name resolves the way the suggestion list promises", () 
   // Structured queries still win over the substring fallback.
   assert.equal(parseCommand("energy", demo).type, "sector");
   assert.equal(parseCommand("earnings this week", demo).type, "earnings");
+});
+
+test("London has no empty zone and no road running through a building", () => {
+  const city = getCity("london");
+  const plots = city.createPlots(companiesForCity(demo.companies, city));
+  // Zones exist to carry companies; an empty ring only makes the model bigger.
+  for (const zone of city.tiers)
+    assert.ok(
+      plots.some((p) => p.tier === zone.id),
+      zone.name + " has no companies and should not exist",
+    );
+  assert.ok(
+    plots.every((p) => city.tiers.some((t) => t.id === p.tier)),
+    "every lot must name a zone the city declares",
+  );
+  // Streets front the rows rather than dividing them, so no carriageway may
+  // cross a lot. Sampling is dense enough to catch a clipped corner.
+  for (const road of londonRoads(plots)) {
+    if (road.bridge) continue;
+    for (let i = 1; i < road.points.length; i++) {
+      const [ax, az] = road.points[i - 1],
+        [bx, bz] = road.points[i];
+      for (let t = 0; t <= 1; t += 0.02) {
+        const x = ax + (bx - ax) * t,
+          z = az + (bz - az) * t;
+        for (const p of plots) {
+          const dx = Math.max(0, Math.abs(x - p.x) - p.width / 2),
+            dz = Math.max(0, Math.abs(z - p.z) - p.depth / 2);
+          assert.ok(
+            Math.hypot(dx, dz) >= road.width / 2,
+            `${road.id} runs through ${p.ticker}`,
+          );
+        }
+      }
+    }
+  }
+  // No street is drawn where the city has not built.
+  assert.ok(
+    londonRoads([]).every((r) => r.bridge),
+    "an empty London draws only its river crossings",
+  );
+  // No closed ring roads: a street must not return to where it started.
+  for (const road of londonRoads(plots)) {
+    const first = road.points[0],
+      last = road.points[road.points.length - 1];
+    assert.ok(
+      Math.hypot(first[0] - last[0], first[1] - last[1]) > 4,
+      road.id + " closes into a ring",
+    );
+  }
+  // London is inland: no sea beyond the edge, but the Thames still runs.
+  assert.equal(city.surround, "land");
+  assert.ok(city.water.length > 0, "the Thames must still be drawn");
+  assert.equal(getCity("newyork").surround, "sea");
 });
