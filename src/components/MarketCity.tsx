@@ -335,7 +335,9 @@ export default function MarketCity() {
     if (intent.type === "company") {
       setSelected(intent.ticker);
       setFocusedSector(null);
-      setDeep(false);
+      // Searching for a company is a deliberate pick, so zoom the camera
+      // straight to its building rather than leaving the city framing.
+      setDeep(true);
       setMatches(null);
       setResultLabel("");
       return;

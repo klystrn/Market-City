@@ -348,27 +348,59 @@ function Signature({ p, active }: { p: Plot; active: boolean }) {
         )}
       </group>
     );
-  // Financials — a tapering glass tower crossed by a diagonal exoskeleton,
-  // the single most recognizable feature of JPMorgan's 270 Park Avenue.
+  // Financials — a tapering glass tower wrapped on all four sides by a
+  // diagonal exoskeleton, rising off four corner supercolumns planted in
+  // the ground: the single most recognizable feature of JPMorgan's new
+  // 270 Park Avenue headquarters.
   if (p.ticker === "JPM") {
-    const braceLength = Math.hypot(w, h) * 0.94;
-    const braceAngle = Math.atan2(h, w);
+    const pillarInset = 0.22;
+    const pillarSize = Math.max(0.22, Math.min(w, d) * 0.14);
+    const corners: [number, number][] = [
+      [w / 2 + pillarInset, d / 2 + pillarInset],
+      [-w / 2 - pillarInset, d / 2 + pillarInset],
+      [w / 2 + pillarInset, -d / 2 - pillarInset],
+      [-w / 2 - pillarInset, -d / 2 - pillarInset],
+    ];
+    const faces = [
+      { rotationY: 0, faceWidth: w, faceOffset: d / 2 + 0.15 },
+      { rotationY: Math.PI, faceWidth: w, faceOffset: d / 2 + 0.15 },
+      { rotationY: Math.PI / 2, faceWidth: d, faceOffset: w / 2 + 0.15 },
+      { rotationY: -Math.PI / 2, faceWidth: d, faceOffset: w / 2 + 0.15 },
+    ];
     return (
       <group>
-        {[braceAngle, -braceAngle].map((angle) => (
-          <mesh
-            key={angle}
-            position={[0, h * 0.52, d / 2 + 0.15]}
-            rotation={[0, 0, angle]}
-          >
-            <boxGeometry args={[braceLength, 0.2, 0.1]} />
+        {corners.map(([x, z]) => (
+          <mesh key={`${x}-${z}`} position={[x, h / 2, z]}>
+            <boxGeometry args={[pillarSize, h, pillarSize]} />
             <meshStandardMaterial
-              color={tone("#a7bac6")}
-              metalness={0.65}
-              roughness={0.25}
+              color={tone("#828d94")}
+              metalness={0.55}
+              roughness={0.35}
             />
           </mesh>
         ))}
+        {faces.map((face, i) => {
+          const braceLength = Math.hypot(face.faceWidth, h) * 0.94;
+          const braceAngle = Math.atan2(h, face.faceWidth);
+          return (
+            <group key={i} rotation={[0, face.rotationY, 0]}>
+              {[braceAngle, -braceAngle].map((angle) => (
+                <mesh
+                  key={angle}
+                  position={[0, h * 0.52, face.faceOffset]}
+                  rotation={[0, 0, angle]}
+                >
+                  <boxGeometry args={[braceLength, 0.2, 0.1]} />
+                  <meshStandardMaterial
+                    color={tone("#a7bac6")}
+                    metalness={0.65}
+                    roughness={0.25}
+                  />
+                </mesh>
+              ))}
+            </group>
+          );
+        })}
         <Wordmark
           text="JPMORGAN"
           color="#ffffff"
