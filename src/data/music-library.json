@@ -1,0 +1,188 @@
+[
+  {
+    "id": "classical",
+    "name": "MC Classical",
+    "tracks": []
+  },
+  {
+    "id": "jazz",
+    "name": "MC Jazz",
+    "tracks": [
+      {
+        "title": "alex morgan cocktail jazz",
+        "url": "/music/jazz/alex-morgan-cocktail-jazz-556233.mp3"
+      },
+      {
+        "title": "alex morgan dixieland jazz restaurant",
+        "url": "/music/jazz/alex-morgan-dixieland-jazz-restaurant-556679.mp3"
+      },
+      {
+        "title": "alex morgan jazz cocktail bar music",
+        "url": "/music/jazz/alex-morgan-jazz-cocktail-bar-music-563579.mp3"
+      },
+      {
+        "title": "alex morgan jazz cocktail lounge music",
+        "url": "/music/jazz/alex-morgan-jazz-cocktail-lounge-music-556246.mp3"
+      },
+      {
+        "title": "alex morgan jazz coffee shop music",
+        "url": "/music/jazz/alex-morgan-jazz-coffee-shop-music-556234.mp3"
+      },
+      {
+        "title": "alex morgan jazz coffee shop music",
+        "url": "/music/jazz/alex-morgan-jazz-coffee-shop-music-571652.mp3"
+      },
+      {
+        "title": "alex morgan jazz piano restaurant music",
+        "url": "/music/jazz/alex-morgan-jazz-piano-restaurant-music-564275.mp3"
+      },
+      {
+        "title": "alex morgan jazz rainy lounge music",
+        "url": "/music/jazz/alex-morgan-jazz-rainy-lounge-music-556235.mp3"
+      },
+      {
+        "title": "alex morgan jazz rainy night music",
+        "url": "/music/jazz/alex-morgan-jazz-rainy-night-music-571656.mp3"
+      },
+      {
+        "title": "alex morgan jazz restaurant music",
+        "url": "/music/jazz/alex-morgan-jazz-restaurant-music-556244.mp3"
+      },
+      {
+        "title": "alex morgan jazz restaurant music",
+        "url": "/music/jazz/alex-morgan-jazz-restaurant-music-563578.mp3"
+      },
+      {
+        "title": "alex morgan jazz song sunny cafe nu jazz",
+        "url": "/music/jazz/alex-morgan-jazz-song-sunny-cafe-nu-jazz-587413.mp3"
+      },
+      {
+        "title": "alex morgan jazz study music",
+        "url": "/music/jazz/alex-morgan-jazz-study-music-563581.mp3"
+      },
+      {
+        "title": "alex morgan samba jazz restaurant",
+        "url": "/music/jazz/alex-morgan-samba-jazz-restaurant-567538.mp3"
+      },
+      {
+        "title": "alex morgan smooth jazz sunny cafe",
+        "url": "/music/jazz/alex-morgan-smooth-jazz-sunny-cafe-568177.mp3"
+      },
+      {
+        "title": "andriih jazz jazz music",
+        "url": "/music/jazz/andriih-jazz-jazz-music-576304.mp3"
+      },
+      {
+        "title": "aurectheme coffee jazz",
+        "url": "/music/jazz/aurectheme-coffee-jazz-593167.mp3"
+      },
+      {
+        "title": "aurectheme jazz",
+        "url": "/music/jazz/aurectheme-jazz-584847.mp3"
+      },
+      {
+        "title": "aurectheme jazz bar",
+        "url": "/music/jazz/aurectheme-jazz-bar-592657.mp3"
+      },
+      {
+        "title": "ornave jazz light tread",
+        "url": "/music/jazz/ornave-jazz-light-tread-594985.mp3"
+      },
+      {
+        "title": "ornave jazz piano fog",
+        "url": "/music/jazz/ornave-jazz-piano-fog-595002.mp3"
+      }
+    ]
+  },
+  {
+    "id": "lofi",
+    "name": "MC Lofi",
+    "tracks": [
+      {
+        "title": "alex morgan corporate lofi flute presentation",
+        "url": "/music/lofi/alex-morgan-corporate-lofi-flute-presentation-560069.mp3"
+      },
+      {
+        "title": "alex morgan lofi chill vlog beats",
+        "url": "/music/lofi/alex-morgan-lofi-chill-vlog-beats-573883.mp3"
+      },
+      {
+        "title": "alex morgan lofi cocktail bar",
+        "url": "/music/lofi/alex-morgan-lofi-cocktail-bar-568153.mp3"
+      },
+      {
+        "title": "alex morgan lofi coffee shop",
+        "url": "/music/lofi/alex-morgan-lofi-coffee-shop-568150.mp3"
+      },
+      {
+        "title": "alex morgan lofi jazz melody restaurant",
+        "url": "/music/lofi/alex-morgan-lofi-jazz-melody-restaurant-560048.mp3"
+      },
+      {
+        "title": "alex morgan lofi study rainy night",
+        "url": "/music/lofi/alex-morgan-lofi-study-rainy-night-568166.mp3"
+      },
+      {
+        "title": "mirostar lofi lofi music lofi chill",
+        "url": "/music/lofi/mirostar-lofi-lofi-music-lofi-chill-560327.mp3"
+      },
+      {
+        "title": "ornave lofi moon light",
+        "url": "/music/lofi/ornave-lofi-moon-light-553399.mp3"
+      },
+      {
+        "title": "ornave lofi worn keys",
+        "url": "/music/lofi/ornave-lofi-worn-keys-594983.mp3"
+      },
+      {
+        "title": "prettyjohn1 lofi lofi music_35sec",
+        "url": "/music/lofi/prettyjohn1-lofi-lofi-music_35sec-587183.mp3"
+      },
+      {
+        "title": "prettyjohn1 lofi lofi music_61sec",
+        "url": "/music/lofi/prettyjohn1-lofi-lofi-music_61sec-587180.mp3"
+      },
+      {
+        "title": "pulsebox lofi production",
+        "url": "/music/lofi/pulsebox-lofi-production-522875.mp3"
+      },
+      {
+        "title": "sub_clair lofi instrumental",
+        "url": "/music/lofi/sub_clair-lofi-instrumental-586096.mp3"
+      },
+      {
+        "title": "the_mountain lofi beats",
+        "url": "/music/lofi/the_mountain-lofi-beats-567433.mp3"
+      },
+      {
+        "title": "the_mountain lofi lofi music",
+        "url": "/music/lofi/the_mountain-lofi-lofi-music-496553.mp3"
+      },
+      {
+        "title": "zephiramusic lofi piano",
+        "url": "/music/lofi/zephiramusic-lofi-piano-582885.mp3"
+      },
+      {
+        "title": "zephiramusic lofi podcast",
+        "url": "/music/lofi/zephiramusic-lofi-podcast-582884.mp3"
+      },
+      {
+        "title": "zephiramusic lofi reel",
+        "url": "/music/lofi/zephiramusic-lofi-reel-588906.mp3"
+      },
+      {
+        "title": "zephiramusic lofi romantic",
+        "url": "/music/lofi/zephiramusic-lofi-romantic-588905.mp3"
+      },
+      {
+        "title": "zephiramusic travel lofi",
+        "url": "/music/lofi/zephiramusic-travel-lofi-585955.mp3"
+      }
+    ]
+  },
+  {
+    "id": "technopop",
+    "name": "MC Technopop",
+    "tracks": []
+  }
+]

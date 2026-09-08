@@ -1,0 +1,807 @@
+{
+  "checkedOn": "2026-09-08",
+  "source": "https://github.com/datasets/s-and-p-500-companies/blob/main/data/constituents.csv",
+  "upstream": "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies",
+  "companies": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "NVDA",
+      "name": "NVIDIA",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "AVGO",
+      "name": "Broadcom",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "ORCL",
+      "name": "Oracle",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "CRM",
+      "name": "Salesforce",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "AMD",
+      "name": "Advanced Micro Devices",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "ADBE",
+      "name": "Adobe",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "ACN",
+      "name": "Accenture",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "CSCO",
+      "name": "Cisco Systems",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "IBM",
+      "name": "IBM",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "QCOM",
+      "name": "Qualcomm",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "TXN",
+      "name": "Texas Instruments",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "INTU",
+      "name": "Intuit",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "AMAT",
+      "name": "Applied Materials",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "NOW",
+      "name": "ServiceNow",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "MU",
+      "name": "Micron Technology",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "PANW",
+      "name": "Palo Alto Networks",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase",
+      "sector": "financials",
+      "reference": "Financials",
+      "expected": "financials",
+      "match": true
+    },
+    {
+      "ticker": "V",
+      "name": "Visa",
+      "sector": "financials",
+      "reference": "Financials",
+      "expected": "financials",
+      "match": true
+    },
+    {
+      "ticker": "MA",
+      "name": "Mastercard",
+      "sector": "financials",
+      "reference": "Financials",
+      "expected": "financials",
+      "match": true
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway",
+      "sector": "financials",
+      "reference": "Financials",
+      "expected": "financials",
+      "match": true
+    },
+    {
+      "ticker": "BAC",
+      "name": "Bank of America",
+      "sector": "financials",
+      "reference": "Financials",
+      "expected": "financials",
+      "match": true
+    },
+    {
+      "ticker": "WFC",
+      "name": "Wells Fargo",
+      "sector": "financials",
+      "reference": "Financials",
+      "expected": "financials",
+      "match": true
+    },
+    {
+      "ticker": "GS",
+      "name": "Goldman Sachs",
+      "sector": "financials",
+      "reference": "Financials",
+      "expected": "financials",
+      "match": true
+    },
+    {
+      "ticker": "MS",
+      "name": "Morgan Stanley",
+      "sector": "financials",
+      "reference": "Financials",
+      "expected": "financials",
+      "match": true
+    },
+    {
+      "ticker": "AXP",
+      "name": "American Express",
+      "sector": "financials",
+      "reference": "Financials",
+      "expected": "financials",
+      "match": true
+    },
+    {
+      "ticker": "BLK",
+      "name": "BlackRock",
+      "sector": "financials",
+      "reference": "Financials",
+      "expected": "financials",
+      "match": true
+    },
+    {
+      "ticker": "C",
+      "name": "Citigroup",
+      "sector": "financials",
+      "reference": "Financials",
+      "expected": "financials",
+      "match": true
+    },
+    {
+      "ticker": "SPGI",
+      "name": "S&P Global",
+      "sector": "financials",
+      "reference": "Financials",
+      "expected": "financials",
+      "match": true
+    },
+    {
+      "ticker": "LLY",
+      "name": "Eli Lilly",
+      "sector": "healthcare",
+      "reference": "Health Care",
+      "expected": "healthcare",
+      "match": true
+    },
+    {
+      "ticker": "UNH",
+      "name": "UnitedHealth Group",
+      "sector": "healthcare",
+      "reference": "Health Care",
+      "expected": "healthcare",
+      "match": true
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "sector": "healthcare",
+      "reference": "Health Care",
+      "expected": "healthcare",
+      "match": true
+    },
+    {
+      "ticker": "ABBV",
+      "name": "AbbVie",
+      "sector": "healthcare",
+      "reference": "Health Care",
+      "expected": "healthcare",
+      "match": true
+    },
+    {
+      "ticker": "MRK",
+      "name": "Merck & Co.",
+      "sector": "healthcare",
+      "reference": "Health Care",
+      "expected": "healthcare",
+      "match": true
+    },
+    {
+      "ticker": "TMO",
+      "name": "Thermo Fisher Scientific",
+      "sector": "healthcare",
+      "reference": "Health Care",
+      "expected": "healthcare",
+      "match": true
+    },
+    {
+      "ticker": "ABT",
+      "name": "Abbott Laboratories",
+      "sector": "healthcare",
+      "reference": "Health Care",
+      "expected": "healthcare",
+      "match": true
+    },
+    {
+      "ticker": "AMGN",
+      "name": "Amgen",
+      "sector": "healthcare",
+      "reference": "Health Care",
+      "expected": "healthcare",
+      "match": true
+    },
+    {
+      "ticker": "PFE",
+      "name": "Pfizer",
+      "sector": "healthcare",
+      "reference": "Health Care",
+      "expected": "healthcare",
+      "match": true
+    },
+    {
+      "ticker": "ISRG",
+      "name": "Intuitive Surgical",
+      "sector": "healthcare",
+      "reference": "Health Care",
+      "expected": "healthcare",
+      "match": true
+    },
+    {
+      "ticker": "DHR",
+      "name": "Danaher",
+      "sector": "healthcare",
+      "reference": "Health Care",
+      "expected": "healthcare",
+      "match": true
+    },
+    {
+      "ticker": "BMY",
+      "name": "Bristol Myers Squibb",
+      "sector": "healthcare",
+      "reference": "Health Care",
+      "expected": "healthcare",
+      "match": true
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon",
+      "sector": "consumer",
+      "reference": "Consumer Discretionary",
+      "expected": "consumer",
+      "match": true
+    },
+    {
+      "ticker": "TSLA",
+      "name": "Tesla",
+      "sector": "consumer",
+      "reference": "Consumer Discretionary",
+      "expected": "consumer",
+      "match": true
+    },
+    {
+      "ticker": "HD",
+      "name": "Home Depot",
+      "sector": "consumer",
+      "reference": "Consumer Discretionary",
+      "expected": "consumer",
+      "match": true
+    },
+    {
+      "ticker": "MCD",
+      "name": "McDonald's",
+      "sector": "consumer",
+      "reference": "Consumer Discretionary",
+      "expected": "consumer",
+      "match": true
+    },
+    {
+      "ticker": "LOW",
+      "name": "Lowe's",
+      "sector": "consumer",
+      "reference": "Consumer Discretionary",
+      "expected": "consumer",
+      "match": true
+    },
+    {
+      "ticker": "BKNG",
+      "name": "Booking Holdings",
+      "sector": "consumer",
+      "reference": "Consumer Discretionary",
+      "expected": "consumer",
+      "match": true
+    },
+    {
+      "ticker": "NKE",
+      "name": "Nike",
+      "sector": "consumer",
+      "reference": "Consumer Discretionary",
+      "expected": "consumer",
+      "match": true
+    },
+    {
+      "ticker": "SBUX",
+      "name": "Starbucks",
+      "sector": "consumer",
+      "reference": "Consumer Discretionary",
+      "expected": "consumer",
+      "match": true
+    },
+    {
+      "ticker": "TJX",
+      "name": "TJX Companies",
+      "sector": "consumer",
+      "reference": "Consumer Discretionary",
+      "expected": "consumer",
+      "match": true
+    },
+    {
+      "ticker": "CMG",
+      "name": "Chipotle Mexican Grill",
+      "sector": "consumer",
+      "reference": "Consumer Discretionary",
+      "expected": "consumer",
+      "match": true
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet",
+      "sector": "communications",
+      "reference": "Communication Services",
+      "expected": "communications",
+      "match": true
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms",
+      "sector": "communications",
+      "reference": "Communication Services",
+      "expected": "communications",
+      "match": true
+    },
+    {
+      "ticker": "NFLX",
+      "name": "Netflix",
+      "sector": "communications",
+      "reference": "Communication Services",
+      "expected": "communications",
+      "match": true
+    },
+    {
+      "ticker": "DIS",
+      "name": "Walt Disney",
+      "sector": "communications",
+      "reference": "Communication Services",
+      "expected": "communications",
+      "match": true
+    },
+    {
+      "ticker": "TMUS",
+      "name": "T-Mobile US",
+      "sector": "communications",
+      "reference": "Communication Services",
+      "expected": "communications",
+      "match": true
+    },
+    {
+      "ticker": "VZ",
+      "name": "Verizon",
+      "sector": "communications",
+      "reference": "Communication Services",
+      "expected": "communications",
+      "match": true
+    },
+    {
+      "ticker": "T",
+      "name": "AT&T",
+      "sector": "communications",
+      "reference": "Communication Services",
+      "expected": "communications",
+      "match": true
+    },
+    {
+      "ticker": "CMCSA",
+      "name": "Comcast",
+      "sector": "communications",
+      "reference": "Communication Services",
+      "expected": "communications",
+      "match": true
+    },
+    {
+      "ticker": "GE",
+      "name": "GE Aerospace",
+      "sector": "industrials",
+      "reference": "Industrials",
+      "expected": "industrials",
+      "match": true
+    },
+    {
+      "ticker": "CAT",
+      "name": "Caterpillar",
+      "sector": "industrials",
+      "reference": "Industrials",
+      "expected": "industrials",
+      "match": true
+    },
+    {
+      "ticker": "RTX",
+      "name": "RTX",
+      "sector": "industrials",
+      "reference": "Industrials",
+      "expected": "industrials",
+      "match": true
+    },
+    {
+      "ticker": "UNP",
+      "name": "Union Pacific",
+      "sector": "industrials",
+      "reference": "Industrials",
+      "expected": "industrials",
+      "match": true
+    },
+    {
+      "ticker": "HON",
+      "name": "Honeywell",
+      "sector": "industrials",
+      "reference": "Industrials",
+      "expected": "industrials",
+      "match": true
+    },
+    {
+      "ticker": "ETN",
+      "name": "Eaton",
+      "sector": "industrials",
+      "reference": "Industrials",
+      "expected": "industrials",
+      "match": true
+    },
+    {
+      "ticker": "UPS",
+      "name": "United Parcel Service",
+      "sector": "industrials",
+      "reference": "Industrials",
+      "expected": "industrials",
+      "match": true
+    },
+    {
+      "ticker": "DE",
+      "name": "Deere & Company",
+      "sector": "industrials",
+      "reference": "Industrials",
+      "expected": "industrials",
+      "match": true
+    },
+    {
+      "ticker": "LMT",
+      "name": "Lockheed Martin",
+      "sector": "industrials",
+      "reference": "Industrials",
+      "expected": "industrials",
+      "match": true
+    },
+    {
+      "ticker": "ADP",
+      "name": "Automatic Data Processing",
+      "sector": "industrials",
+      "reference": "Industrials",
+      "expected": "industrials",
+      "match": true
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart",
+      "sector": "staples",
+      "reference": "Consumer Staples",
+      "expected": "staples",
+      "match": true
+    },
+    {
+      "ticker": "COST",
+      "name": "Costco",
+      "sector": "staples",
+      "reference": "Consumer Staples",
+      "expected": "staples",
+      "match": true
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble",
+      "sector": "staples",
+      "reference": "Consumer Staples",
+      "expected": "staples",
+      "match": true
+    },
+    {
+      "ticker": "KO",
+      "name": "Coca-Cola",
+      "sector": "staples",
+      "reference": "Consumer Staples",
+      "expected": "staples",
+      "match": true
+    },
+    {
+      "ticker": "PEP",
+      "name": "PepsiCo",
+      "sector": "staples",
+      "reference": "Consumer Staples",
+      "expected": "staples",
+      "match": true
+    },
+    {
+      "ticker": "PM",
+      "name": "Philip Morris International",
+      "sector": "staples",
+      "reference": "Consumer Staples",
+      "expected": "staples",
+      "match": true
+    },
+    {
+      "ticker": "MDLZ",
+      "name": "Mondelez International",
+      "sector": "staples",
+      "reference": "Consumer Staples",
+      "expected": "staples",
+      "match": true
+    },
+    {
+      "ticker": "CL",
+      "name": "Colgate-Palmolive",
+      "sector": "staples",
+      "reference": "Consumer Staples",
+      "expected": "staples",
+      "match": true
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil",
+      "sector": "energy",
+      "reference": "Energy",
+      "expected": "energy",
+      "match": true
+    },
+    {
+      "ticker": "CVX",
+      "name": "Chevron",
+      "sector": "energy",
+      "reference": "Energy",
+      "expected": "energy",
+      "match": true
+    },
+    {
+      "ticker": "COP",
+      "name": "ConocoPhillips",
+      "sector": "energy",
+      "reference": "Energy",
+      "expected": "energy",
+      "match": true
+    },
+    {
+      "ticker": "SLB",
+      "name": "SLB",
+      "sector": "energy",
+      "reference": "Energy",
+      "expected": "energy",
+      "match": true
+    },
+    {
+      "ticker": "EOG",
+      "name": "EOG Resources",
+      "sector": "energy",
+      "reference": "Energy",
+      "expected": "energy",
+      "match": true
+    },
+    {
+      "ticker": "MPC",
+      "name": "Marathon Petroleum",
+      "sector": "energy",
+      "reference": "Energy",
+      "expected": "energy",
+      "match": true
+    },
+    {
+      "ticker": "NEE",
+      "name": "NextEra Energy",
+      "sector": "utilities",
+      "reference": "Utilities",
+      "expected": "utilities",
+      "match": true
+    },
+    {
+      "ticker": "SO",
+      "name": "Southern Company",
+      "sector": "utilities",
+      "reference": "Utilities",
+      "expected": "utilities",
+      "match": true
+    },
+    {
+      "ticker": "DUK",
+      "name": "Duke Energy",
+      "sector": "utilities",
+      "reference": "Utilities",
+      "expected": "utilities",
+      "match": true
+    },
+    {
+      "ticker": "CEG",
+      "name": "Constellation Energy",
+      "sector": "utilities",
+      "reference": "Utilities",
+      "expected": "utilities",
+      "match": true
+    },
+    {
+      "ticker": "AEP",
+      "name": "American Electric Power",
+      "sector": "utilities",
+      "reference": "Utilities",
+      "expected": "utilities",
+      "match": true
+    },
+    {
+      "ticker": "LIN",
+      "name": "Linde",
+      "sector": "materials",
+      "reference": "Materials",
+      "expected": "materials",
+      "match": true
+    },
+    {
+      "ticker": "SHW",
+      "name": "Sherwin-Williams",
+      "sector": "materials",
+      "reference": "Materials",
+      "expected": "materials",
+      "match": true
+    },
+    {
+      "ticker": "APD",
+      "name": "Air Products",
+      "sector": "materials",
+      "reference": "Materials",
+      "expected": "materials",
+      "match": true
+    },
+    {
+      "ticker": "FCX",
+      "name": "Freeport-McMoRan",
+      "sector": "materials",
+      "reference": "Materials",
+      "expected": "materials",
+      "match": true
+    },
+    {
+      "ticker": "NEM",
+      "name": "Newmont",
+      "sector": "materials",
+      "reference": "Materials",
+      "expected": "materials",
+      "match": true
+    },
+    {
+      "ticker": "PLD",
+      "name": "Prologis",
+      "sector": "realestate",
+      "reference": "Real Estate",
+      "expected": "realestate",
+      "match": true
+    },
+    {
+      "ticker": "AMT",
+      "name": "American Tower",
+      "sector": "realestate",
+      "reference": "Real Estate",
+      "expected": "realestate",
+      "match": true
+    },
+    {
+      "ticker": "EQIX",
+      "name": "Equinix",
+      "sector": "realestate",
+      "reference": "Real Estate",
+      "expected": "realestate",
+      "match": true
+    },
+    {
+      "ticker": "WELL",
+      "name": "Welltower",
+      "sector": "realestate",
+      "reference": "Real Estate",
+      "expected": "realestate",
+      "match": true
+    },
+    {
+      "ticker": "SPG",
+      "name": "Simon Property Group",
+      "sector": "realestate",
+      "reference": "Real Estate",
+      "expected": "realestate",
+      "match": true
+    },
+    {
+      "ticker": "O",
+      "name": "Realty Income",
+      "sector": "realestate",
+      "reference": "Real Estate",
+      "expected": "realestate",
+      "match": true
+    }
+  ]
+}

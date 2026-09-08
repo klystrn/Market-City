@@ -1,0 +1,12 @@
+node_modules/
+.next/
+out/
+.env*
+!.env.example
+*.tsbuildinfo
+.DS_Store
+coverage/
+artifacts/
+
+# Generated from the owner music library by predev/prebuild
+public/music/

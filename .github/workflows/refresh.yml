@@ -1,0 +1,72 @@
+name: Refresh shared market snapshot
+on:
+  workflow_dispatch:
+    inputs:
+      refresh_quotes:
+        description: Refresh seven companies (uses up to 14 daily Alpha Vantage calls)
+        type: boolean
+        default: false
+  # Hourly by default: respects free quotas and avoids excessive Pages rebuilds.
+  # GitHub schedules are best-effort. A later server host can target 5-minute news.
+  schedule:
+    - cron: '17 * * * *'
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check credentials
+        id: credentials
+        env:
+          NEWS: ${{ secrets.MARKETAUX_API_TOKEN }}
+          PRICES: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+        run: |
+          if [ -n "$NEWS" ] || [ -n "$PRICES" ]; then
+            echo 'ready=true' >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-node@v4
+        if: steps.credentials.outputs.ready == 'true'
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/cache/restore@v4
+        if: steps.credentials.outputs.ready == 'true'
+        with:
+          path: public/data/market.json
+          key: market-snapshot-${{ github.run_id }}
+          restore-keys: market-snapshot-
+      - run: npm ci
+        if: steps.credentials.outputs.ready == 'true'
+      - name: Refresh data
+        if: steps.credentials.outputs.ready == 'true'
+        env:
+          MARKETAUX_API_TOKEN: ${{ secrets.MARKETAUX_API_TOKEN }}
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+          REFRESH_QUOTES: ${{ inputs.refresh_quotes && 'true' || 'false' }}
+        run: npm run refresh:data
+      - uses: actions/cache/save@v4
+        if: steps.credentials.outputs.ready == 'true'
+        with:
+          path: public/data/market.json
+          key: market-snapshot-${{ github.run_id }}
+      - run: npm run build
+        if: steps.credentials.outputs.ready == 'true'
+        env:
+          NEXT_PUBLIC_BASE_PATH: /Market-City
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.credentials.outputs.ready == 'true'
+        with:
+          path: out
+      - uses: actions/deploy-pages@v4
+        id: deployment
+        if: steps.credentials.outputs.ready == 'true'

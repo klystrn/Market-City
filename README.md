@@ -1,0 +1,129 @@
+# Market City
+
+An interactive architectural model of the U.S. stock market. Explore 100 representative companies across 11 sector towns and 29 subsector streets. A Tokyo-inspired city spreads inland from a southeastern bay, with river wards, three sector islands, an elevated rail loop and Mount Fuji in the distance. Search and filter the city, inspect company evidence and catalysts, and listen to the jazz and lofi radio library.
+
+**Status:** Functional demo application with replaceable provider adapters. Demo prices, news, catalysts, index values, and historical charts are explicitly simulated. Live provider operation requires free account credentials; the repository does not contain credentials or real market snapshots.
+
+## Run locally
+
+Requires Node.js 22 or newer.
+
+```sh
+npm ci
+npm run dev
+```
+
+Open http://127.0.0.1:3000. No environment file is needed for Demo Mode.
+
+```sh
+npm run lint
+npm run typecheck
+npm test
+npm run build
+npm run preview
+```
+
+The production build is a static Next.js export in `out/`. `preview` serves a root-path build. The lockfile pins the installed dependencies.
+
+## Explore
+
+- Use **WASD or arrow keys** to pan across the ground, drag to orbit, and scroll to zoom. Keyboard movement follows the camera orientation and pauses while typing or interacting with form controls. Click a company building to open its quick drawer.
+- Click a **sector label or town ground** to zoom into its district. Physical roadside signs appear at close zoom (17× and above), rather than floating over company names.
+- The separate **Explore Company** card beneath the drawer focuses the company and reveals a historical chart. Double-clicking a building does the same. **City view** returns to the overview.
+- `Ctrl/Cmd + K` focuses search. `Escape` or clicking outside dismisses floating cards. Clicking within the separate Explore card preserves the selected company; dragging the map does not dismiss company details.
+- Try `NVDA`, `News for Apple`, `Show technology`, `software`, `Show semiconductors` (or `semi`), `memory`, `Show stocks down more than 2%`, `Show unusual volume`, `Earnings this week`, `Show strongest sector`, or `What is moving today?`.
+- **Demo session** changes the market scenario and session lighting, or enables simulated quote updates.
+- **Layers & view** controls catalysts, traffic, reduced effects, and the accessible list view. Phones start in the list view; WebGL failure falls back to it.
+- **Season**, inside Layers & view, defaults to the current Japanese calendar in JST: spring March–May, summer June–August, autumn September–November and winter December–February. Manual previews show cherry blossoms, lush summer foliage, autumn colors or bare winter branches and snowier mountains. These are illustrative environments, independent of market-driven weather; they do not claim current weather or blossom conditions.
+- **MC Jazz** attempts to start automatically, with market broadcasts and news enabled. If the browser blocks sound, the first click or keypress starts playback. Pause stops music and speech. Your local jazz/lofi recordings play in sequence with a Next track control. Natural English voices are preferred where available, with a presenter selector and livelier pacing. Unsupported speech falls back to text.
+
+## GitHub Pages
+
+The repository is configured for `https://klystrn.github.io/Market-City/` through `.github/workflows/pages.yml`. This is a prepared target, not a claim that deployment has occurred.
+
+1. Push the validated source to the existing repository's `main` branch.
+2. In **Settings → Pages**, choose **GitHub Actions** as the build source.
+3. Run **Build and deploy Market City**, or push a change to `main`.
+
+The workflow checks lint/types/tests, exports with `NEXT_PUBLIC_BASE_PATH=/Market-City`, and deploys `out/`. No paid hosting or server is required for the demo. No custom domain or changes to the existing portfolio have been made.
+
+For the later `reginaldtan.com/MarketCity` integration, build with `NEXT_PUBLIC_BASE_PATH=/MarketCity` and mount the exported directory at that path in the portfolio's existing host. A path is not a separate DNS record. The correct deployment method depends on that site's current hosting setup.
+
+## Optional financial data
+
+Credentials are read only by `scripts/refresh-data.ts` in Node or GitHub Actions. The browser only fetches the public, normalized `data/market.json` snapshot. Do **not** put secrets in `NEXT_PUBLIC_*` variables.
+
+- **Marketaux:** `MARKETAUX_API_TOKEN`. One market-wide request per refresh, ticker/entity matching, significance scoring, deduplication, and up to seven days of cached headlines. No article bodies are republished.
+- **Alpha Vantage:** `ALPHA_VANTAGE_API_KEY`. Company overview plus daily history; derives daily change and volume relative to the prior 20 sessions. Seven rotating companies per daily run (up to 14 requests). Missing companies remain clearly labeled demo; no synthetic figures are relabeled as EOD.
+- `INITIAL_OWNER_EMAIL` is reserved server-side configuration for future accounts. Guest access is available now; Google sign-in is intentionally deferred.
+
+Add keys as repository **Actions secrets** to enable **Refresh shared market snapshot**. It runs hourly when credentials exist and skips entirely when none exist. Quote refresh runs in the 22:00 UTC weekday window; a manual run can explicitly request it. Avoid repeated manual quote runs that would consume the daily free allowance.
+
+For local refreshes, export environment variables or create a gitignored `.env.local` and run:
+
+```sh
+node --env-file=.env.local --import tsx scripts/refresh-data.ts
+```
+
+Set `REFRESH_QUOTES=true` to request quotes outside the daily window. The refresh workflow preserves the last JSON snapshot in an Actions cache and deploys the regenerated static output without committing provider data. Failed calls retain previous values with warnings and original per-item timestamps.
+
+### Current coverage limits
+
+- No accounts have been created and no paid service has been added.
+- Provider adapters are verified against controlled response fixtures; live credentials are still needed for an end-to-end provider test.
+- Marketaux's published free plan allows **100 requests/day and 3 articles/request**. This is limited coverage, not comprehensive news for every company.
+- Alpha Vantage's standard free allowance is **25 requests/day**. Rotating seven companies cannot deliver fresh daily quotes for all 100 companies. Each company displays its source, status, and quote timestamp.
+- S&P 500 and VIX inputs remain demo data until a suitable index provider is connected. Mixed snapshots retain that explicit labeling. Company explanations never treat fictional news as evidence for real quotes, or use news published after an EOD quote to explain that earlier move.
+- GitHub Pages is static; Actions schedules are best-effort. The initial hourly snapshot path does not promise five-minute news. A future shared server/cache can provide the specification's target cadence without changing the UI or domain model.
+
+Verified references: [Next.js static exports](https://nextjs.org/docs/app/guides/static-exports), [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages), [Marketaux pricing](https://www.marketaux.com/pricing), [Marketaux API](https://www.marketaux.com/documentation), [Alpha Vantage API](https://www.alphavantage.co/documentation/), [Alpha Vantage free allowance](https://www.alphavantage.co/premium/).
+
+## Structure
+
+```text
+src/app/          Static application shell and shared visual tokens
+src/components/   DOM controls, company details, charts, radio and list fallback
+src/three/        Instanced geometry, camera, districts, labels and traffic
+src/domain/       Normalized types, layout, encodings and evidence calculations
+src/data/         Deterministic, labeled development fixtures
+src/services/     Commands, replaceable providers, validation, audio and bulletins
+scripts/          Credential-bearing refresh execution (never browser code)
+tests/            Domain, layout and provider contract checks
+```
+
+Buildings use twelve procedural massing variations, including faceted oval towers, twin towers with skybridges, Art Deco crowns, terraced towers, courtyard campuses and colonnades. Four-sided window grids, cornices, entrances, roof equipment and parapets remain visible when orbiting. Lot sizes and heights use compressed market capitalization. Apple, Microsoft, Amazon, Alphabet, Meta, NVIDIA, Tesla and Netflix have recognizable sculptures, atriums, canopies, terraces, skybridges, chip crowns, chargers and cinema details. Brand elements are identity cues and do not encode additional financial metrics.
+
+Low-rise blocks, trees, mountains and civic landmarks are decorative scenery. Energy's symbolic nuclear campus, the industrial container port and the real-estate marina stand on distinct islands; mainland sectors have their own identifying landmarks. These thematic landmarks do not represent company-owned facilities. More vibrant water, foliage, roofs and civic accents follow the owner's revised direction, while company gains remain green and losses red.
+
+Geometry is shared and instanced, including roads, crossings, trees and low-poly traffic. Vehicle count is capped at 240. Market updates change color buffers separately from structural matrices. Labels are culled by zoom; hidden tabs pause rendering; traffic stops after 30 seconds of inactivity. Reduced effects removes traffic and motion. Rendering uses a bounded device pixel ratio and no full-city real-time shadows.
+
+Subsectors are a curated exploration taxonomy, not official GICS sub-industry classifications. Streets group related companies, including a dedicated Memory Lane for Micron. The geography interprets Tokyo's mainland, river and bay arrangement at an illustrative scale; it is not a georeferenced map. Fuji uses a triangulated cone with a small crater and elevation-based seasonal snow, on continuous inland terrain.
+
+Environment references: [Tokyo geography](https://www.gotokyo.org/en/plan/tokyo-outline/index.html), [Japan's seasons](https://www.japan.travel/en/gc/when-to-go/), and [Fuji-Hakone-Izu National Park](https://www.japan.travel/national-parks/parks/fuji-hakone-izu/explore/).
+
+The authoritative product brief is [MARKET_CITY.md](MARKET_CITY.md); accepted scope and development status are in [BUILD_PLAN.md](BUILD_PLAN.md). Full S&P 500, historical replay, authentication, trading, and paid AI remain outside this phase.
+
+### God simulation
+Open **God → Simulation** at the upper right. This permanent, offline feature replaces the old Demo Mode controls. It starts collapsed and never modifies a shared provider snapshot. Every simulated quote remains marked as simulated/demo in provenance.
+
+Set daily company targets (overriding sector targets), sector targets, the independent index, relative volume, VIX and a simulated ET clock. Presets include panic selling and a relief rally. Announcements create fictional news/catalysts and enable catalyst beacons; their price impact is set separately. Reset clears overrides and injected events. Settings last for the current page session.
+
+Fire marks a stock below −10%. Entering an index decline of at least 5% triggers a brief earthquake. Reduced effects suppresses animation; the God effects switch removes these metaphors.
+
+The tomorrow laboratory uses a [random-walk benchmark](https://otexts.com/fpp3/simple-methods.html): next price equals the current price. Downside/upside scenarios apply ±1.96 standard deviations of up to 60 trailing log returns. A 0.5% volatility floor prevents degenerate ranges. These are **uncalibrated illustrations based on synthetic history**, not reliable confidence intervals or event predictions. The index stress separately uses VIX / √252; all stocks share the chosen stress direction, without a fitted correlation model. Back to today restores the current scenario. Dates skip weekends, but do not account for exchange holidays. Longer horizons and validation on real out-of-sample data remain future work.
+
+Civic additions take architectural cues from Paris (museum courtyard/pyramid), NYC (formal public park), Singapore (conservatories), and London (covered rail station). They are original stylized scenery, not geographic replicas. Station platform lights reflect average relative trading volume. Parks and conservatories remain seasonal public space; a market-history museum and optional breadth gardens are future educational ideas.
+
+### Map details and city identity
+**Layers & view → Map details** offers independent feature tiles for parks, district landmarks, transit, trees, city blocks, Mount Fuji, labels, road signs, brand details and market shocks. Hiding scenery does not remove stock data or change market statistics. The compact **Read the city** guide replaces the opening headline; expand it to see the encodings and controls.
+
+Central Commons Park is a full 50×40-unit block with lawns, a lake, fountain and amphitheater steps. Fuji has no trees, and the surrounding tree distribution is sparse and deterministic. The farm, shopping arcade, exchange promenade and technology sculpture give sectors distinct civic identities. A SpaceX exhibit occupies the industrial island as scenery with **no quote**; it is not an invented member of the 100-stock dataset.
+
+Glass shafts, tapered spires and twisting towers join the existing courtyard, terraced, twin-tower and Art Deco forms. Colored podiums, crowns and tinted glass preserve the daily-performance encoding. Keyboard panning is now about 2.4× faster than the preceding version.
+
+### Music folders and sector reference
+Put audio inside `music/jazz/`, `music/lofi/`, `music/classical/`, or `music/technopop/`; nested folders are supported. `npm run dev` and `npm run build` synchronize the library automatically. To refresh an already-running preview, run `npm run music:sync`. Supported extensions are mp3, m4a, ogg, wav and aac. Generated public/music files are ignored by Git; the source recordings stay in music/. Tracks stream individually instead of loading the entire library into memory.
+
+Jazz starts with broadcasts and news enabled. Browser autoplay policy may require the first interaction. News headlines are deduplicated and read at 90-second intervals while playing and visible; God headlines are expressly fictional. Pause stops both music and speech. The presenter prefers available natural/neural English voices, then supported alternatives; this preview currently exposes Microsoft Zira as the selected fallback. Rate/pitch and friendlier scripts make delivery livelier without claiming a neural voice when none is installed.
+
+All 100 company assignments matched the [public sector reference](https://github.com/datasets/s-and-p-500-companies/blob/main/data/constituents.csv) checked on 2026-09-08. The reference originates from the Wikipedia constituent table and can lag official changes. Alphabet and Meta's Communication Services placement is also supported by [S&P's GICS revision](https://www.spglobal.com/spdji/en/documents/indexnews/announcements/20180111-646149/646149_gicspressreleasejan2018.pdf) and [State Street's Communication Services ETF](https://www.ssga.com/us/en/individual/etfs/state-street-communication-services-select-sector-spdr-etf-xlc). `npx tsx scripts/audit-sectors.ts [path-to-updated-csv]` regenerates the dated audit; update its review date when refreshing. Sector classifications are separate from our curated subsector street names.
