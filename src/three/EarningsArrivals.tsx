@@ -16,7 +16,7 @@ export default function EarningsArrivals({
   const upcoming = catalysts
     .filter((c) => c.type === "EARNINGS" && Date.parse(c.date) >= now)
     .sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
-    .slice(0, 5);
+    .slice(0, 4);
   if (!upcoming.length) return null;
   return (
     <Html position={[station.x, 8.6, station.z]} center zIndexRange={[4, 0]}>

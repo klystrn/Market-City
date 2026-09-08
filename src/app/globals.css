@@ -1478,10 +1478,6 @@ select {
     max-height: calc(100svh - 150px);
     overflow-y: auto;
   }
-  .layers-panel {
-    right: -40px;
-    width: 285px;
-  }
   .company-panel {
     top: 145px;
     bottom: 106px;
@@ -1772,9 +1768,6 @@ select {
     top: 132px;
     left: 12px;
     width: 195px;
-  }
-  .layers-panel {
-    width: min(330px, calc(100vw - 24px));
   }
 }
 .map-guide {
@@ -2217,13 +2210,23 @@ select {
   color: #b5652f;
 }
 @media (max-width: 700px) {
-  .tools-panel {
-    width: min(280px, calc(100vw - 24px));
-  }
   .compare-panel {
     width: min(620px, 94vw);
   }
   .compare-table {
     font-size: 11px;
+  }
+  /* The launcher button's position inside the bottom bar's flex row varies
+     with viewport width, so anchoring the panel to it (right: 0) can push
+     it off the left edge. Pin to the viewport instead. Placed last so it
+     wins over the unconditional base .layers-panel / .tools-panel rules. */
+  .layers-panel,
+  .tools-panel {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: 96px;
+    width: auto;
+    max-height: calc(100dvh - 210px);
   }
 }

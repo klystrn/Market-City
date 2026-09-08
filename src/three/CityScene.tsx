@@ -659,7 +659,7 @@ function CityScene(props: Props) {
               dark={props.dark}
             />
           )}
-          {props.mapFeatures.transit && (
+          {props.mapFeatures.transit && !props.selected && (
             <EarningsArrivals
               catalysts={props.snapshot.catalysts}
               now={Date.parse(props.snapshot.generatedAt)}
