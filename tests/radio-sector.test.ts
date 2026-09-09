@@ -8,8 +8,8 @@ import { createDemo } from "../src/data/demo";
 import { marketBulletin, newsBulletin } from "../src/services/bulletins";
 import { existsSync } from "node:fs";
 import path from "node:path";
-test("all 100 company sectors match the dated external sector audit", () => {
-  assert.equal(audit.companies.length, 100);
+test("every company sector matches the dated external sector audit", () => {
+  assert.equal(audit.companies.length, companySeeds.length);
   for (const [ticker, , sector] of companySeeds) {
     const row = audit.companies.find((c) => c.ticker === ticker);
     assert.ok(row, `Missing ${ticker}`);

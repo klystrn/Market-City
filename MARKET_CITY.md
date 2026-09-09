@@ -2781,7 +2781,32 @@ placement, no overlaps, session independence, the New York borough ranking reall
 following the seeded sector market-cap order, every lot inside its own borough polygon,
 and London's largest-first zone ordering and single-wedge sectors.
 
-## 75.9 Landmark fidelity and label decluttering (owner follow-up)
+## 75.9 Full sector coverage in every city (owner follow-up)
+
+The Nasdaq-100 city showed no financials and no energy buildings, and its districts
+were buried under decorative low-rise blocks. One cause behind both: Tokyo rendered
+only the 34 seeded companies that were Nasdaq-100 members, so two districts had
+nothing to place and the scenery generator filled the empty ground.
+
+- **The roster now covers every sector in every universe.** 133 seeded companies,
+  67 of them Nasdaq-100 members, chosen so no district is ever empty. Every company
+  is checked against a dated public GICS sector reference, so nothing is filed under
+  a sector it does not belong to.
+- **Energy and materials stay deliberately small in the Nasdaq-100 city.** The real
+  index carries about one company in each. Padding those districts with companies
+  that are not in the index would misrepresent it, so they stay one-building
+  neighbourhoods instead.
+- **Scenery is secondary again.** Tokyo's low-rise blocks went from 604 to 189
+  against 67 company buildings. Decorative geometry carries no market encoding, so
+  it must never outweigh the buildings that do.
+- **A city's band is named on every lot.** Tokyo's plots never recorded a tier, so
+  its company cards said "Tokyo" where the other cities say "Borough · Manhattan".
+  The sector town is now the tier, as the guide always claimed.
+- **Boroughs re-checked against the seeded caps.** Utilities overtook materials once
+  more utilities companies were seeded, so utilities moved to Brooklyn and materials
+  to the Bronx, keeping the documented rule that the Bronx holds the smallest sector.
+
+## 75.10 Landmark fidelity and label decluttering (owner follow-up)
 
 Two complaints, both addressed in `src/three/CityLandmarks.tsx`: too many floating
 landmark names, and several landmarks not looking like the real place they name.

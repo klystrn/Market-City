@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createDemo } from "../src/data/demo";
+import { companySeeds } from "../src/data/companies";
 import { sectors, createPlots, performanceColor } from "../src/domain/city";
 import {
   breadth,
@@ -38,14 +39,14 @@ test("road corridors leave company footprints clear", () => {
 });
 test("subsector streets locate every company and terrain keeps buildings out of the river", () => {
   const plots = createPlots(demo.companies);
-  assert.equal(plots.length, 100);
+  assert.equal(plots.length, companySeeds.length);
   for (const c of demo.companies)
     assert.ok(
       subsectors.some(
         (s) => s.id === c.subsector && s.tickers.includes(c.ticker),
       ),
     );
-  assert.equal(cityStreets().length, 29);
+  assert.equal(cityStreets().length, subsectors.length);
   assert.equal(cityRoads().filter((r) => r.bridge).length, 5);
   for (const p of plots)
     for (const dx of [-p.width / 2, p.width / 2])
@@ -67,9 +68,12 @@ test("subsector streets locate every company and terrain keeps buildings out of 
     ),
   );
 });
-test("100 deterministic demo companies cover every district, with positive valid data", () => {
-  assert.equal(demo.companies.length, 100);
-  assert.equal(new Set(demo.companies.map((c) => c.ticker)).size, 100);
+test("deterministic demo companies cover every district, with positive valid data", () => {
+  assert.equal(demo.companies.length, companySeeds.length);
+  assert.equal(
+    new Set(demo.companies.map((c) => c.ticker)).size,
+    companySeeds.length,
+  );
   assert.deepEqual(demo, createDemo());
   assert.ok(validateSnapshot(demo));
   for (const sector of sectors)
@@ -105,7 +109,7 @@ test("market encodings are stable, directional and have a deadband", () => {
   assert.equal(themeFor(0.02, true), true);
   assert.equal(themeFor(-0.5, false), true);
   const b = breadth(demo.companies);
-  assert.equal(b.up + b.down + b.flat, 100);
+  assert.equal(b.up + b.down + b.flat, demo.companies.length);
   assert.equal(weightedChange([]), 0);
 });
 test("commands resolve names, ticker punctuation, sectors and filters", () => {

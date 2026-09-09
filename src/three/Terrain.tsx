@@ -259,8 +259,12 @@ export default function Terrain({
       "#d9b6a7",
       "#c4c9b0",
     ];
-    for (let x = -148; x < 139; x += 3.8)
-      for (let z = -140; z < 163; z += 3.9) {
+    // Low-rise scenery reads as the neighbourhood a company town sits in, so it
+    // has to stay clearly secondary to the buildings that carry market data.
+    // The grid is spaced well wider than a block and keeps only some of the
+    // cells, which leaves gaps between blocks instead of a continuous carpet.
+    for (let x = -148; x < 139; x += 5.2)
+      for (let z = -140; z < 163; z += 5.4) {
         if (
           ![-1.4, 1.4].every((dx) =>
             [-1.4, 1.4].every((dz) => isLand([x + dx, z + dz])),
@@ -284,10 +288,10 @@ export default function Terrain({
         )
           continue;
         const seed = Math.abs(Math.round(x * 13 + z * 7));
-        if (seed % 8 === 0) continue;
+        if (seed % 10 >= 6) continue;
         const h = 1.5 + (seed % 5) * 0.6,
-          w = seed % 3 === 0 ? 2 : 2.6,
-          d = 2.4;
+          w = seed % 3 === 0 ? 2.6 : 3.4,
+          d = 3.2;
         neighborhoods.push({
           position: [x, 1.1 + h / 2, z],
           scale: [w, h, d],
@@ -300,12 +304,12 @@ export default function Terrain({
         });
         for (const sign of [-1, 1]) {
           neighborhoodWindows.push({
-            position: [x, 1.1 + h * 0.65, z + sign * 1.21],
+            position: [x, 1.1 + h * 0.65, z + sign * (d / 2 + 0.01)],
             scale: [w * 0.8, 0.4, 0.03],
           });
           neighborhoodWindows.push({
             position: [x + sign * (w / 2 + 0.01), 1.1 + h * 0.65, z],
-            scale: [0.03, 0.4, 1.9],
+            scale: [0.03, 0.4, d * 0.8],
           });
         }
       }
