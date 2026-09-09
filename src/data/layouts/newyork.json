@@ -1,0 +1,1336 @@
+{
+  "city": "newyork",
+  "key": "AAPL:technology:hardware:3400000000000|ABBV:healthcare:pharma:340000000000|ABNB:consumer:travel-dining:80000000000|ABT:healthcare:medical-technology:200000000000|ACN:technology:it-services:220000000000|ADBE:technology:software:230000000000|ADI:technology:semiconductors:115000000000|ADP:industrials:transport-services:115000000000|ADSK:technology:software:60000000000|AEP:utilities:grid-utilities:55000000000|AMAT:technology:semiconductors:160000000000|AMD:technology:semiconductors:240000000000|AMGN:healthcare:pharma:170000000000|AMT:realestate:digital-property:100000000000|AMZN:consumer:retail:1950000000000|APD:materials:chemicals:65000000000|AVGO:technology:semiconductors:820000000000|AXP:financials:payments:180000000000|BAC:financials:banking:310000000000|BKNG:consumer:travel-dining:145000000000|BLK:financials:capital-markets:135000000000|BMY:healthcare:pharma:105000000000|BRK.B:financials:capital-markets:960000000000|C:financials:banking:120000000000|CAT:industrials:machinery:180000000000|CDNS:technology:software:74000000000|CEG:utilities:power:70000000000|CHTR:communications:telecom:48000000000|CL:staples:household-food:85000000000|CMCSA:communications:telecom:155000000000|CMG:consumer:travel-dining:80000000000|COIN:financials:capital-markets:55000000000|COP:energy:oil-gas:125000000000|COST:staples:essentials-retail:390000000000|CRM:technology:software:280000000000|CSCO:technology:hardware:210000000000|CSGP:realestate:commercial-property:31000000000|CSX:industrials:transport-services:66000000000|CTAS:industrials:commercial-services:78000000000|CVX:energy:oil-gas:275000000000|DE:industrials:machinery:110000000000|DHR:healthcare:medical-technology:185000000000|DIS:communications:internet-media:175000000000|DUK:utilities:grid-utilities:90000000000|EOG:energy:energy-services:70000000000|EQIX:realestate:digital-property:85000000000|ETN:industrials:machinery:130000000000|EXC:utilities:grid-utilities:39000000000|FANG:energy:oil-gas:52000000000|FAST:industrials:commercial-services:42000000000|FCX:materials:mining:65000000000|GE:industrials:aerospace:185000000000|GILD:healthcare:pharma:105000000000|GOOGL:communications:internet-media:2050000000000|GS:financials:capital-markets:160000000000|HD:consumer:retail:385000000000|HON:industrials:machinery:135000000000|IBM:technology:hardware:200000000000|IDXX:healthcare:medical-technology:40000000000|INTU:technology:software:175000000000|ISRG:healthcare:medical-technology:170000000000|JNJ:healthcare:pharma:390000000000|JPM:financials:banking:610000000000|KDP:staples:household-food:50000000000|KHC:staples:household-food:42000000000|KLAC:technology:semiconductors:95000000000|KO:staples:household-food:295000000000|LIN:materials:chemicals:220000000000|LLY:healthcare:pharma:850000000000|LMT:industrials:aerospace:135000000000|LOW:consumer:retail:150000000000|LRCX:technology:semiconductors:100000000000|LULU:consumer:retail:33000000000|MA:financials:payments:450000000000|MAR:consumer:travel-dining:68000000000|MCD:consumer:travel-dining:210000000000|MDLZ:staples:household-food:100000000000|META:communications:internet-media:1400000000000|MNST:staples:household-food:50000000000|MPC:energy:energy-services:60000000000|MRK:healthcare:pharma:280000000000|MRVL:technology:semiconductors:62000000000|MS:financials:capital-markets:160000000000|MSFT:technology:software:3200000000000|MU:technology:memory:105000000000|NEE:utilities:power:170000000000|NEM:materials:mining:55000000000|NFLX:communications:internet-media:310000000000|NKE:consumer:retail:125000000000|NOW:technology:software:165000000000|NVDA:technology:semiconductors:3100000000000|NXPI:technology:semiconductors:60000000000|O:realestate:commercial-property:55000000000|ODFL:industrials:transport-services:42000000000|ORCL:technology:software:460000000000|ORLY:consumer:retail:68000000000|PANW:technology:software:110000000000|PCAR:industrials:machinery:52000000000|PEP:staples:household-food:235000000000|PFE:healthcare:pharma:160000000000|PG:staples:household-food:400000000000|PLD:realestate:commercial-property:115000000000|PM:staples:household-food:180000000000|PYPL:financials:payments:72000000000|QCOM:technology:semiconductors:190000000000|REGN:healthcare:pharma:115000000000|RTX:industrials:aerospace:160000000000|SBAC:realestate:digital-property:25000000000|SBUX:consumer:travel-dining:110000000000|SHW:materials:chemicals:95000000000|SLB:energy:energy-services:65000000000|SNPS:technology:software:78000000000|SO:utilities:grid-utilities:100000000000|SPG:realestate:commercial-property:60000000000|SPGI:financials:capital-markets:155000000000|T:communications:telecom:150000000000|TJX:consumer:retail:130000000000|TMO:healthcare:medical-technology:230000000000|TMUS:communications:telecom:235000000000|TSLA:consumer:automotive:740000000000|TTWO:communications:internet-media:27000000000|TXN:technology:semiconductors:185000000000|UNH:healthcare:health-services:510000000000|UNP:industrials:transport-services:150000000000|UPS:industrials:transport-services:115000000000|V:financials:payments:560000000000|VRTX:healthcare:pharma:120000000000|VZ:communications:telecom:180000000000|WELL:realestate:commercial-property:75000000000|WFC:financials:banking:210000000000|WMT:staples:essentials-retail:620000000000|XEL:utilities:grid-utilities:36000000000|XOM:energy:oil-gas:500000000000",
+  "plots": [
+    {
+      "ticker": "MSFT",
+      "x": -14.4,
+      "z": 29.6,
+      "width": 2.624,
+      "depth": 3.4320000000000004,
+      "height": 40.337238372224355,
+      "variant": 7,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "ORCL",
+      "x": -11.200000000000001,
+      "z": 29.6,
+      "width": 2.624,
+      "depth": 3.4320000000000004,
+      "height": 25.658555217051433,
+      "variant": 1,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "CRM",
+      "x": -8,
+      "z": 29.6,
+      "width": 2.624,
+      "depth": 3.4320000000000004,
+      "height": 21.90172869613817,
+      "variant": 2,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "ADBE",
+      "x": -4.800000000000001,
+      "z": 29.6,
+      "width": 2.624,
+      "depth": 3.4320000000000004,
+      "height": 20.413107542606557,
+      "variant": 3,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "INTU",
+      "x": -1.6,
+      "z": 29.6,
+      "width": 2.624,
+      "depth": 3.4320000000000004,
+      "height": 18.344937998358677,
+      "variant": 4,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "NOW",
+      "x": 1.6,
+      "z": 29.6,
+      "width": 2.624,
+      "depth": 3.4320000000000004,
+      "height": 17.899657727927316,
+      "variant": 5,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "PANW",
+      "x": 4.800000000000001,
+      "z": 29.6,
+      "width": 2.624,
+      "depth": 3.4320000000000004,
+      "height": 14.831267538882067,
+      "variant": 6,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "SNPS",
+      "x": 8,
+      "z": 29.6,
+      "width": 2.624,
+      "depth": 3.3065634637002232,
+      "height": 10.541033259556144,
+      "variant": 7,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "CDNS",
+      "x": 11.200000000000001,
+      "z": 29.6,
+      "width": 2.624,
+      "depth": 3.256425161370031,
+      "height": 10.04302785471125,
+      "variant": 8,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "ADSK",
+      "x": 14.4,
+      "z": 29.6,
+      "width": 2.624,
+      "depth": 3.0566856920913303,
+      "height": 8.162463566214011,
+      "variant": 9,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "NVDA",
+      "x": -14.545454545454547,
+      "z": 34.8,
+      "width": 2.3854545454545453,
+      "depth": 3.4320000000000004,
+      "height": 40.0969775150622,
+      "variant": 8,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "AVGO",
+      "x": -11.636363636363637,
+      "z": 34.8,
+      "width": 2.3854545454545453,
+      "depth": 3.4320000000000004,
+      "height": 30.03320637778626,
+      "variant": 4,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "AMD",
+      "x": -8.727272727272727,
+      "z": 34.8,
+      "width": 2.3854545454545453,
+      "depth": 3.4320000000000004,
+      "height": 20.73518088682473,
+      "variant": 5,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "QCOM",
+      "x": -5.818181818181818,
+      "z": 34.8,
+      "width": 2.3854545454545453,
+      "depth": 3.4320000000000004,
+      "height": 18.967281496603043,
+      "variant": 6,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "TXN",
+      "x": -2.909090909090909,
+      "z": 34.8,
+      "width": 2.3854545454545453,
+      "depth": 3.4320000000000004,
+      "height": 18.765467367422513,
+      "variant": 7,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "AMAT",
+      "x": 0,
+      "z": 34.8,
+      "width": 2.3854545454545453,
+      "depth": 3.4320000000000004,
+      "height": 17.66679069777949,
+      "variant": 8,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "LRCX",
+      "x": 2.909090909090909,
+      "z": 34.8,
+      "width": 2.3854545454545453,
+      "depth": 3.4320000000000004,
+      "height": 14.109999999999998,
+      "variant": 9,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "KLAC",
+      "x": 5.818181818181818,
+      "z": 34.8,
+      "width": 2.3854545454545453,
+      "depth": 3.4320000000000004,
+      "height": 13.721833822158171,
+      "variant": 10,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "ADI",
+      "x": 8.727272727272727,
+      "z": 34.8,
+      "width": 2.3854545454545453,
+      "depth": 3.4320000000000004,
+      "height": 15.167659868161683,
+      "variant": 11,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "MRVL",
+      "x": 11.636363636363637,
+      "z": 34.8,
+      "width": 2.3854545454545453,
+      "depth": 3.087914975069671,
+      "height": 9.290149372055703,
+      "variant": 0,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "NXPI",
+      "x": 14.545454545454547,
+      "z": 34.8,
+      "width": 2.3854545454545453,
+      "depth": 3.0566856920913303,
+      "height": 8.978709922835414,
+      "variant": 1,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "MU",
+      "x": 0,
+      "z": 40,
+      "width": 4.1740327126283425,
+      "depth": 3.4320000000000004,
+      "height": 8.908475133140561,
+      "variant": 6,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "AAPL",
+      "x": 18,
+      "z": 8,
+      "width": 8.02527123845775,
+      "depth": 3.4320000000000004,
+      "height": 40.79602012946128,
+      "variant": 6,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "CSCO",
+      "x": 0,
+      "z": 45.2,
+      "width": 4.941659201571493,
+      "depth": 3.4320000000000004,
+      "height": 14.36761938989542,
+      "variant": 10,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "IBM",
+      "x": 10.666666666666666,
+      "z": 45.2,
+      "width": 4.887626488943152,
+      "depth": 3.4320000000000004,
+      "height": 13.94451716246985,
+      "variant": 11,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "ACN",
+      "x": 0,
+      "z": 50.400000000000006,
+      "width": 4.993177836096626,
+      "depth": 3.4320000000000004,
+      "height": 14.776512427213575,
+      "variant": 0,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "JPM",
+      "x": 19,
+      "z": 16,
+      "width": 4.305,
+      "depth": 3.52,
+      "height": 27.794372375062615,
+      "variant": 8,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "BAC",
+      "x": -0.625,
+      "z": 58.666666666666664,
+      "width": 4.305,
+      "depth": 3.52,
+      "height": 21.85004416325891,
+      "variant": 1,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "WFC",
+      "x": 4.625,
+      "z": 58.666666666666664,
+      "width": 4.305,
+      "depth": 3.52,
+      "height": 16.08011186961321,
+      "variant": 2,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "C",
+      "x": 9.875,
+      "z": 58.666666666666664,
+      "width": 4.305,
+      "depth": 3.52,
+      "height": 9.658941230481862,
+      "variant": 3,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "V",
+      "x": -5.875,
+      "z": 64,
+      "width": 4.305,
+      "depth": 3.52,
+      "height": 27.14717637058304,
+      "variant": 3,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "MA",
+      "x": -0.625,
+      "z": 64,
+      "width": 4.305,
+      "depth": 3.52,
+      "height": 25.492228052535356,
+      "variant": 4,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "AXP",
+      "x": 4.625,
+      "z": 64,
+      "width": 4.305,
+      "depth": 3.52,
+      "height": 14.10186550778723,
+      "variant": 5,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "PYPL",
+      "x": 9.875,
+      "z": 64,
+      "width": 3.7561978658997344,
+      "depth": 3.2303301646737714,
+      "height": 6.837658088420501,
+      "variant": 6,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "GS",
+      "x": -6.75,
+      "z": 69.33333333333333,
+      "width": 2.8699999999999997,
+      "depth": 3.52,
+      "height": 17.66679069777949,
+      "variant": 6,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "MS",
+      "x": -3.25,
+      "z": 69.33333333333333,
+      "width": 2.8699999999999997,
+      "depth": 3.52,
+      "height": 17.66679069777949,
+      "variant": 7,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "BLK",
+      "x": 0.25,
+      "z": 69.33333333333333,
+      "width": 2.8699999999999997,
+      "depth": 3.52,
+      "height": 16.260950881062627,
+      "variant": 8,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "SPGI",
+      "x": 3.75,
+      "z": 69.33333333333333,
+      "width": 2.8699999999999997,
+      "depth": 3.52,
+      "height": 17.426529840617327,
+      "variant": 9,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "BRK.B",
+      "x": 7.25,
+      "z": 69.33333333333333,
+      "width": 2.8699999999999997,
+      "depth": 3.52,
+      "height": 31.226076235714476,
+      "variant": 10,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "COIN",
+      "x": 10.75,
+      "z": 69.33333333333333,
+      "width": 2.8699999999999997,
+      "depth": 2.9738153780608765,
+      "height": 6.793819388309838,
+      "variant": 11,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "LLY",
+      "x": 56.900000000000006,
+      "z": -4.666666666666667,
+      "width": 3.1159999999999997,
+      "depth": 5.581415704091444,
+      "height": 30.30512478057155,
+      "variant": 0,
+      "tier": "queens"
+    },
+    {
+      "ticker": "JNJ",
+      "x": 60.7,
+      "z": -4.666666666666667,
+      "width": 3.1159999999999997,
+      "depth": 4.8394046832091115,
+      "height": 24.409300777436748,
+      "variant": 1,
+      "tier": "queens"
+    },
+    {
+      "ticker": "ABBV",
+      "x": 64.5,
+      "z": -4.666666666666667,
+      "width": 3.1159999999999997,
+      "depth": 4.708733265073665,
+      "height": 23.371020129461293,
+      "variant": 2,
+      "tier": "queens"
+    },
+    {
+      "ticker": "MRK",
+      "x": 68.3,
+      "z": -4.666666666666667,
+      "width": 3.1159999999999997,
+      "depth": 4.523817562733488,
+      "height": 21.748968066019494,
+      "variant": 3,
+      "tier": "queens"
+    },
+    {
+      "ticker": "AMGN",
+      "x": 72.1,
+      "z": -4.666666666666667,
+      "width": 3.1159999999999997,
+      "depth": 4.048574484582555,
+      "height": 16.10827531522399,
+      "variant": 4,
+      "tier": "queens"
+    },
+    {
+      "ticker": "PFE",
+      "x": 75.9,
+      "z": -4.666666666666667,
+      "width": 3.1159999999999997,
+      "depth": 3.9908351219644436,
+      "height": 15.476638120598404,
+      "variant": 5,
+      "tier": "queens"
+    },
+    {
+      "ticker": "BMY",
+      "x": 79.7,
+      "z": -4.666666666666667,
+      "width": 3.1159999999999997,
+      "depth": 3.5896681328603743,
+      "height": 11.409188381399234,
+      "variant": 6,
+      "tier": "queens"
+    },
+    {
+      "ticker": "VRTX",
+      "x": 83.5,
+      "z": -4.666666666666667,
+      "width": 3.1159999999999997,
+      "depth": 3.7168444725824403,
+      "height": 12.637858981271966,
+      "variant": 7,
+      "tier": "queens"
+    },
+    {
+      "ticker": "REGN",
+      "x": 87.3,
+      "z": -4.666666666666667,
+      "width": 3.1159999999999997,
+      "depth": 3.6763103638954706,
+      "height": 12.240127116160581,
+      "variant": 8,
+      "tier": "queens"
+    },
+    {
+      "ticker": "GILD",
+      "x": 91.1,
+      "z": -4.666666666666667,
+      "width": 3.1159999999999997,
+      "depth": 3.5896681328603743,
+      "height": 11.409188381399234,
+      "variant": 9,
+      "tier": "queens"
+    },
+    {
+      "ticker": "TMO",
+      "x": 58.8,
+      "z": 6,
+      "width": 5.042405981844862,
+      "depth": 4.336469144386581,
+      "height": 12.007710319180328,
+      "variant": 3,
+      "tier": "queens"
+    },
+    {
+      "ticker": "ABT",
+      "x": 66.4,
+      "z": 6,
+      "width": 4.887626488943152,
+      "depth": 4.203358780491111,
+      "height": 11.385557455555807,
+      "variant": 4,
+      "tier": "queens"
+    },
+    {
+      "ticker": "ISRG",
+      "x": 74,
+      "z": 6,
+      "width": 4.707644749514599,
+      "depth": 4.048574484582555,
+      "height": 10.662101444127309,
+      "variant": 5,
+      "tier": "queens"
+    },
+    {
+      "ticker": "DHR",
+      "x": 81.6,
+      "z": 6,
+      "width": 4.801287907427685,
+      "depth": 4.129107600387809,
+      "height": 11.038510216130891,
+      "variant": 6,
+      "tier": "queens"
+    },
+    {
+      "ticker": "IDXX",
+      "x": 89.2,
+      "z": 6,
+      "width": 3.105252977886304,
+      "depth": 2.6705175609822214,
+      "height": 4.2211149111116155,
+      "variant": 7,
+      "tier": "queens"
+    },
+    {
+      "ticker": "UNH",
+      "x": 74,
+      "z": 16.666666666666664,
+      "width": 5.924303949049737,
+      "depth": 5.094901396182774,
+      "height": 15.552594305003847,
+      "variant": 6,
+      "tier": "queens"
+    },
+    {
+      "ticker": "AMZN",
+      "x": 6.571428571428571,
+      "z": -26,
+      "width": 1.757142857142857,
+      "depth": 6.372245902718001,
+      "height": 36.58885310299187,
+      "variant": 9,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "HD",
+      "x": 8.714285714285715,
+      "z": -26,
+      "width": 1.757142857142857,
+      "depth": 4.827115379812142,
+      "height": 24.311653211685623,
+      "variant": 1,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "LOW",
+      "x": 10.857142857142858,
+      "z": -26,
+      "width": 1.757142857142857,
+      "depth": 3.9293681311091087,
+      "height": 17.178390189045246,
+      "variant": 2,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "NKE",
+      "x": 13,
+      "z": -26,
+      "width": 1.757142857142857,
+      "depth": 3.755723658526667,
+      "height": 15.798656976665377,
+      "variant": 3,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "TJX",
+      "x": 15.142857142857142,
+      "z": -26,
+      "width": 1.757142857142857,
+      "depth": 3.7930777716088935,
+      "height": 16.095462913946633,
+      "variant": 4,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "ORLY",
+      "x": 17.285714285714285,
+      "z": -26,
+      "width": 1.757142857142857,
+      "depth": 3.175892045564776,
+      "height": 11.19146780390617,
+      "variant": 5,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "LULU",
+      "x": 19.42857142857143,
+      "z": -26,
+      "width": 1.757142857142857,
+      "depth": 2.666,
+      "height": 7.14,
+      "variant": 6,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "TSLA",
+      "x": 13,
+      "z": -16,
+      "width": 6.336540885313989,
+      "depth": 5.44942516137003,
+      "height": 17.209625127242507,
+      "variant": 11,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "MCD",
+      "x": 6.75,
+      "z": -6,
+      "width": 2.05,
+      "depth": 4.249826913351484,
+      "height": 19.72467121073854,
+      "variant": 6,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "BKNG",
+      "x": 9.25,
+      "z": -6,
+      "width": 2.05,
+      "depth": 3.8970800289013,
+      "height": 16.921837438944436,
+      "variant": 7,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "SBUX",
+      "x": 11.75,
+      "z": -6,
+      "width": 2.05,
+      "depth": 3.633974158551987,
+      "height": 14.831267538882067,
+      "variant": 8,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "CMG",
+      "x": 14.25,
+      "z": -6,
+      "width": 2.05,
+      "depth": 3.330676341473332,
+      "height": 12.421343023334614,
+      "variant": 9,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "ABNB",
+      "x": 16.75,
+      "z": -6,
+      "width": 2.05,
+      "depth": 3.330676341473332,
+      "height": 12.421343023334614,
+      "variant": 10,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "MAR",
+      "x": 19.25,
+      "z": -6,
+      "width": 2.05,
+      "depth": 3.175892045564776,
+      "height": 11.19146780390617,
+      "variant": 11,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "GOOGL",
+      "x": -9,
+      "z": 58,
+      "width": 5.576,
+      "depth": 6.419876217295268,
+      "height": 29.112156566515512,
+      "variant": 10,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "META",
+      "x": -7.8,
+      "z": 13,
+      "width": 5.576,
+      "depth": 6.056658782242376,
+      "height": 25.32088494492092,
+      "variant": 7,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "NFLX",
+      "x": -1,
+      "z": 13,
+      "width": 5.372972319277395,
+      "depth": 4.62075619457856,
+      "height": 13.336457361801294,
+      "variant": 2,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "DIS",
+      "x": 5.8,
+      "z": 13,
+      "width": 4.73974702415005,
+      "depth": 4.076182440769043,
+      "height": 10.791139999034518,
+      "variant": 3,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "TTWO",
+      "x": 12.6,
+      "z": 13,
+      "width": 3.1,
+      "depth": 2.666,
+      "height": 4.200000000000001,
+      "variant": 4,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "TMUS",
+      "x": -14.6,
+      "z": 23,
+      "width": 5.066223048792927,
+      "depth": 4.356951821961917,
+      "height": 12.103445588285297,
+      "variant": 3,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "VZ",
+      "x": -7.8,
+      "z": 23,
+      "width": 4.77094488801343,
+      "depth": 4.10301260369155,
+      "height": 10.916543177308887,
+      "variant": 4,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "T",
+      "x": -1,
+      "z": 23,
+      "width": 4.569032710591987,
+      "depth": 3.9293681311091087,
+      "height": 10.104935405320733,
+      "variant": 5,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "CMCSA",
+      "x": 5.8,
+      "z": 23,
+      "width": 4.605345830334243,
+      "depth": 3.9605974140874487,
+      "height": 10.250899906245488,
+      "variant": 6,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "CHTR",
+      "x": 12.6,
+      "z": 23,
+      "width": 3.307165155307747,
+      "depth": 2.8441620335646625,
+      "height": 5.032722683099768,
+      "variant": 7,
+      "tier": "manhattan"
+    },
+    {
+      "ticker": "GE",
+      "x": -110.33333333333333,
+      "z": 118.5,
+      "width": 4.801287907427685,
+      "depth": 4.129107600387809,
+      "height": 11.038510216130891,
+      "variant": 0,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "RTX",
+      "x": -97,
+      "z": 118.5,
+      "width": 4.640505955772609,
+      "depth": 3.9908351219644436,
+      "height": 10.39222982222323,
+      "variant": 1,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "LMT",
+      "x": -83.66666666666667,
+      "z": 118.5,
+      "width": 4.452351109662265,
+      "depth": 3.829021954309548,
+      "height": 9.635921127073813,
+      "variant": 2,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "CAT",
+      "x": -113,
+      "z": 125.5,
+      "width": 4.77094488801343,
+      "depth": 4.10301260369155,
+      "height": 10.916543177308887,
+      "variant": 5,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "HON",
+      "x": -105,
+      "z": 125.5,
+      "width": 4.452351109662265,
+      "depth": 3.829021954309548,
+      "height": 9.635921127073813,
+      "variant": 4,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "ETN",
+      "x": -97,
+      "z": 125.5,
+      "width": 4.410555548382434,
+      "depth": 3.7930777716088935,
+      "height": 9.467919361145078,
+      "variant": 5,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "DE",
+      "x": -89,
+      "z": 125.5,
+      "width": 4.225551347153473,
+      "depth": 3.633974158551987,
+      "height": 8.724275022871806,
+      "variant": 6,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "PCAR",
+      "x": -81,
+      "z": 125.5,
+      "width": 3.395808526268737,
+      "depth": 2.920395332591114,
+      "height": 5.389034272256689,
+      "variant": 7,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "CTAS",
+      "x": -107,
+      "z": 132.5,
+      "width": 3.8448412368607245,
+      "depth": 3.3065634637002232,
+      "height": 7.193969677577423,
+      "variant": 6,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "FAST",
+      "x": -87,
+      "z": 132.5,
+      "width": 3.1592856905146465,
+      "depth": 2.716985693842596,
+      "height": 4.43830522657848,
+      "variant": 7,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "UNP",
+      "x": -113,
+      "z": 139.5,
+      "width": 4.569032710591987,
+      "depth": 3.9293681311091087,
+      "height": 10.104935405320733,
+      "variant": 9,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "UPS",
+      "x": -105,
+      "z": 139.5,
+      "width": 4.27477949290171,
+      "depth": 3.6763103638954706,
+      "height": 8.922152863624522,
+      "variant": 10,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "ADP",
+      "x": -97,
+      "z": 139.5,
+      "width": 4.27477949290171,
+      "depth": 3.6763103638954706,
+      "height": 8.922152863624522,
+      "variant": 11,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "CSX",
+      "x": -89,
+      "z": 139.5,
+      "width": 3.659837035631765,
+      "depth": 3.147459850643318,
+      "height": 6.450325339304154,
+      "variant": 0,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "ODFL",
+      "x": -81,
+      "z": 139.5,
+      "width": 3.1592856905146465,
+      "depth": 2.716985693842596,
+      "height": 4.43830522657848,
+      "variant": 1,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "WMT",
+      "x": 141,
+      "z": -34.5,
+      "width": 6.140598808220547,
+      "depth": 5.2809149750696704,
+      "height": 16.422014817357102,
+      "variant": 1,
+      "tier": "queens"
+    },
+    {
+      "ticker": "COST",
+      "x": 163,
+      "z": -34.5,
+      "width": 5.627214747917572,
+      "depth": 4.8394046832091115,
+      "height": 14.358412222021617,
+      "variant": 1,
+      "tier": "queens"
+    },
+    {
+      "ticker": "PG",
+      "x": 132.44444444444446,
+      "z": -17.5,
+      "width": 4.008888888888889,
+      "depth": 4.863517560982221,
+      "height": 20.414089280753597,
+      "variant": 3,
+      "tier": "queens"
+    },
+    {
+      "ticker": "KO",
+      "x": 137.33333333333334,
+      "z": -17.5,
+      "width": 4.008888888888889,
+      "depth": 4.573519681040111,
+      "height": 17.398778135337885,
+      "variant": 4,
+      "tier": "queens"
+    },
+    {
+      "ticker": "PEP",
+      "x": 142.22222222222223,
+      "z": -17.5,
+      "width": 4.008888888888889,
+      "depth": 4.356951821961917,
+      "height": 15.295698311603056,
+      "variant": 5,
+      "tier": "queens"
+    },
+    {
+      "ticker": "PM",
+      "x": 147.11111111111111,
+      "z": -17.5,
+      "width": 4.008888888888889,
+      "depth": 4.10301260369155,
+      "height": 12.991686053188397,
+      "variant": 6,
+      "tier": "queens"
+    },
+    {
+      "ticker": "MDLZ",
+      "x": 152,
+      "z": -17.5,
+      "width": 4.008888888888889,
+      "depth": 3.5432,
+      "height": 8.530044345898,
+      "variant": 7,
+      "tier": "queens"
+    },
+    {
+      "ticker": "CL",
+      "x": 156.88888888888889,
+      "z": -17.5,
+      "width": 3.9400182605714464,
+      "depth": 3.388415704091444,
+      "height": 7.576543988571501,
+      "variant": 8,
+      "tier": "queens"
+    },
+    {
+      "ticker": "MNST",
+      "x": 161.77777777777777,
+      "z": -17.5,
+      "width": 3.3523735110568476,
+      "depth": 2.883041219508889,
+      "height": 5.214442544444191,
+      "variant": 9,
+      "tier": "queens"
+    },
+    {
+      "ticker": "KDP",
+      "x": 166.66666666666666,
+      "z": -17.5,
+      "width": 3.3523735110568476,
+      "depth": 2.883041219508889,
+      "height": 5.214442544444191,
+      "variant": 10,
+      "tier": "queens"
+    },
+    {
+      "ticker": "KHC",
+      "x": 171.55555555555554,
+      "z": -17.5,
+      "width": 3.1592856905146465,
+      "depth": 2.716985693842596,
+      "height": 4.43830522657848,
+      "variant": 11,
+      "tier": "queens"
+    },
+    {
+      "ticker": "XOM",
+      "x": -102.25,
+      "z": 167,
+      "width": 5.902373511056847,
+      "depth": 5.076041219508888,
+      "height": 15.464442544444196,
+      "variant": 2,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "CVX",
+      "x": -92.75,
+      "z": 167,
+      "width": 5.24029836926717,
+      "depth": 4.506656597569766,
+      "height": 12.803160111760192,
+      "variant": 1,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "COP",
+      "x": -83.25,
+      "z": 167,
+      "width": 4.367120533170543,
+      "depth": 3.755723658526667,
+      "height": 9.293327633332577,
+      "variant": 2,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "FANG",
+      "x": -73.75,
+      "z": 167,
+      "width": 3.395808526268737,
+      "depth": 2.920395332591114,
+      "height": 5.389034272256689,
+      "variant": 3,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "SLB",
+      "x": -100.66666666666667,
+      "z": 179,
+      "width": 3.642929059439281,
+      "depth": 3.1329189911177817,
+      "height": 6.38236190558927,
+      "variant": 3,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "EOG",
+      "x": -88,
+      "z": 179,
+      "width": 3.7250000020363547,
+      "depth": 3.203500001751265,
+      "height": 6.712254910146132,
+      "variant": 4,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "MPC",
+      "x": -75.33333333333333,
+      "z": 179,
+      "width": 3.554285688478291,
+      "depth": 3.0566856920913303,
+      "height": 6.026050316432347,
+      "variant": 5,
+      "tier": "staten-island"
+    },
+    {
+      "ticker": "NEE",
+      "x": 87,
+      "z": 131,
+      "width": 4.707644749514599,
+      "depth": 4.048574484582555,
+      "height": 10.662101444127309,
+      "variant": 11,
+      "tier": "brooklyn"
+    },
+    {
+      "ticker": "CEG",
+      "x": 105,
+      "z": 131,
+      "width": 3.7250000020363547,
+      "depth": 3.203500001751265,
+      "height": 6.712254910146132,
+      "variant": 1,
+      "tier": "brooklyn"
+    },
+    {
+      "ticker": "SO",
+      "x": 81.6,
+      "z": 145,
+      "width": 4.12,
+      "depth": 3.5432,
+      "height": 8.299999999999999,
+      "variant": 3,
+      "tier": "brooklyn"
+    },
+    {
+      "ticker": "DUK",
+      "x": 88.8,
+      "z": 145,
+      "width": 4.003318399070278,
+      "depth": 3.4428538232004393,
+      "height": 7.830985721753078,
+      "variant": 4,
+      "tier": "brooklyn"
+    },
+    {
+      "ticker": "AEP",
+      "x": 96,
+      "z": 145,
+      "width": 3.4579248582103217,
+      "depth": 2.9738153780608765,
+      "height": 5.638717567316,
+      "variant": 5,
+      "tier": "brooklyn"
+    },
+    {
+      "ticker": "EXC",
+      "x": 103.2,
+      "z": 145,
+      "width": 3.1,
+      "depth": 2.666,
+      "height": 4.200000000000001,
+      "variant": 6,
+      "tier": "brooklyn"
+    },
+    {
+      "ticker": "XEL",
+      "x": 110.4,
+      "z": 145,
+      "width": 3.1,
+      "depth": 2.666,
+      "height": 4.200000000000001,
+      "variant": 7,
+      "tier": "brooklyn"
+    },
+    {
+      "ticker": "LIN",
+      "x": 28.666666666666664,
+      "z": -198,
+      "width": 4.993177836096626,
+      "depth": 4.294132939043098,
+      "height": 11.809832478427612,
+      "variant": 10,
+      "tier": "bronx"
+    },
+    {
+      "ticker": "SHW",
+      "x": 44,
+      "z": -198,
+      "width": 4.063195193486562,
+      "depth": 3.4943478663984435,
+      "height": 8.07166695421069,
+      "variant": 1,
+      "tier": "bronx"
+    },
+    {
+      "ticker": "APD",
+      "x": 59.333333333333336,
+      "z": -198,
+      "width": 3.642929059439281,
+      "depth": 3.1329189911177817,
+      "height": 6.38236190558927,
+      "variant": 2,
+      "tier": "bronx"
+    },
+    {
+      "ticker": "FCX",
+      "x": 32.5,
+      "z": -184,
+      "width": 3.642929059439281,
+      "depth": 3.1329189911177817,
+      "height": 6.38236190558927,
+      "variant": 3,
+      "tier": "bronx"
+    },
+    {
+      "ticker": "NEM",
+      "x": 55.5,
+      "z": -184,
+      "width": 3.4579248582103217,
+      "depth": 2.9738153780608765,
+      "height": 5.638717567316,
+      "variant": 4,
+      "tier": "bronx"
+    },
+    {
+      "ticker": "PLD",
+      "x": 48,
+      "z": 79.5,
+      "width": 4.27477949290171,
+      "depth": 3.6763103638954706,
+      "height": 8.922152863624522,
+      "variant": 1,
+      "tier": "brooklyn"
+    },
+    {
+      "ticker": "WELL",
+      "x": 54,
+      "z": 79.5,
+      "width": 3.801406221648835,
+      "depth": 3.269209350617998,
+      "height": 7.019377949764925,
+      "variant": 1,
+      "tier": "brooklyn"
+    },
+    {
+      "ticker": "SPG",
+      "x": 60,
+      "z": 79.5,
+      "width": 3.554285688478291,
+      "depth": 3.0566856920913303,
+      "height": 6.026050316432347,
+      "variant": 2,
+      "tier": "brooklyn"
+    },
+    {
+      "ticker": "O",
+      "x": 66,
+      "z": 79.5,
+      "width": 3.4579248582103217,
+      "depth": 2.9738153780608765,
+      "height": 5.638717567316,
+      "variant": 3,
+      "tier": "brooklyn"
+    },
+    {
+      "ticker": "CSGP",
+      "x": 72,
+      "z": 79.5,
+      "width": 3.1,
+      "depth": 2.666,
+      "height": 4.200000000000001,
+      "variant": 4,
+      "tier": "brooklyn"
+    },
+    {
+      "ticker": "AMT",
+      "x": 50,
+      "z": 92.5,
+      "width": 4.12,
+      "depth": 3.5432,
+      "height": 8.299999999999999,
+      "variant": 3,
+      "tier": "brooklyn"
+    },
+    {
+      "ticker": "EQIX",
+      "x": 60,
+      "z": 92.5,
+      "width": 3.9400182605714464,
+      "depth": 3.388415704091444,
+      "height": 7.576543988571501,
+      "variant": 4,
+      "tier": "brooklyn"
+    },
+    {
+      "ticker": "SBAC",
+      "x": 70,
+      "z": 92.5,
+      "width": 3.1,
+      "depth": 2.666,
+      "height": 4.200000000000001,
+      "variant": 5,
+      "tier": "brooklyn"
+    }
+  ]
+}

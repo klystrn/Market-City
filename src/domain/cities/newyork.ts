@@ -1,3 +1,4 @@
+import bakedLayout from "@/data/layouts/newyork.json";
 import type { Company, Plot } from "../types";
 import type { Point, Road } from "../geography";
 import { massing } from "../massing";
@@ -491,7 +492,17 @@ export const newYork: CityDefinition = {
   land: boroughs.map((b) => boroughShapes[b.id]),
   water: [],
   roads: () => newYorkRoads(),
+  // A borough's band is its own shore. The shape is stored open, the way a
+  // polygon fill wants it, so the closing edge is added here — without it the
+  // ribbon would stop one segment short and leave the borough visibly unsealed.
   createPlots: createNewYorkPlots,
+  tierOutline: (tierId) => {
+    const shape = boroughShapes[tierId];
+    return shape ? [...shape, shape[0]] : [];
+  },
+  bakedLayout,
+  // Measured 133 lots, 16 landmarks, 61 road segments, 30 labels.
+  budget: { lots: 180, landmarks: 24, roadSegments: 140, labels: 60 },
   surround: "sea",
   // Opens over the Hudson looking east-south-east down the built length of
   // Manhattan, which puts Queens across the East River and Brooklyn beyond the

@@ -13,6 +13,8 @@ export interface MapFeatures {
   connections: boolean;
   trails: boolean;
   halos: boolean;
+  breadthRibbons: boolean;
+  massColumns: boolean;
 }
 export const defaultMapFeatures: MapFeatures = {
   greenery: true,
@@ -29,4 +31,6 @@ export const defaultMapFeatures: MapFeatures = {
   connections: true,
   trails: false,
   halos: false,
+  breadthRibbons: false,
+  massColumns: false,
 };

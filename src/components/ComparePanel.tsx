@@ -2,7 +2,7 @@
 import { X } from "lucide-react";
 import type { Snapshot } from "@/domain/types";
 import { compact, money, pct } from "@/domain/analytics";
-import { sectors } from "@/domain/city";
+import { sectorIdentities as sectors } from "@/domain/sectors";
 import Dialog from "./Dialog";
 const rows: {
   label: string;

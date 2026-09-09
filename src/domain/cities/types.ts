@@ -1,5 +1,6 @@
 import type { Company, Plot, Sector } from "../types";
 import type { Point, Road } from "../geography";
+import type { BakedLayout } from "./layout-key";
 export type CityId = "tokyo" | "london" | "newyork";
 export type UniverseId = "nasdaq100" | "sp500";
 export type LandmarkKind =
@@ -45,6 +46,16 @@ export interface CityTier {
 export interface CityDistrict extends Sector {
   tier?: string;
 }
+export interface CityBudget {
+  /** Company lots placed on the ground. */
+  lots: number;
+  /** Landmark meshes drawn as scenery. */
+  landmarks: number;
+  /** Straight road segments the terrain instances. */
+  roadSegments: number;
+  /** Floating labels that can share the screen: districts, landmarks, buildings. */
+  labels: number;
+}
 export interface CityDefinition {
   id: CityId;
   name: string;
@@ -74,6 +85,23 @@ export interface CityDefinition {
   };
   /** What lies beyond the city edge. London is inland, so its horizon is land. */
   surround: "sea" | "land";
+  /** Placement solved at build time, used whenever it still matches the roster. */
+  bakedLayout?: BakedLayout;
+  /**
+   * What this city is allowed to draw. Every count is an upper bound the city
+   * must stay under, declared next to the city so adding one is a deliberate
+   * act; tests/budget.test.ts measures the real geometry against it, so a new
+   * or grown city cannot quietly regress frame rate.
+   */
+  budget: CityBudget;
+  /**
+   * The closed outline of one market-cap band, in ground coordinates. Each city
+   * knows its own shape — a London ring, a New York borough shore, a Tokyo town
+   * boundary — which is what lets one breadth layer draw all three. The loop is
+   * explicit: the first point is repeated as the last, so a renderer that walks
+   * consecutive pairs draws the closing edge too. Unknown bands return [].
+   */
+  tierOutline: (tierId: string) => Point[];
   /** Tokyo keeps its own bespoke terrain, seasons and Fuji. */
   bespokeTerrain?: boolean;
 }

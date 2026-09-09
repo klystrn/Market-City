@@ -7,6 +7,7 @@ import {
   Camera,
   Compass,
   Landmark,
+  MapPin,
   X,
 } from "lucide-react";
 import type { Menu } from "./control-types";
@@ -57,6 +58,12 @@ export default function ToolsMenu({
       label: "District directory",
       hint: "Keyboard-friendly index",
       icon: Compass,
+    },
+    {
+      id: "landmarks",
+      label: "Landmark index",
+      hint: "What each place means",
+      icon: MapPin,
     },
     {
       id: "history",

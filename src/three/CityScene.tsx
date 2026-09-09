@@ -21,6 +21,9 @@ import MarketDisasters from "./MarketDisasters";
 import Terrain from "./Terrain";
 import CityTerrain from "./CityTerrain";
 import CityLandmarks from "./CityLandmarks";
+import BreadthRibbons from "./BreadthRibbons";
+import MassColumns from "./MassColumns";
+import { plotsFor } from "@/domain/cities/layout-key";
 import RoadSigns from "./RoadSigns";
 import SignatureBuildings, { signatureTickers } from "./SignatureBuildings";
 import Buildings from "./Buildings";
@@ -516,7 +519,7 @@ function CityScene(props: Props) {
   // Quote updates do not change structural data or reallocate geometry.
 
   const plots = useMemo(
-    () => props.city.createPlots(props.snapshot.companies),
+    () => plotsFor(props.city, props.snapshot.companies),
     // eslint-disable-next-line react-hooks/exhaustive-deps -- Geometry depends on the structural signature, not quote ticks.
     [structure, props.city],
   );
@@ -607,6 +610,20 @@ function CityScene(props: Props) {
                 />
               )}
             </>
+          )}
+          {props.mapFeatures.breadthRibbons && (
+            <BreadthRibbons
+              city={props.city}
+              companies={props.snapshot.companies}
+              dark={props.dark}
+            />
+          )}
+          {props.mapFeatures.massColumns && (
+            <MassColumns
+              districts={props.city.districts}
+              companies={props.snapshot.companies}
+              dark={props.dark}
+            />
           )}
           <MarketDisasters
             snapshot={props.snapshot}

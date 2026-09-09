@@ -1,6 +1,6 @@
 import { companyNamesForSpeech } from "@/domain/company-names";
 import type { MarketState, Snapshot } from "@/domain/types";
-import { sectors } from "@/domain/city";
+import { sectorIdentities as sectors } from "@/domain/sectors";
 import { weightedChange } from "@/domain/analytics";
 export function marketBulletin(
   snapshot: Snapshot,

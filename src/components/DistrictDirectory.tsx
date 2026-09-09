@@ -1,7 +1,7 @@
 "use client";
 import { useRef } from "react";
 import { ChevronRight } from "lucide-react";
-import { sectors } from "@/domain/city";
+import { sectorIdentities as sectors } from "@/domain/sectors";
 import { subsectors } from "@/domain/subsectors";
 import Dialog from "./Dialog";
 export default function DistrictDirectory({

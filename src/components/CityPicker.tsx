@@ -1,6 +1,6 @@
 "use client";
 import { ChevronDown, Check, Globe2, X } from "lucide-react";
-import { cities } from "@/domain/cities";
+import { cityCatalog } from "@/domain/cities";
 import type { CityDefinition, CityId } from "@/domain/cities/types";
 import { universeNames, universeNotes } from "@/domain/indexes";
 import type { Menu } from "./control-types";
@@ -49,7 +49,7 @@ export default function CityPicker({
             One market, several maps. Each city arranges the same companies a
             different way.
           </p>
-          {cities.map((option) => (
+          {cityCatalog.map((option) => (
             <button
               key={option.id}
               className={`layer-option ${option.id === city.id ? "active" : ""}`}

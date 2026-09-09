@@ -1,19 +1,30 @@
-import type { Company } from "../types";
-import { inUniverse } from "../indexes";
-import { tokyo } from "./tokyo";
-import { london } from "./london";
-import { newYork } from "./newyork";
 import type { CityDefinition, CityId } from "./types";
-export const cities: CityDefinition[] = [newYork, london, tokyo];
-export const defaultCityId: CityId = "newyork";
-export function getCity(id: string | null | undefined): CityDefinition {
-  return cities.find((c) => c.id === id) ?? cities[0];
+// Each city's geometry is fetched on demand, so the first load carries only the
+// city being shown. The three modules are named literally rather than built from
+// a variable, because a bundler can only split what it can see statically.
+const loaders: Record<CityId, () => Promise<{ city: CityDefinition }>> = {
+  newyork: async () => ({ city: (await import("./newyork")).newYork }),
+  london: async () => ({ city: (await import("./london")).london }),
+  tokyo: async () => ({ city: (await import("./tokyo")).tokyo }),
+};
+const cache = new Map<CityId, CityDefinition>();
+/** The full city, from cache when it has already been fetched once. */
+export async function loadCity(id: CityId): Promise<CityDefinition> {
+  const cached = cache.get(id);
+  if (cached) return cached;
+  const { city } = await loaders[id]();
+  cache.set(id, city);
+  return city;
 }
-// A city renders only the companies in its market universe.
-export function companiesForCity(
-  companies: Company[],
-  city: CityDefinition,
-): Company[] {
-  return companies.filter((c) => inUniverse(c.ticker, city.universe));
+/** The city if it is already loaded, without starting a fetch. */
+export function loadedCity(id: CityId): CityDefinition | undefined {
+  return cache.get(id);
 }
+export {
+  cityCatalog,
+  defaultCityId,
+  getCatalogEntry,
+  companiesForCity,
+  type CityCatalogEntry,
+} from "./catalog";
 export type { CityDefinition, CityId } from "./types";

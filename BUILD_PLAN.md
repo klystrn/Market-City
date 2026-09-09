@@ -282,3 +282,41 @@ the 66 empty lots' worth of ground with filler.
    the roster grows. They now read `companySeeds.length` and `subsectors.length`,
    and a new test asserts that every city places buildings for every sector and
    that every lot names a tier its city declares.
+
+### Orientation, breadth and budgets (owner follow-up)
+The owner selected nine backlog proposals — UI/UX 1 and 3, Market visualisation 1
+and 2, Features 2 and 3, and all three Optimisation items — and asked for them in
+one pass. §75.11 of `MARKET_CITY.md` records each in full; the parts worth
+carrying forward:
+
+1. **Orientation is per city, and so is the tour.** A card states how *this* city
+   is arranged and comes back for a city you have not seen, tracked in a set
+   rather than a single "seen the intro" flag — switching city changes the rules
+   of the map. The tour reuses the existing sector-flyto and advances only on a
+   click, never a timer, so it cannot take the map away mid-thought.
+2. **Breadth and mass are two layers because they are two facts.** A ribbon along
+   each band's edge counts what share is advancing; a translucent column over each
+   district measures that sector's share of index market cap. They disagree
+   routinely, which is the point: a band of small companies mostly rising reads
+   green while its column stays short.
+3. **One `tierOutline` per city drives the ribbon in all three.** The contract is
+   an explicit closed loop, because the renderer walks consecutive pairs. New
+   York's borough shapes are stored open for polygon fill, so its `tierOutline`
+   closes them — without that, every borough ribbon stopped one segment short.
+   `tests/orientation.test.ts` asserts closure for every band of every city, and
+   that is what caught it.
+4. **A budget only constrains if it also has a ceiling and a floor.** Each city
+   declares lots, landmarks, road segments and labels; the test checks the city is
+   under its budget, the budget is under a shared ceiling, and the budget is not
+   far above what the city actually draws. Without that last check a generous
+   number would pass forever.
+5. **Code-splitting exposed a dependency nothing else would have.** Tokyo's
+   geometry kept loading eagerly because sector identities lived in the same
+   module as its terrain. `sectorIdentities` moved to `src/domain/sectors.ts` and
+   `geography.ts` now imports from it, inverting the edge. The split was verified
+   by grepping the built chunks for city-specific markers, not by trusting the
+   import syntax.
+6. **Baked layouts key on structure, not price.** The cache signature is ticker,
+   sector, subsector and market cap — never price or volume — so a quote refresh
+   reuses the fixture and a roster change falls back to solving in the browser. A
+   stale fixture is a slower boot, never a wrong city.

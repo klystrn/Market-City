@@ -35,6 +35,10 @@ The globe control in the header switches between three layouts of the same seede
 | **London** | S&P 500 | Market-cap zones out from a civic core (eight at the current roster size). Each sector is a wedge running through every zone; the larger the company, the lower its zone number. Ordinary streets front each row of buildings — there are no ring roads dividing one zone from the next — and the city sits on open green country, since London is inland. Subsector appears on the company card instead of in the layout. |
 | **Tokyo** | Nasdaq-100 | The original layout: a sector town for each district and a subsector street inside it, with bay islands, an elevated rail loop and Mount Fuji behind the skyline. |
 
+The first time you open a city, a short card says how that particular city is arranged and offers a **guided tour** — three or four stops that fly to a district and explain one encoding at each. The tour advances only when you click and ends on `Escape`; it never moves the camera on a timer. The card returns for a city you have not opened before, because switching city changes the rules of the map, and stays gone for one you have.
+
+Each city also remembers **its own** map layers, season and last camera bookmark, rather than carrying one global setting between geographies. Only the active city's terrain and landmark data is downloaded; the other two load when you switch to them.
+
 In the zone and borough cities, market capitalisation is encoded as the **total volume of built space** — land footprint and height together — rather than height alone, so a mega-cap reads as a large site as well as a tall one. Both axes use the same compressed log scale.
 
 London was specified as nine zones. The city carries as many rings as the roster actually fills and no more, rather than leaving empty rings for the camera to cross; a test fails if any declared zone ends up empty, so the count is re-checked whenever companies are added.
@@ -67,6 +71,7 @@ Everything below is stored in your browser only. Nothing is uploaded, and no acc
 - **Bookmarked views** — save the current camera focus (a company, a district or the overview) and jump back to it.
 - **District directory** — every sector and subsector street as a keyboard-navigable list, for reaching any district without using the 3D map. `↑`/`↓` move, `Enter` selects.
 - **Museum of Markets** — a curated timeline of real, well-documented U.S. financial history from Black Tuesday to the 2023 SVB failure. Click the museum building or open it from Tools. These are historical facts, kept explicitly separate from this app's simulated prices, and they are not a forecast.
+- **Landmark index** — every real place in the active city with its role stated in words: standing in for a company, identifying a sector, or scenery only. From the map alone the three look similar, so the index is what keeps an identity cue from being read as a claim. Rows that carry a meaning are clickable and take you to that company or sector.
 - **God scenarios** — save a named scenario locally, or copy a share link. Every God setting travels in the `?scenario=` parameter.
 
 **Layers & view → Map details** adds four optional analytical layers on top of the existing scenery toggles:
@@ -75,6 +80,8 @@ Everything below is stored in your browser only. Nothing is uploaded, and no acc
 - **Supply-chain connections** — curated, illustrative relationships between seeded companies, drawn as arcs when a company is selected and listed as chips on its card. A simplified exploration layer, not a claim about current contracts.
 - **Intraday performance trails** — a deterministic seeded path from the session open to the current price, drawn beside the selected company and the day's biggest movers. Illustrative session texture; this offline demo has no intraday feed.
 - **Volatility halos** — a ground ring sized and coloured by trailing daily-return volatility over up to 60 sessions.
+- **Zone & borough breadth** — a thin band along the edge of each market-cap band (a London ring, a New York borough shore, a Tokyo town boundary), coloured by the share of that band's companies advancing today. This is a count, not a weight: a band of small companies mostly rising reads green even though it carries little of the index.
+- **Sector mass columns** — a translucent column over each district whose height tracks that sector's share of total index market capitalisation, so weight is legible from the overview. Breadth and mass disagree routinely, which is why they are separate layers.
 
 **Adaptive graphics quality** (Layers & view, on by default) watches frame timing and trims device pixel ratio, then traffic and the optional layers, when the frame rate drops — restoring them once it recovers. Intraday-trail computation runs in a Web Worker so dragging the God session-minute slider never blocks input, with a synchronous fallback where Workers are unavailable.
 
@@ -128,6 +135,7 @@ src/three/         Instanced geometry, camera, districts, labels and traffic
 src/domain/        Normalized types, layout, encodings and evidence calculations
 src/domain/cities/ One module per city: tiers, districts, landmarks, roads, plots
 src/data/          Deterministic, labeled development fixtures
+src/data/layouts/  Generated plot fixtures — run `npm run bake:layouts` to rebuild
 src/services/      Commands, replaceable providers, validation, audio and bulletins
 scripts/           Credential-bearing refresh execution (never browser code)
 tests/             Domain, layout, city and provider contract checks
@@ -138,6 +146,8 @@ Buildings use twelve procedural massing variations, including faceted oval tower
 Sixteen companies — at least one in every sector — have recognizable signature architecture: Apple, Microsoft, Amazon, Alphabet, Meta, NVIDIA, Tesla and Netflix, joined by JPMorgan (financials), Eli Lilly (healthcare), Caterpillar (industrials), Walmart (staples), Exxon Mobil (energy), NextEra (utilities), Linde (materials) and Prologis (real estate). Details include sculptures, atriums, canopies, terraces, skybridges, chip crowns, chargers, cinema marquees, a four-sided diagonal exoskeleton on corner supercolumns, a rooftop wind turbine, a refinery flare and a warehouse sawtooth roof. Each has a curated base massing so its accents sit on a flat facade. Brand elements are identity cues; they do not encode additional financial metrics and are not architectural reproductions.
 
 Low-rise blocks, trees, mountains and civic landmarks are decorative scenery. Energy's symbolic nuclear campus, the industrial container port and the real-estate marina stand on distinct islands; mainland sectors have their own identifying landmarks. These thematic landmarks do not represent company-owned facilities. More vibrant water, foliage, roofs and civic accents follow the owner's revised direction, while company gains remain green and losses red.
+
+Each city declares a geometry budget — lots, landmarks, road segments and labels — that a test enforces from both sides: no city may exceed its budget, and no budget may sit far above what its city actually draws, so a generous number cannot be used to wave a regression through. Only the active city's geometry is downloaded; the rest load on switch. Plot placement is baked to a JSON fixture at build time and keyed on the roster's structure (ticker, sector, subsector, market cap) rather than on prices, so refreshing quotes reuses the fixture and a roster change falls back to solving in the browser — a stale fixture costs a slower boot, never a wrong city.
 
 Geometry is shared and instanced, including roads, crossings, trees and low-poly traffic. Vehicle count is capped at 240. Market updates change color buffers separately from structural matrices. Labels are culled by zoom; hidden tabs pause rendering; traffic stops after 30 seconds of inactivity. Reduced effects removes traffic and motion. Rendering uses a bounded device pixel ratio and no full-city real-time shadows.
 
