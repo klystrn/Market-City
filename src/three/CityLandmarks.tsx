@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { useMemo, useRef, useState } from "react";
+import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { Html } from "@react-three/drei";
 import type { CityLandmark } from "@/domain/cities/types";
@@ -256,8 +257,14 @@ function TentDome({ landmark }: { landmark: CityLandmark }) {
         <meshStandardMaterial color="#ddd2c0" />
       </mesh>
       <mesh position={[0, r * 0.8, 0]}>
-        <sphereGeometry args={[r * 0.62, 14, 8, 0, Math.PI * 2, 0, Math.PI / 2]} />
-        <meshStandardMaterial color="#9fb4b8" metalness={0.25} roughness={0.4} />
+        <sphereGeometry
+          args={[r * 0.62, 14, 8, 0, Math.PI * 2, 0, Math.PI / 2]}
+        />
+        <meshStandardMaterial
+          color="#9fb4b8"
+          metalness={0.25}
+          roughness={0.4}
+        />
       </mesh>
       <mesh position={[0, r * 1.5, 0]} scale={[0.14, r * 0.4, 0.14]}>
         <boxGeometry />
@@ -588,7 +595,10 @@ function Museum({ landmark }: { landmark: CityLandmark }) {
           <meshStandardMaterial color="#f2e9d3" />
         </mesh>
       ))}
-      <mesh position={[0, r * 0.86, r * 0.5]} scale={[r * 1.9, r * 0.16, r * 0.8]}>
+      <mesh
+        position={[0, r * 0.86, r * 0.5]}
+        scale={[r * 1.9, r * 0.16, r * 0.8]}
+      >
         <boxGeometry />
         <meshStandardMaterial color="#c9bda4" />
       </mesh>
@@ -689,7 +699,9 @@ function Terminal({ landmark }: { landmark: CityLandmark }) {
         <meshStandardMaterial color="#c8b79b" />
       </mesh>
       <mesh position={[0, r * 0.72, 0]} rotation={[0, 0, Math.PI / 2]}>
-        <cylinderGeometry args={[r * 0.7, r * 0.7, r * 2, 12, 1, false, 0, Math.PI]} />
+        <cylinderGeometry
+          args={[r * 0.7, r * 0.7, r * 2, 12, 1, false, 0, Math.PI]}
+        />
         <meshStandardMaterial
           color="#8fa9b3"
           metalness={0.3}
@@ -796,6 +808,15 @@ export default function CityLandmarks({
   labels: boolean;
 }) {
   const palette = seasonPalette[season];
+  const [showAllLabels, setShowAllLabels] = useState(false);
+  const labelDetail = useRef(false);
+  useFrame(({ camera }) => {
+    const detailed = camera.zoom >= 7.2;
+    if (detailed !== labelDetail.current) {
+      labelDetail.current = detailed;
+      setShowAllLabels(detailed);
+    }
+  });
   const greens = useMemo(() => {
     const lawns: Part[] = [],
       crowns: Part[] = [],
@@ -935,13 +956,16 @@ export default function CityLandmarks({
             return null;
         }
       })}
-      {/* Only landmarks that identify a sector get a label: a functional cue
-          for wayfinding, not decoration. A landmark standing in for a company
-          (ticker set) has no mesh here to label, and every other decorative
-          landmark now relies on its own shape to be recognizable. */}
+      {/* Only landmarks that identify a sector get a label at all: a
+          functional cue for wayfinding, not decoration. A landmark standing
+          in for a company (ticker set) has no mesh here to label, and every
+          other decorative landmark relies on its own shape to be
+          recognizable. Among those, the smaller ones stay hidden until the
+          user zooms in enough to tell them apart from their surrounding
+          streets, so the overview stays legible. */}
       {labels &&
         landmarks
-          .filter((l) => l.sector)
+          .filter((l) => l.sector && l.radius >= (showAllLabels ? 4 : 7))
           .map((l) => (
             <Html
               key={l.id}

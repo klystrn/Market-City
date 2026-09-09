@@ -56,6 +56,8 @@ type Props = {
   onReady: () => void;
   onFailure: () => void;
   onMuseum: () => void;
+  earningsVisible: boolean;
+  onHideEarnings: () => void;
 };
 class SceneBoundary extends Component<
   { children: ReactNode; onFailure: () => void },
@@ -144,7 +146,7 @@ function Traffic({
       const t = ((elapsed.current * speed + offset) % run.length) / run.length;
       const along = i % 2 === 0 ? t : 1 - t;
       // Half a lane either side of the centre line, so the two directions pass.
-      const lane = (i % 2 === 0 ? 0.42 : -0.42);
+      const lane = i % 2 === 0 ? 0.42 : -0.42;
       object.position.set(
         run.a[0] + (run.b[0] - run.a[0]) * along - Math.sin(run.angle) * lane,
         run.y,
@@ -399,8 +401,7 @@ function Labels({ plots, ...props }: Props & { plots: Plot[] }) {
                 const members = props.snapshot.companies.filter(
                   (c) => c.sector === s.id,
                 );
-                if (!members.length)
-                  return <b className="muted">No members</b>;
+                if (!members.length) return <b className="muted">No members</b>;
                 const change = weightedChange(members);
                 return (
                   <b className={change >= 0 ? "positive" : "negative"}>
@@ -729,19 +730,23 @@ function CityScene(props: Props) {
               dark={props.dark}
             />
           )}
-          {props.mapFeatures.transit && !props.selected && (
-            <EarningsArrivals
-              catalysts={props.snapshot.catalysts}
-              now={Date.parse(props.snapshot.generatedAt)}
-              station={
-                props.city.bespokeTerrain
-                  ? civicSites.find((s) => s.id === "station")!
-                  : (props.city.landmarks.find((l) => l.kind === "terminal") ??
-                    props.city.districts[0])
-              }
-              onSelect={props.onSelect}
-            />
-          )}
+          {props.mapFeatures.transit &&
+            props.earningsVisible &&
+            !props.selected && (
+              <EarningsArrivals
+                catalysts={props.snapshot.catalysts}
+                now={Date.parse(props.snapshot.generatedAt)}
+                station={
+                  props.city.bespokeTerrain
+                    ? civicSites.find((s) => s.id === "station")!
+                    : (props.city.landmarks.find(
+                        (l) => l.kind === "terminal",
+                      ) ?? props.city.districts[0])
+                }
+                onSelect={props.onSelect}
+                onDismiss={props.onHideEarnings}
+              />
+            )}
           {props.mapFeatures.labels && <Labels {...props} plots={plots} />}
         </group>
         <Camera

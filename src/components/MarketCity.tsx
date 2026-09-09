@@ -20,6 +20,7 @@ import {
   CloudSun,
   ArrowLeft,
   Columns3,
+  CalendarClock,
 } from "lucide-react";
 import { createDemo } from "@/data/demo";
 import type { Company, Layer, Snapshot } from "@/domain/types";
@@ -123,6 +124,7 @@ export default function MarketCity() {
     [webglFailed, setWebglFailed] = useState(false),
     [ready, setReady] = useState(false),
     [resetKey, setResetKey] = useState(0);
+  const [earningsVisible, setEarningsVisible] = useState(true);
   const watchlist = usePersistentSet("market-city-watchlist");
   const [compareSet, setCompareSet] = useState<string[]>([]);
   const cameraBookmarks = useCameraBookmarks();
@@ -485,6 +487,8 @@ export default function MarketCity() {
             onReady={onReady}
             onFailure={onFailure}
             onMuseum={() => setMenu("history")}
+            earningsVisible={earningsVisible}
+            onHideEarnings={() => setEarningsVisible(false)}
           />
         </div>
       )}
@@ -595,9 +599,7 @@ export default function MarketCity() {
             setSelected(null);
             setFocusedSector(null);
           }}
-          cityContext={
-            tierName ? `${city.tierNoun} · ${tierName}` : city.name
-          }
+          cityContext={tierName ? `${city.tierNoun} · ${tierName}` : city.name}
           indexName={universeNames[city.universe]}
           pinned={watchlist.has(company.ticker)}
           onTogglePin={() => watchlist.toggle(company.ticker)}
@@ -615,7 +617,7 @@ export default function MarketCity() {
         </button>
       )}
       {!selected && !listMode && (
-        <div className="market-pulse">
+        <div className="glass market-pulse">
           <div className="index-line">
             <span>{universeNames[city.universe]}</span>
             <b
@@ -641,8 +643,20 @@ export default function MarketCity() {
             {weather(snapshot)} <span>·</span> VIX{" "}
             {snapshot.market.vix.toFixed(1)}
           </p>
-          <p>{seasonNames[season]} in the city · Japan seasons</p>
+          <p>
+            {seasonNames[season]} in the city ·{" "}
+            {city.bespokeTerrain ? "Japan seasons" : "seasonal environment"}
+          </p>
         </div>
+      )}
+      {!selected && !listMode && !earningsVisible && (
+        <button
+          className="glass earnings-toggle"
+          onClick={() => setEarningsVisible(true)}
+          aria-label="Show earnings arrivals"
+        >
+          <CalendarClock size={15} /> Earnings
+        </button>
       )}
       <ViewControls
         mapFeatures={mapFeatures}
