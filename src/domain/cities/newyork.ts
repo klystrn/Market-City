@@ -162,7 +162,7 @@ const neighbourhoods: {
     depth: 24,
   },
   {
-    sector: "materials",
+    sector: "utilities",
     borough: "brooklyn",
     name: "Sunset Park & Gowanus",
     x: 96,
@@ -180,9 +180,9 @@ const neighbourhoods: {
     depth: 26,
   },
   {
-    sector: "utilities",
+    sector: "materials",
     borough: "bronx",
-    name: "Hunts Point & South Bronx",
+    name: "Port Morris & Hunts Point",
     x: 44,
     z: -191,
     width: 46,
@@ -293,7 +293,7 @@ export const newYorkLandmarks: CityLandmark[] = [
     z: -168,
     radius: 8,
     kind: "arena",
-    sector: "utilities",
+    sector: "materials",
   },
   {
     id: "citi-field",
@@ -311,7 +311,7 @@ export const newYorkLandmarks: CityLandmark[] = [
     z: 176,
     radius: 6,
     kind: "wheel",
-    sector: "materials",
+    sector: "utilities",
   },
   {
     id: "prospect-park",

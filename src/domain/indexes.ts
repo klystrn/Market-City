@@ -14,6 +14,11 @@ import type { UniverseId } from "./cities/types";
 // - Selecting the Nasdaq-100 universe therefore renders a partial index: the
 //   seeded members only. Completing it requires adding the remaining
 //   constituents to the dataset.
+// - The seeded set is chosen so that every sector has at least one Nasdaq-100
+//   member, which is what keeps the Nasdaq-100 city from showing empty
+//   districts. Energy and materials are genuinely thin: the real index carries
+//   one company in each, so those districts stay small rather than being
+//   padded with companies that are not in the index.
 export const nasdaq100Members = [
   "AAPL",
   "MSFT",
@@ -49,6 +54,39 @@ export const nasdaq100Members = [
   "AEP",
   "LIN",
   "EQIX",
+  "LRCX",
+  "KLAC",
+  "ADI",
+  "SNPS",
+  "CDNS",
+  "MRVL",
+  "NXPI",
+  "ADSK",
+  "PYPL",
+  "COIN",
+  "VRTX",
+  "REGN",
+  "GILD",
+  "IDXX",
+  "ABNB",
+  "MAR",
+  "ORLY",
+  "LULU",
+  "CHTR",
+  "TTWO",
+  "CTAS",
+  "CSX",
+  "PCAR",
+  "FAST",
+  "ODFL",
+  "MNST",
+  "KDP",
+  "KHC",
+  "FANG",
+  "EXC",
+  "XEL",
+  "CSGP",
+  "SBAC",
 ] as const;
 const nasdaqSet = new Set<string>(nasdaq100Members);
 export function inUniverse(ticker: string, universe: UniverseId): boolean {

@@ -246,3 +246,39 @@ place they name. Both are fixed in `src/three/CityLandmarks.tsx`.
    stands there and already carries the identity (Apple's logo sculpture) and
    the daily-change colour encoding a second shape would have duplicated or
    obscured.
+
+### Full sector coverage in every city (owner follow-up)
+The Nasdaq-100 city had no financials and no energy buildings at all, and its
+districts were drowning in decorative low-rise blocks. Both traced back to the
+same cause: Tokyo rendered only the 34 seeded companies that were Nasdaq-100
+members, so two districts had nothing to place and the scenery generator filled
+the 66 empty lots' worth of ground with filler.
+
+1. **Roster extended to 133 companies.** 33 real Nasdaq-100 constituents were
+   added, chosen so every sector has at least one member in the Nasdaq-100 city
+   as well as the S&P 500 ones. Each addition is verified against the dated
+   public GICS sector reference by `tests/radio-sector.test.ts`, which fails if a
+   company is filed under the wrong sector. The Nasdaq-100 view goes from 34 to
+   67 companies and no district is empty. Energy and materials stay at one
+   company each because the real index genuinely carries about one of each —
+   padding them with non-members would have been a fabrication.
+2. **Tokyo scenery cut to a supporting role.** The low-rise grid went from
+   3.8×3.9 spacing keeping 7 cells in 8, to 5.2×5.4 keeping 6 in 10 — 604 blocks
+   down to 189 against 67 company buildings, so the buildings that carry market
+   data read first and the blocks sit between them with visible gaps rather than
+   forming a carpet.
+3. **Two modelling faults the change exposed.** Tokyo's plots never set `tier`,
+   so its company cards fell back to "Tokyo" instead of naming the sector town
+   the way the zone and borough cities name theirs. And New York's borough
+   assignment had drifted: adding utilities companies pushed that sector above
+   materials, which broke the documented rule that the Bronx holds the smallest
+   sector. Utilities moved to Sunset Park & Gowanus in Brooklyn and materials to
+   Port Morris & Hunts Point in the Bronx, with Yankee Stadium and the Coney
+   Island Wonder Wheel swapping which sector they identify so each landmark
+   still stands in the borough it really stands in.
+4. **London grew to eight zones**, since the larger roster fills one more ring.
+5. **Counts are derived, not hard-coded.** The tests asserted `100` companies and
+   `29` streets in four places, which would have to be edited by hand every time
+   the roster grows. They now read `companySeeds.length` and `subsectors.length`,
+   and a new test asserts that every city places buildings for every sector and
+   that every lot names a tier its city declares.

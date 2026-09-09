@@ -269,3 +269,30 @@ test("London has no empty zone and no road running through a building", () => {
   assert.ok(city.water.length > 0, "the Thames must still be drawn");
   assert.equal(getCity("newyork").surround, "sea");
 });
+
+test("every city shows every sector, so no district stands empty", () => {
+  for (const city of cities) {
+    const members = companiesForCity(demo.companies, city);
+    const plots = city.createPlots(members);
+    for (const sector of sectorIdentities) {
+      const inSector = members.filter((c) => c.sector === sector.id);
+      assert.ok(
+        inSector.length > 0,
+        `${city.name} has no ${sector.id} companies, so that district renders empty`,
+      );
+      // And the members actually reach the ground: a district with members but
+      // no lots would look just as broken as one with no members at all.
+      const tickers = new Set(inSector.map((c) => c.ticker));
+      assert.ok(
+        plots.some((p) => tickers.has(p.ticker)),
+        `${city.name} places no ${sector.id} buildings`,
+      );
+    }
+    // Every lot names the band it sits in, which is what the company card reads.
+    for (const p of plots)
+      assert.ok(
+        city.tiers.some((t) => t.id === p.tier),
+        `${city.name}: ${p.ticker} has no tier the city declares`,
+      );
+  }
+});

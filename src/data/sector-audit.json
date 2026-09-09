@@ -148,6 +148,70 @@
       "match": true
     },
     {
+      "ticker": "LRCX",
+      "name": "Lam Research",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "KLAC",
+      "name": "KLA Corporation",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "ADI",
+      "name": "Analog Devices",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "SNPS",
+      "name": "Synopsys",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "CDNS",
+      "name": "Cadence Design Systems",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "MRVL",
+      "name": "Marvell Technology",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "NXPI",
+      "name": "NXP Semiconductors",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
+      "ticker": "ADSK",
+      "name": "Autodesk",
+      "sector": "technology",
+      "reference": "Information Technology",
+      "expected": "technology",
+      "match": true
+    },
+    {
       "ticker": "JPM",
       "name": "JPMorgan Chase",
       "sector": "financials",
@@ -238,6 +302,22 @@
     {
       "ticker": "SPGI",
       "name": "S&P Global",
+      "sector": "financials",
+      "reference": "Financials",
+      "expected": "financials",
+      "match": true
+    },
+    {
+      "ticker": "PYPL",
+      "name": "PayPal",
+      "sector": "financials",
+      "reference": "Financials",
+      "expected": "financials",
+      "match": true
+    },
+    {
+      "ticker": "COIN",
+      "name": "Coinbase Global",
       "sector": "financials",
       "reference": "Financials",
       "expected": "financials",
@@ -340,6 +420,38 @@
       "match": true
     },
     {
+      "ticker": "VRTX",
+      "name": "Vertex Pharmaceuticals",
+      "sector": "healthcare",
+      "reference": "Health Care",
+      "expected": "healthcare",
+      "match": true
+    },
+    {
+      "ticker": "REGN",
+      "name": "Regeneron Pharmaceuticals",
+      "sector": "healthcare",
+      "reference": "Health Care",
+      "expected": "healthcare",
+      "match": true
+    },
+    {
+      "ticker": "GILD",
+      "name": "Gilead Sciences",
+      "sector": "healthcare",
+      "reference": "Health Care",
+      "expected": "healthcare",
+      "match": true
+    },
+    {
+      "ticker": "IDXX",
+      "name": "IDEXX Laboratories",
+      "sector": "healthcare",
+      "reference": "Health Care",
+      "expected": "healthcare",
+      "match": true
+    },
+    {
       "ticker": "AMZN",
       "name": "Amazon",
       "sector": "consumer",
@@ -420,6 +532,38 @@
       "match": true
     },
     {
+      "ticker": "ABNB",
+      "name": "Airbnb",
+      "sector": "consumer",
+      "reference": "Consumer Discretionary",
+      "expected": "consumer",
+      "match": true
+    },
+    {
+      "ticker": "MAR",
+      "name": "Marriott International",
+      "sector": "consumer",
+      "reference": "Consumer Discretionary",
+      "expected": "consumer",
+      "match": true
+    },
+    {
+      "ticker": "ORLY",
+      "name": "O'Reilly Automotive",
+      "sector": "consumer",
+      "reference": "Consumer Discretionary",
+      "expected": "consumer",
+      "match": true
+    },
+    {
+      "ticker": "LULU",
+      "name": "Lululemon Athletica",
+      "sector": "consumer",
+      "reference": "Consumer Discretionary",
+      "expected": "consumer",
+      "match": true
+    },
+    {
       "ticker": "GOOGL",
       "name": "Alphabet",
       "sector": "communications",
@@ -478,6 +622,22 @@
     {
       "ticker": "CMCSA",
       "name": "Comcast",
+      "sector": "communications",
+      "reference": "Communication Services",
+      "expected": "communications",
+      "match": true
+    },
+    {
+      "ticker": "CHTR",
+      "name": "Charter Communications",
+      "sector": "communications",
+      "reference": "Communication Services",
+      "expected": "communications",
+      "match": true
+    },
+    {
+      "ticker": "TTWO",
+      "name": "Take-Two Interactive",
       "sector": "communications",
       "reference": "Communication Services",
       "expected": "communications",
@@ -564,6 +724,46 @@
       "match": true
     },
     {
+      "ticker": "CTAS",
+      "name": "Cintas",
+      "sector": "industrials",
+      "reference": "Industrials",
+      "expected": "industrials",
+      "match": true
+    },
+    {
+      "ticker": "CSX",
+      "name": "CSX",
+      "sector": "industrials",
+      "reference": "Industrials",
+      "expected": "industrials",
+      "match": true
+    },
+    {
+      "ticker": "PCAR",
+      "name": "PACCAR",
+      "sector": "industrials",
+      "reference": "Industrials",
+      "expected": "industrials",
+      "match": true
+    },
+    {
+      "ticker": "FAST",
+      "name": "Fastenal",
+      "sector": "industrials",
+      "reference": "Industrials",
+      "expected": "industrials",
+      "match": true
+    },
+    {
+      "ticker": "ODFL",
+      "name": "Old Dominion Freight Line",
+      "sector": "industrials",
+      "reference": "Industrials",
+      "expected": "industrials",
+      "match": true
+    },
+    {
       "ticker": "WMT",
       "name": "Walmart",
       "sector": "staples",
@@ -628,6 +828,30 @@
       "match": true
     },
     {
+      "ticker": "MNST",
+      "name": "Monster Beverage",
+      "sector": "staples",
+      "reference": "Consumer Staples",
+      "expected": "staples",
+      "match": true
+    },
+    {
+      "ticker": "KDP",
+      "name": "Keurig Dr Pepper",
+      "sector": "staples",
+      "reference": "Consumer Staples",
+      "expected": "staples",
+      "match": true
+    },
+    {
+      "ticker": "KHC",
+      "name": "Kraft Heinz",
+      "sector": "staples",
+      "reference": "Consumer Staples",
+      "expected": "staples",
+      "match": true
+    },
+    {
       "ticker": "XOM",
       "name": "Exxon Mobil",
       "sector": "energy",
@@ -676,6 +900,14 @@
       "match": true
     },
     {
+      "ticker": "FANG",
+      "name": "Diamondback Energy",
+      "sector": "energy",
+      "reference": "Energy",
+      "expected": "energy",
+      "match": true
+    },
+    {
       "ticker": "NEE",
       "name": "NextEra Energy",
       "sector": "utilities",
@@ -710,6 +942,22 @@
     {
       "ticker": "AEP",
       "name": "American Electric Power",
+      "sector": "utilities",
+      "reference": "Utilities",
+      "expected": "utilities",
+      "match": true
+    },
+    {
+      "ticker": "EXC",
+      "name": "Exelon",
+      "sector": "utilities",
+      "reference": "Utilities",
+      "expected": "utilities",
+      "match": true
+    },
+    {
+      "ticker": "XEL",
+      "name": "Xcel Energy",
       "sector": "utilities",
       "reference": "Utilities",
       "expected": "utilities",
@@ -798,6 +1046,22 @@
     {
       "ticker": "O",
       "name": "Realty Income",
+      "sector": "realestate",
+      "reference": "Real Estate",
+      "expected": "realestate",
+      "match": true
+    },
+    {
+      "ticker": "CSGP",
+      "name": "CoStar Group",
+      "sector": "realestate",
+      "reference": "Real Estate",
+      "expected": "realestate",
+      "match": true
+    },
+    {
+      "ticker": "SBAC",
+      "name": "SBA Communications",
       "sector": "realestate",
       "reference": "Real Estate",
       "expected": "realestate",

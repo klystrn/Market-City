@@ -36,6 +36,9 @@ export function createPlots(companies: Company[]): Plot[] {
               (group.tickers.indexOf(c.ticker) +
                 subsectors.indexOf(group) * 3) %
                 12,
+            // Tokyo's market-cap band is the sector town itself, so the company
+            // card can name it the way the zone and borough cities do.
+            tier: sector.id,
           };
         });
       }),

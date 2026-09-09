@@ -27,10 +27,11 @@ import type { CityDefinition, CityDistrict, CityLandmark } from "./types";
 // river frontage — so company lots begin on the Zone 1 ring outside it.
 const CENTRE_RADIUS = 26;
 const ZONE_WIDTH = 16;
-// Seven rings, not nine: the outer two were empty for every sector in the
-// seeded dataset, and empty rings only make the model larger to fly across.
-// tests/cities.test.ts fails if a zone ends up with no companies in it.
-const ZONE_COUNT = 7;
+// As many rings as the dataset actually fills, and no more: empty rings only
+// make the model larger to fly across. tests/cities.test.ts fails if a zone
+// ends up with no companies in it, so this has to be re-checked whenever the
+// company roster grows.
+const ZONE_COUNT = 8;
 // Radial avenues between wedges are kept at a constant ground width, so the
 // angle they consume shrinks as the rings grow.
 const AVENUE_ARC = 9;

@@ -6,8 +6,9 @@ import {
 } from "../src/domain/company-names";
 import { newsBulletin } from "../src/services/bulletins";
 import { createDemo } from "../src/data/demo";
+import { companySeeds } from "../src/data/companies";
 test("broadcast mapping covers every seeded company and full ticker tokens", () => {
-  assert.equal(Object.keys(tickerCompanyNames).length, 100);
+  assert.equal(Object.keys(tickerCompanyNames).length, companySeeds.length);
   assert.equal(
     companyNamesForSpeech("AAPL and MSFT rise; $NVDA follows."),
     "Apple and Microsoft rise; NVIDIA follows.",

@@ -542,7 +542,13 @@ export default function MarketCity() {
         <div className="glass result-banner" role="status">
           <span>
             {resultLabel}
-            {matches !== null && <b> {matches.length} companies</b>}
+            {matches !== null && (
+              <b>
+                {" "}
+                {matches.length}{" "}
+                {matches.length === 1 ? "company" : "companies"}
+              </b>
+            )}
           </span>
           <button
             className="icon-button"
