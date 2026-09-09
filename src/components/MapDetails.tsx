@@ -14,6 +14,8 @@ import {
   Waypoints,
   Activity,
   CircleDashed,
+  Ratio,
+  BarChart3,
 } from "lucide-react";
 import type { MapFeatures } from "@/domain/map-features";
 const options = [
@@ -31,6 +33,8 @@ const options = [
   ["connections", "Supply-chain connections", Waypoints],
   ["trails", "Intraday performance trails", Activity],
   ["halos", "Volatility halos", CircleDashed],
+  ["breadthRibbons", "Zone & borough breadth", Ratio],
+  ["massColumns", "Sector mass columns", BarChart3],
 ] as const;
 export default function MapDetails({
   features,

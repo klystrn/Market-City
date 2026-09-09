@@ -12,7 +12,8 @@
     "refresh:data": "tsx scripts/refresh-data.ts",
     "music:sync": "tsx scripts/sync-music.ts",
     "predev": "npm run music:sync",
-    "prebuild": "npm run music:sync"
+    "prebuild": "npm run music:sync",
+    "bake:layouts": "tsx scripts/bake-layouts.ts"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.0",

@@ -20,7 +20,7 @@ import {
   pct,
   weightedChange,
 } from "@/domain/analytics";
-import { sectors } from "@/domain/city";
+import { sectorIdentities as sectors } from "@/domain/sectors";
 import { subsectorFor } from "@/domain/subsectors";
 import { linksFor, partnerOf } from "@/domain/supply-chain";
 function Chart({ company }: { company: Company }) {

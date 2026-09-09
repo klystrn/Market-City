@@ -31,6 +31,17 @@ export function sectorBreadthRatio(companies: Company[]): number {
   const b = breadth(companies);
   return b.up / companies.length;
 }
+// Colour for a breadth ratio in [0, 1]: half the band advancing is neutral,
+// all of it advancing is fully green, none of it fully red. Deliberately the
+// same green-up / red-down semantics the buildings use, so one legend covers
+// both — but this reads a share of companies, never a price move.
+export function breadthColor(ratio: number, dark = false): string {
+  const away = Math.min(1, Math.abs(ratio - 0.5) * 2);
+  if (away < 0.08) return dark ? "#8d968c" : "#bcc3b6";
+  const low = ratio > 0.5 ? [124, 191, 150] : [232, 150, 133];
+  const high = ratio > 0.5 ? [22, 138, 99] : [206, 66, 74];
+  return `rgb(${low.map((v, i) => Math.round(v + (high[i] - v) * away)).join(",")})`;
+}
 // Trailing daily-return volatility (standard deviation of log returns) over
 // up to the last 60 sessions. Purely descriptive; not a forecast.
 export function historicalVolatility(company: Company): number {

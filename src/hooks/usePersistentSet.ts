@@ -34,11 +34,16 @@ export function usePersistentSet(key: string) {
       ),
     [],
   );
+  const add = useCallback(
+    (ticker: string) =>
+      setItems((prev) => (prev.includes(ticker) ? prev : [...prev, ticker])),
+    [],
+  );
   const remove = useCallback(
     (ticker: string) =>
       setItems((prev) => prev.filter((t) => t !== ticker)),
     [],
   );
   const has = useCallback((ticker: string) => items.includes(ticker), [items]);
-  return { items, toggle, remove, has };
+  return { items, toggle, add, remove, has, hydrated };
 }

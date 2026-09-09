@@ -1,5 +1,5 @@
 import type { Snapshot } from "@/domain/types";
-import { sectors } from "@/domain/city";
+import { sectorIdentities as sectors } from "@/domain/sectors";
 import { subsectors } from '@/domain/subsectors';
 import { pct, weightedChange } from "@/domain/analytics";
 import type { CityDefinition } from "@/domain/cities/types";

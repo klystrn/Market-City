@@ -1,3 +1,4 @@
+import bakedLayout from "@/data/layouts/london.json";
 import type { Company, Plot } from "../types";
 import type { Point, Road } from "../geography";
 import { massing } from "../massing";
@@ -490,6 +491,17 @@ const outline: Point[] = Array.from({ length: 97 }, (_, i) => {
   const r = LONDON_RADIUS + 14 + Math.sin(a * 3) * 5 + Math.cos(a * 5) * 3;
   return [Math.cos(a) * r, Math.sin(a) * r] as Point;
 });
+// A zone's band is the ring it ends at, so the ribbon reads as the edge of that
+// market-cap band rather than as another road.
+function londonTierOutline(tierId: string): Point[] {
+  const rank = Number(tierId.replace("zone-", ""));
+  if (!Number.isFinite(rank) || rank < 1) return [];
+  const radius = zoneOuter(rank) - 1.2;
+  return Array.from({ length: 73 }, (_, i) => {
+    const a = (i / 72) * Math.PI * 2;
+    return [Math.cos(a) * radius, Math.sin(a) * radius] as Point;
+  });
+}
 export const london: CityDefinition = {
   id: "london",
   name: "London",
@@ -514,6 +526,10 @@ export const london: CityDefinition = {
   ],
   roads: londonRoads,
   createPlots: createLondonPlots,
+  tierOutline: londonTierOutline,
+  bakedLayout,
+  // Measured 133 lots, 16 landmarks, 144 road segments, 26 labels.
+  budget: { lots: 180, landmarks: 24, roadSegments: 220, labels: 60 },
   surround: "land",
   camera: {
     offset: [250, 275, 300],

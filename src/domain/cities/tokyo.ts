@@ -1,3 +1,4 @@
+import bakedLayout from "@/data/layouts/tokyo.json";
 import { createPlots } from "../city";
 import { landmarks, sectors, cityRoads, mainland, islands, waterOutline, channels } from "../geography";
 import { civicSites } from "../civic";
@@ -45,6 +46,23 @@ export const tokyo: CityDefinition = {
   water: [waterOutline, ...channels],
   roads: () => cityRoads(),
   createPlots,
+  // A town's band is the edge of its ground.
+  tierOutline: (tierId) => {
+    const town = sectors.find((s) => s.id === tierId);
+    if (!town) return [];
+    const w = town.width / 2 + 1.5,
+      d = town.depth / 2 + 1.5;
+    return [
+      [town.x - w, town.z - d],
+      [town.x + w, town.z - d],
+      [town.x + w, town.z + d],
+      [town.x - w, town.z + d],
+      [town.x - w, town.z - d],
+    ];
+  },
+  bakedLayout,
+  // Measured 67 lots, 15 landmarks, 192 road segments, 33 labels.
+  budget: { lots: 120, landmarks: 24, roadSegments: 260, labels: 60 },
   surround: "sea",
   camera: {
     offset: [270, 285, 330],

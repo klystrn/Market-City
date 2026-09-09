@@ -9,5 +9,6 @@ export type Menu =
   | "compare"
   | "camera"
   | "directory"
+  | "landmarks"
   | "history"
   | null;

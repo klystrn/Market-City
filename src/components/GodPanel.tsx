@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { X, SlidersHorizontal, Share2, Save, Trash2, Play } from "lucide-react";
-import { sectors } from "@/domain/city";
+import { sectorIdentities as sectors } from "@/domain/sectors";
 import {
   defaultGod,
   projectTomorrow,

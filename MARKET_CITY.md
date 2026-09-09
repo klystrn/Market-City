@@ -2834,48 +2834,112 @@ landmark names, and several landmarks not looking like the real place they name.
 
 ---
 
+## 75.11 Backlog selection — orientation, breadth, landmarks, budgets (owner follow-up)
+
+The owner selected nine backlog proposals and asked for them together: UI/UX 1 and
+3, Market visualisation 1 and 2, Features 2 and 3, and all three Optimisation
+items. They are now shipped and their entries are struck from the backlog below.
+
+**City-aware onboarding and guided tours (UI/UX 1, 3).** `src/domain/cities/orientation.ts`
+holds one `CityOrientation` per city: a two-line headline and detail, plus a
+three-or-four-stop tour. Both are per city on purpose — the point of three cities
+is that the same market is arranged three different ways, so an orientation that
+said the same thing everywhere would teach nothing. The card
+(`CityOnboarding.tsx`) appears once per city, tracked in a persistent set rather
+than a single flag, because switching city changes the rules of the map and the
+explanation has to come back for a city you have not seen. The tour
+(`GuidedTour.tsx`) reuses the existing sector-flyto: each stop names a sector, and
+advancing calls the same camera move a click on the district directory would. It
+never advances on a timer — it moves only when the reader asks, so it cannot take
+the map away from someone mid-thought — and Escape ends it at any step.
+
+**Breadth ribbons and mass columns (Market visualisation 1, 2).** Two layers that
+separate the two things a district encodes. `BreadthRibbons.tsx` draws a thin band
+along each market-cap band's edge — a London ring, a New York borough shore, a
+Tokyo town boundary — coloured by the share of that band's companies advancing.
+`MassColumns.tsx` draws a translucent column over each district whose height
+tracks that sector's share of total index market capitalisation. Breadth is a
+count and mass is a weight, and they disagree often: a band of small companies
+mostly rising reads green on the ribbon while its column stays short. Both are off
+by default and toggle from Layers & view.
+
+One `tierOutline(tierId)` on `CityDefinition` is what lets a single breadth layer
+draw all three cities. The contract is an *explicit* loop — first point repeated as
+last — because the renderer walks consecutive pairs. New York's borough shapes are
+stored open, the way a polygon fill wants them, so its `tierOutline` closes them on
+the way out; without that the ribbon stopped one segment short and left every
+borough visibly unsealed. `tests/orientation.test.ts` asserts the closure for
+every band of every city, which is how that gap was found.
+
+**Landmark index (Features 2).** `LandmarkIndex.tsx` lists every real place in the
+active city and says in words what each one is doing: standing in for a company,
+identifying a sector, or scenery only. From the map alone the three look similar,
+and an identity cue mistaken for a claim about ownership or headquarters location
+is exactly the ambiguity the honesty constraints exist to prevent. The footer
+counts how many landmarks carry a meaning against the total, so the ratio of
+decoration to signal is stated rather than implied.
+
+**Personal city preferences (Features 3).** `useCityPreferences` stores map layers,
+season mode and last camera bookmark under `market-city-prefs:<cityId>`, so each
+city keeps its own feel instead of a global setting following you between
+geographies. Stored preferences are merged over the current defaults rather than
+used as-is, so a file written before a layer existed does not leave that layer
+undefined.
+
+**Per-city geometry budget (Optimisation 1).** Each `CityDefinition` declares a
+`budget` of lots, landmarks, road segments and labels. `tests/budget.test.ts`
+enforces three things: no city exceeds its own budget, no budget exceeds a shared
+ceiling, and — the part that makes a budget a real constraint rather than a
+comment — no budget sits far above what the city actually draws. Without that
+headroom check a city could declare a generous budget and pass forever.
+
+**Lazy city loading (Optimisation 2).** `src/domain/cities/index.ts` is now a
+`Record<CityId, () => Promise<…>>` of dynamic imports with a resolved-module cache,
+written as literal specifiers because a bundler can only split what it can see
+statically. `catalog.ts` carries the light metadata the city picker needs (name,
+region, universe, tagline) so listing the cities does not pull in any city's
+geometry. `MarketCity` splits into a loader and a view; the view keeps the same
+component type at the same position across a city switch, so God-mode and compare
+state survive changing city. The one non-obvious dependency this exposed: Tokyo's
+geography was still loading eagerly because sector identities lived in the same
+module as its terrain, so `sectorIdentities` moved to `src/domain/sectors.ts` and
+`geography.ts` now imports from it rather than the reverse.
+
+**Precomputed layout snapshots (Optimisation 3).** `npm run bake:layouts` writes
+each city's solved plots to `src/data/layouts/<city>.json`, imported by that city's
+module so the fixture rides its lazy chunk. The cache key is a structural
+signature — ticker, sector, subsector and market cap, sorted — and deliberately
+excludes price and volume, so a quote refresh reuses the baked layout while a
+roster or weighting change falls back to solving in the browser. A stale fixture
+is therefore a slower boot, never a wrong city.
+
+---
+
 # 76. Idea Backlog
 
-Proposals only. Nothing here is approved scope until the owner selects it.
+Proposals only. Nothing here is approved scope until the owner selects it. Items
+the owner has selected and shipped are removed rather than ticked; §75.11 records
+the last nine.
 
 ## UI/UX
 
-1. **City-aware onboarding** — a two-line orientation card that changes per city
-   ("zones, centre is biggest" vs "five boroughs, Manhattan is biggest"), shown
-   once per city and dismissible.
-2. **Split-screen city comparison** — the same company or sector rendered in two
+1. **Split-screen city comparison** — the same company or sector rendered in two
    cities side by side, to show how differently each geography reads.
-3. **Guided tours** — a short, skippable camera path per city that visits three or four
-   landmarks and explains one encoding at each stop.
 
 ## Market visualisation
 
-1. **Zone/borough breadth ribbons** — a thin colour band around each London ring or
-   borough shoreline showing what share of that tier is advancing.
-2. **Sector mass column** — an optional glass column over each district whose volume
-   tracks the sector's share of total index market cap, making weight legible from the
-   overview.
-3. **Index-migration ghosts** — when a company would sit in a different zone/borough
+1. **Index-migration ghosts** — when a company would sit in a different zone/borough
    than it did at the last snapshot, show a faint outline on its previous plot.
 
 ## Features
 
 1. **Universe diff** — a panel listing which companies appear in one universe but not
    the other, so switching indexes is explicable rather than surprising.
-2. **Landmark index** — a browsable list of every real landmark in the active city with
-   its role (scenery, or the company it stands in for), so identity cues are never
-   ambiguous.
-3. **Personal city preferences** — remember per city: last camera bookmark, enabled map
-   layers and preferred season/lighting, so each city keeps its own feel.
 
 ## Optimisation
 
-1. **Per-city geometry budget** — a declared instance/label budget per city definition,
-   enforced at build time by a test, so a new city cannot silently regress performance.
-2. **Lazy city loading** — code-split each city's terrain and landmark data so the
-   initial download only carries the active city.
-3. **Precomputed layout snapshots** — bake each city's plot positions into a generated
-   JSON fixture at build time instead of solving placement in the browser on boot.
+All three selected optimisation proposals are shipped (§75.11). No further
+optimisation work is proposed until a measurement shows one is needed.
 
 ---
 

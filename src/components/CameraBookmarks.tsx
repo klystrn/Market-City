@@ -1,7 +1,7 @@
 "use client";
 import { Bookmark, ArrowUpRight, Trash2 } from "lucide-react";
 import type { CameraBookmark } from "@/domain/bookmarks";
-import { sectors } from "@/domain/city";
+import { sectorIdentities as sectors } from "@/domain/sectors";
 import Dialog from "./Dialog";
 function label(b: CameraBookmark) {
   if (b.ticker)

@@ -1,0 +1,676 @@
+{
+  "city": "tokyo",
+  "key": "AAPL:technology:hardware:3400000000000|ABNB:consumer:travel-dining:80000000000|ADBE:technology:software:230000000000|ADI:technology:semiconductors:115000000000|ADP:industrials:transport-services:115000000000|ADSK:technology:software:60000000000|AEP:utilities:grid-utilities:55000000000|AMAT:technology:semiconductors:160000000000|AMD:technology:semiconductors:240000000000|AMGN:healthcare:pharma:170000000000|AMZN:consumer:retail:1950000000000|AVGO:technology:semiconductors:820000000000|BKNG:consumer:travel-dining:145000000000|CDNS:technology:software:74000000000|CEG:utilities:power:70000000000|CHTR:communications:telecom:48000000000|CMCSA:communications:telecom:155000000000|CMG:consumer:travel-dining:80000000000|COIN:financials:capital-markets:55000000000|COST:staples:essentials-retail:390000000000|CSCO:technology:hardware:210000000000|CSGP:realestate:commercial-property:31000000000|CSX:industrials:transport-services:66000000000|CTAS:industrials:commercial-services:78000000000|EQIX:realestate:digital-property:85000000000|EXC:utilities:grid-utilities:39000000000|FANG:energy:oil-gas:52000000000|FAST:industrials:commercial-services:42000000000|GILD:healthcare:pharma:105000000000|GOOGL:communications:internet-media:2050000000000|HON:industrials:machinery:135000000000|IDXX:healthcare:medical-technology:40000000000|INTU:technology:software:175000000000|ISRG:healthcare:medical-technology:170000000000|KDP:staples:household-food:50000000000|KHC:staples:household-food:42000000000|KLAC:technology:semiconductors:95000000000|LIN:materials:chemicals:220000000000|LRCX:technology:semiconductors:100000000000|LULU:consumer:retail:33000000000|MAR:consumer:travel-dining:68000000000|MDLZ:staples:household-food:100000000000|META:communications:internet-media:1400000000000|MNST:staples:household-food:50000000000|MRVL:technology:semiconductors:62000000000|MSFT:technology:software:3200000000000|MU:technology:memory:105000000000|NFLX:communications:internet-media:310000000000|NVDA:technology:semiconductors:3100000000000|NXPI:technology:semiconductors:60000000000|ODFL:industrials:transport-services:42000000000|ORLY:consumer:retail:68000000000|PANW:technology:software:110000000000|PCAR:industrials:machinery:52000000000|PEP:staples:household-food:235000000000|PYPL:financials:payments:72000000000|QCOM:technology:semiconductors:190000000000|REGN:healthcare:pharma:115000000000|SBAC:realestate:digital-property:25000000000|SBUX:consumer:travel-dining:110000000000|SNPS:technology:software:78000000000|TMUS:communications:telecom:235000000000|TSLA:consumer:automotive:740000000000|TTWO:communications:internet-media:27000000000|TXN:technology:semiconductors:185000000000|VRTX:healthcare:pharma:120000000000|XEL:utilities:grid-utilities:36000000000",
+  "plots": [
+    {
+      "ticker": "MSFT",
+      "x": -67.625,
+      "z": -63.574999999999996,
+      "width": 9.165000000000001,
+      "depth": 3.7499999999999996,
+      "height": 24.993335207665147,
+      "variant": 7,
+      "tier": "technology"
+    },
+    {
+      "ticker": "ADBE",
+      "x": -67.625,
+      "z": -57.225,
+      "width": 6.08549358219169,
+      "depth": 3.7499999999999996,
+      "height": 13.122341501141275,
+      "variant": 3,
+      "tier": "technology"
+    },
+    {
+      "ticker": "INTU",
+      "x": -55.875,
+      "z": -63.574999999999996,
+      "width": 5.729362486915515,
+      "depth": 3.7499999999999996,
+      "height": 12.034163154464073,
+      "variant": 4,
+      "tier": "technology"
+    },
+    {
+      "ticker": "PANW",
+      "x": -55.875,
+      "z": -57.225,
+      "width": 5.166512563819788,
+      "depth": 3.7499999999999996,
+      "height": 10.314343945004907,
+      "variant": 6,
+      "tier": "technology"
+    },
+    {
+      "ticker": "SNPS",
+      "x": -44.125,
+      "z": -63.56863011043334,
+      "width": 4.791359257521387,
+      "depth": 3.7372602208666823,
+      "height": 9.168042175759794,
+      "variant": 7,
+      "tier": "technology"
+    },
+    {
+      "ticker": "CDNS",
+      "x": -44.125,
+      "z": -57.25239781654805,
+      "width": 4.737441496030637,
+      "depth": 3.6952043669038965,
+      "height": 9.003293460093612,
+      "variant": 8,
+      "tier": "technology"
+    },
+    {
+      "ticker": "ADSK",
+      "x": -32.375,
+      "z": -63.46770777217554,
+      "width": 4.5325840312193355,
+      "depth": 3.535415544351082,
+      "height": 8.377340095392412,
+      "variant": 9,
+      "tier": "technology"
+    },
+    {
+      "ticker": "NVDA",
+      "x": -69.58333333333333,
+      "z": -53.375,
+      "width": 6.11,
+      "depth": 3.7499999999999996,
+      "height": 24.84356622419778,
+      "variant": 8,
+      "tier": "technology"
+    },
+    {
+      "ticker": "AVGO",
+      "x": -69.58333333333333,
+      "z": -47.025000000000006,
+      "width": 6.11,
+      "depth": 3.7499999999999996,
+      "height": 18.65682305907166,
+      "variant": 4,
+      "tier": "technology"
+    },
+    {
+      "ticker": "AMD",
+      "x": -61.75,
+      "z": -53.375,
+      "width": 6.11,
+      "depth": 3.7499999999999996,
+      "height": 13.296078440156824,
+      "variant": 5,
+      "tier": "technology"
+    },
+    {
+      "ticker": "QCOM",
+      "x": -61.75,
+      "z": -47.025000000000006,
+      "width": 5.83480424088267,
+      "depth": 3.7499999999999996,
+      "height": 12.356346291585934,
+      "variant": 6,
+      "tier": "technology"
+    },
+    {
+      "ticker": "TXN",
+      "x": -53.916666666666664,
+      "z": -53.375,
+      "width": 5.80044109642024,
+      "depth": 3.7499999999999996,
+      "height": 12.2513477946174,
+      "variant": 7,
+      "tier": "technology"
+    },
+    {
+      "ticker": "AMAT",
+      "x": -53.916666666666664,
+      "z": -47.025000000000006,
+      "width": 5.616292015609668,
+      "depth": 3.7499999999999996,
+      "height": 11.688670047696206,
+      "variant": 8,
+      "tier": "technology"
+    },
+    {
+      "ticker": "LRCX",
+      "x": -46.083333333333336,
+      "z": -53.375,
+      "width": 5.058644959660993,
+      "depth": 3.7499999999999996,
+      "height": 9.984748487853032,
+      "variant": 9,
+      "tier": "technology"
+    },
+    {
+      "ticker": "KLAC",
+      "x": -46.083333333333336,
+      "z": -47.025000000000006,
+      "width": 5.001785597801358,
+      "depth": 3.7499999999999996,
+      "height": 9.811011548837481,
+      "variant": 10,
+      "tier": "technology"
+    },
+    {
+      "ticker": "ADI",
+      "x": -38.25,
+      "z": -53.375,
+      "width": 5.217778144632385,
+      "depth": 3.7499999999999996,
+      "height": 10.47098877526562,
+      "variant": 11,
+      "tier": "technology"
+    },
+    {
+      "ticker": "MRVL",
+      "x": -38.25,
+      "z": -47.12021758667073,
+      "width": 4.563544649562239,
+      "depth": 3.5595648266585465,
+      "height": 8.471941984773506,
+      "variant": 0,
+      "tier": "technology"
+    },
+    {
+      "ticker": "NXPI",
+      "x": -30.416666666666668,
+      "z": -53.26770777217554,
+      "width": 4.5325840312193355,
+      "depth": 3.535415544351082,
+      "height": 8.377340095392412,
+      "variant": 1,
+      "tier": "technology"
+    },
+    {
+      "ticker": "MU",
+      "x": -50,
+      "z": -43.175,
+      "width": 5.113508839265245,
+      "depth": 3.7499999999999996,
+      "height": 10.152388119977138,
+      "variant": 6,
+      "tier": "technology"
+    },
+    {
+      "ticker": "AAPL",
+      "x": -50,
+      "z": -32.975,
+      "width": 10.064194424476844,
+      "depth": 3.7499999999999996,
+      "height": 25.279482963679243,
+      "variant": 6,
+      "tier": "technology"
+    },
+    {
+      "ticker": "CSCO",
+      "x": -50,
+      "z": -26.625000000000004,
+      "width": 5.965168062438671,
+      "depth": 3.7499999999999996,
+      "height": 12.754680190784827,
+      "variant": 10,
+      "tier": "technology"
+    },
+    {
+      "ticker": "PYPL",
+      "x": -19,
+      "z": 16.958333333333332,
+      "width": 4.709768912831989,
+      "depth": 3.483333333333333,
+      "height": 8.91873834476441,
+      "variant": 9,
+      "tier": "financials"
+    },
+    {
+      "ticker": "COIN",
+      "x": -19,
+      "z": 26.63023495266558,
+      "width": 4.452389010259187,
+      "depth": 3.4728634280021664,
+      "height": 8.13229975356974,
+      "variant": 2,
+      "tier": "financials"
+    },
+    {
+      "ticker": "AMGN",
+      "x": 101,
+      "z": -72.18677032864863,
+      "width": 5.692573492261445,
+      "depth": 4.440207323963928,
+      "height": 11.921752337465527,
+      "variant": 4,
+      "tier": "healthcare"
+    },
+    {
+      "ticker": "VRTX",
+      "x": 101,
+      "z": -65.31237443884221,
+      "width": 5.267415968780664,
+      "depth": 4.108584455648918,
+      "height": 10.622659904607588,
+      "variant": 7,
+      "tier": "healthcare"
+    },
+    {
+      "ticker": "REGN",
+      "x": 119,
+      "z": -72.0016001430733,
+      "width": 5.217778144632385,
+      "depth": 4.0698669528132605,
+      "height": 10.47098877526562,
+      "variant": 8,
+      "tier": "healthcare"
+    },
+    {
+      "ticker": "GILD",
+      "x": 119,
+      "z": -65.37239821935323,
+      "width": 5.113508839265245,
+      "depth": 3.9885368946268915,
+      "height": 10.152388119977138,
+      "variant": 9,
+      "tier": "healthcare"
+    },
+    {
+      "ticker": "ISRG",
+      "x": 110,
+      "z": -60.52010366198196,
+      "width": 5.692573492261445,
+      "depth": 4.440207323963928,
+      "height": 11.921752337465527,
+      "variant": 5,
+      "tier": "healthcare"
+    },
+    {
+      "ticker": "IDXX",
+      "x": 110,
+      "z": -54.06835388608777,
+      "width": 4.183707984390333,
+      "depth": 3.2632922278244596,
+      "height": 7.311329952303794,
+      "variant": 7,
+      "tier": "healthcare"
+    },
+    {
+      "ticker": "AMZN",
+      "x": 3.75,
+      "z": -47.20833333333333,
+      "width": 9.208455106294279,
+      "depth": 4.4833333333333325,
+      "height": 22.664723935899186,
+      "variant": 9,
+      "tier": "consumer"
+    },
+    {
+      "ticker": "ORLY",
+      "x": 3.75,
+      "z": -40.55203194178745,
+      "width": 4.652909550972355,
+      "depth": 3.629269449758437,
+      "height": 8.74500140574886,
+      "variant": 2,
+      "tier": "consumer"
+    },
+    {
+      "ticker": "LULU",
+      "x": 24.25,
+      "z": -46.54247973445133,
+      "width": 4.040546327652977,
+      "depth": 3.151626135569322,
+      "height": 6.873891556717428,
+      "variant": 3,
+      "tier": "consumer"
+    },
+    {
+      "ticker": "TSLA",
+      "x": 14,
+      "z": -35.541666666666664,
+      "width": 7.7441246009050655,
+      "depth": 4.4833333333333325,
+      "height": 18.190380724987698,
+      "variant": 11,
+      "tier": "consumer"
+    },
+    {
+      "ticker": "BKNG",
+      "x": 0.3333333333333339,
+      "z": -23.776150212186707,
+      "width": 5.494402253470185,
+      "depth": 4.285633757706744,
+      "height": 11.316229107825567,
+      "variant": 4,
+      "tier": "consumer"
+    },
+    {
+      "ticker": "SBUX",
+      "x": 0.3333333333333339,
+      "z": -17.01839343344362,
+      "width": 5.166512563819788,
+      "depth": 4.029879799779435,
+      "height": 10.314343945004907,
+      "variant": 5,
+      "tier": "consumer"
+    },
+    {
+      "ticker": "CMG",
+      "x": 14,
+      "z": -23.512211574959743,
+      "width": 4.817636516990785,
+      "depth": 3.757756483252812,
+      "height": 9.248333801916287,
+      "variant": 6,
+      "tier": "consumer"
+    },
+    {
+      "ticker": "ABNB",
+      "x": 14,
+      "z": -17.15445509170693,
+      "width": 4.817636516990785,
+      "depth": 3.757756483252812,
+      "height": 9.248333801916287,
+      "variant": 7,
+      "tier": "consumer"
+    },
+    {
+      "ticker": "MAR",
+      "x": 27.666666666666664,
+      "z": -23.447968058212552,
+      "width": 4.652909550972355,
+      "depth": 3.629269449758437,
+      "height": 8.74500140574886,
+      "variant": 8,
+      "tier": "consumer"
+    },
+    {
+      "ticker": "GOOGL",
+      "x": -63.5,
+      "z": -114,
+      "width": 9.285110661219129,
+      "depth": 4.9,
+      "height": 22.898949242614005,
+      "variant": 10,
+      "tier": "communications"
+    },
+    {
+      "ticker": "META",
+      "x": -63.5,
+      "z": -106.5,
+      "width": 8.702689002762234,
+      "depth": 4.9,
+      "height": 21.11932750844016,
+      "variant": 7,
+      "tier": "communications"
+    },
+    {
+      "ticker": "NFLX",
+      "x": -44.5,
+      "z": -114,
+      "width": 6.4912289908803285,
+      "depth": 4.9,
+      "height": 14.362088583245447,
+      "variant": 2,
+      "tier": "communications"
+    },
+    {
+      "ticker": "TTWO",
+      "x": -44.5,
+      "z": -107.4264832048325,
+      "width": 3.906453320942311,
+      "depth": 3.0470335903350025,
+      "height": 6.464162925101505,
+      "variant": 10,
+      "tier": "communications"
+    },
+    {
+      "ticker": "TMUS",
+      "x": -63.5,
+      "z": -101.43453087431323,
+      "width": 6.114181729008282,
+      "depth": 4.76906174862646,
+      "height": 13.209999727525302,
+      "variant": 9,
+      "tier": "communications"
+    },
+    {
+      "ticker": "CMCSA",
+      "x": -63.5,
+      "z": -94.27508363347148,
+      "width": 5.576708632124401,
+      "depth": 4.349832733057033,
+      "height": 11.56772082038011,
+      "variant": 0,
+      "tier": "communications"
+    },
+    {
+      "ticker": "CHTR",
+      "x": -44.5,
+      "z": -100.73976144387437,
+      "width": 4.332721650959943,
+      "depth": 3.3795228877487555,
+      "height": 7.766649489044269,
+      "variant": 1,
+      "tier": "communications"
+    },
+    {
+      "ticker": "HON",
+      "x": 86,
+      "z": 58.1875,
+      "width": 5.407521006489995,
+      "depth": 2.775,
+      "height": 11.050758630941651,
+      "variant": 4,
+      "tier": "industrials"
+    },
+    {
+      "ticker": "PCAR",
+      "x": 86,
+      "z": 63.5625,
+      "width": 4.4022202096633345,
+      "depth": 2.775,
+      "height": 7.979006196193521,
+      "variant": 7,
+      "tier": "industrials"
+    },
+    {
+      "ticker": "CTAS",
+      "x": 86,
+      "z": 66.4375,
+      "width": 4.791359257521387,
+      "depth": 2.775,
+      "height": 9.168042175759794,
+      "variant": 6,
+      "tier": "industrials"
+    },
+    {
+      "ticker": "FAST",
+      "x": 86,
+      "z": 71.8125,
+      "width": 4.2223138998007155,
+      "depth": 2.775,
+      "height": 7.429292471613296,
+      "variant": 7,
+      "tier": "industrials"
+    },
+    {
+      "ticker": "ADP",
+      "x": 78.75,
+      "z": 74.6875,
+      "width": 5.217778144632385,
+      "depth": 2.775,
+      "height": 10.47098877526562,
+      "variant": 11,
+      "tier": "industrials"
+    },
+    {
+      "ticker": "CSX",
+      "x": 78.75,
+      "z": 80.0625,
+      "width": 4.623685146172509,
+      "depth": 2.775,
+      "height": 8.655704613304886,
+      "variant": 0,
+      "tier": "industrials"
+    },
+    {
+      "ticker": "ODFL",
+      "x": 93.25,
+      "z": 74.6875,
+      "width": 4.2223138998007155,
+      "depth": 2.775,
+      "height": 7.429292471613296,
+      "variant": 1,
+      "tier": "industrials"
+    },
+    {
+      "ticker": "COST",
+      "x": -76,
+      "z": 11,
+      "width": 6.813070471305847,
+      "depth": 4.9,
+      "height": 15.345493106767865,
+      "variant": 1,
+      "tier": "staples"
+    },
+    {
+      "ticker": "PEP",
+      "x": -83.66666666666667,
+      "z": 23.565469125686768,
+      "width": 5.98,
+      "depth": 4.76906174862646,
+      "height": 13.209999727525302,
+      "variant": 5,
+      "tier": "staples"
+    },
+    {
+      "ticker": "MDLZ",
+      "x": -83.66666666666667,
+      "z": 30.522871534267786,
+      "width": 5.058644959660993,
+      "depth": 3.9457430685355743,
+      "height": 9.984748487853032,
+      "variant": 7,
+      "tier": "staples"
+    },
+    {
+      "ticker": "MNST",
+      "x": -76,
+      "z": 24.246535744571645,
+      "width": 4.367857065200905,
+      "depth": 3.406928510856706,
+      "height": 7.874007699224987,
+      "variant": 9,
+      "tier": "staples"
+    },
+    {
+      "ticker": "KDP",
+      "x": -76,
+      "z": 30.253464255428355,
+      "width": 4.367857065200905,
+      "depth": 3.406928510856706,
+      "height": 7.874007699224987,
+      "variant": 10,
+      "tier": "staples"
+    },
+    {
+      "ticker": "KHC",
+      "x": -68.33333333333333,
+      "z": 24.30329757907772,
+      "width": 4.2223138998007155,
+      "depth": 3.2934048418445583,
+      "height": 7.429292471613296,
+      "variant": 11,
+      "tier": "staples"
+    },
+    {
+      "ticker": "FANG",
+      "x": 111,
+      "z": 119.7331341182313,
+      "width": 4.4022202096633345,
+      "depth": 3.433731763537401,
+      "height": 7.979006196193521,
+      "variant": 9,
+      "tier": "energy"
+    },
+    {
+      "ticker": "CEG",
+      "x": -78,
+      "z": 55.37417689786231,
+      "width": 4.681597697788946,
+      "depth": 3.651646204275378,
+      "height": 8.832659632132888,
+      "variant": 1,
+      "tier": "utilities"
+    },
+    {
+      "ticker": "AEP",
+      "x": -83.5,
+      "z": 68.46356828599892,
+      "width": 4.452389010259187,
+      "depth": 3.4728634280021664,
+      "height": 8.13229975356974,
+      "variant": 5,
+      "tier": "utilities"
+    },
+    {
+      "ticker": "EXC",
+      "x": -83.5,
+      "z": 74.42397620834733,
+      "width": 4.164041559864925,
+      "depth": 3.2479524166946416,
+      "height": 7.251238099587269,
+      "variant": 6,
+      "tier": "utilities"
+    },
+    {
+      "ticker": "XEL",
+      "x": -72.5,
+      "z": 68.59962994426223,
+      "width": 4.103512963430184,
+      "depth": 3.2007401114755436,
+      "height": 7.0662896104811175,
+      "variant": 7,
+      "tier": "utilities"
+    },
+    {
+      "ticker": "LIN",
+      "x": -126,
+      "z": -6.900330352726569,
+      "width": 6.0264880839142805,
+      "depth": 4.700660705453139,
+      "height": 12.94204692307141,
+      "variant": 10,
+      "tier": "materials"
+    },
+    {
+      "ticker": "CSGP",
+      "x": -24,
+      "z": 81.64112550622288,
+      "width": 3.9971140866080064,
+      "depth": 3.1177489875542452,
+      "height": 6.741181931302242,
+      "variant": 4,
+      "tier": "realestate"
+    },
+    {
+      "ticker": "EQIX",
+      "x": -24,
+      "z": 94.29623056956115,
+      "width": 4.881460078048339,
+      "depth": 3.8075388608777048,
+      "height": 9.443350238481035,
+      "variant": 4,
+      "tier": "realestate"
+    },
+    {
+      "ticker": "SBAC",
+      "x": -24,
+      "z": 100.30503812490211,
+      "width": 3.8590721151336154,
+      "depth": 3.01007624980422,
+      "height": 6.319387018463825,
+      "variant": 5,
+      "tier": "realestate"
+    }
+  ]
+}

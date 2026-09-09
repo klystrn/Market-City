@@ -1,6 +1,6 @@
 "use client";
 import MapGuide from "./MapGuide";
-import { defaultMapFeatures } from "@/domain/map-features";
+import { type MapFeatures } from "@/domain/map-features";
 import GodPanel from "./GodPanel";
 import { applyGod, defaultGod, tomorrowSnapshot } from "@/domain/simulation";
 import ViewControls from "./ViewControls";
@@ -33,7 +33,7 @@ import {
   weather,
   weightedChange,
 } from "@/domain/analytics";
-import { sectors } from "@/domain/city";
+import { sectorIdentities as sectors } from "@/domain/sectors";
 
 import { parseCommand, resolveIntent } from "@/services/commands";
 import CompanyPanel from "./CompanyPanel";
@@ -44,23 +44,97 @@ import WatchlistPanel from "./WatchlistPanel";
 import ComparePanel from "./ComparePanel";
 import CameraBookmarks from "./CameraBookmarks";
 import DistrictDirectory from "./DistrictDirectory";
+import LandmarkIndex from "./LandmarkIndex";
 import MarketHistoryTimeline from "./MarketHistoryTimeline";
 import { usePersistentSet } from "@/hooks/usePersistentSet";
 import { useCameraBookmarks } from "@/hooks/useCameraBookmarks";
 import type { CameraBookmark } from "@/domain/bookmarks";
 import { decodeScenario } from "@/domain/scenarios";
 import type { Menu } from "./control-types";
-import { companiesForCity, defaultCityId, getCity } from "@/domain/cities";
+import {
+  companiesForCity,
+  defaultCityId,
+  getCatalogEntry,
+  loadCity,
+  loadedCity,
+} from "@/domain/cities";
+import { plotsFor } from "@/domain/cities/layout-key";
 import { universeNames } from "@/domain/indexes";
-import type { CityId } from "@/domain/cities/types";
+import type { CityDefinition, CityId } from "@/domain/cities/types";
 import { usePersistentValue } from "@/hooks/usePersistentValue";
+import { useCityPreferences } from "@/hooks/useCityPreferences";
+import CityOnboarding from "./CityOnboarding";
+import GuidedTour from "./GuidedTour";
 const CityScene = dynamic(() => import("@/three/CityScene"), {
   ssr: false,
   loading: () => null,
 });
 export default function MarketCity() {
-  const [mapFeatures, setMapFeatures] = useState(defaultMapFeatures);
-  const [seasonMode, setSeasonMode] = useState<SeasonMode>("auto");
+  const [cityId, setCityId] = usePersistentValue(
+    "market-city-city",
+    defaultCityId,
+  );
+  const [city, setCity] = useState<CityDefinition | null>(() =>
+    loadedCity(defaultCityId) ?? null,
+  );
+  useEffect(() => {
+    let live = true;
+    const id = getCatalogEntry(cityId).id;
+    // Always through loadCity: it resolves from cache once a city has been
+    // fetched, so switching back to one already seen costs a microtask.
+    void loadCity(id).then((loaded) => {
+      if (live) setCity(loaded);
+    });
+    return () => {
+      live = false;
+    };
+  }, [cityId]);
+  // The view stays mounted across city switches, so a change of city keeps the
+  // God session, comparison and data mode the way a change of view should.
+  return city ? (
+    <MarketCityView city={city} setCityId={setCityId} />
+  ) : (
+    <main className="market-app">
+      <div className="loading-screen" role="status">
+        <div className="brand-mark large">
+          <i />
+          <i />
+          <i />
+          <i />
+        </div>
+        <h2>Building {getCatalogEntry(cityId).name}…</h2>
+        <p>Laying out the districts.</p>
+      </div>
+    </main>
+  );
+}
+function MarketCityView({
+  city,
+  setCityId,
+}: {
+  city: CityDefinition;
+  setCityId: (id: string) => void;
+}) {
+  // Layers, season and the last camera bookmark are remembered per city, so
+  // each city keeps the feel it was left in.
+  const {
+    prefs,
+    update: updatePrefs,
+    hydrated: prefsReady,
+  } = useCityPreferences(city.id);
+  const mapFeatures = prefs.mapFeatures;
+  const setMapFeatures = useCallback(
+    (next: MapFeatures) => updatePrefs({ mapFeatures: next }),
+    [updatePrefs],
+  );
+  const seasonMode = prefs.seasonMode;
+  const setSeasonMode = useCallback(
+    (next: SeasonMode) => updatePrefs({ seasonMode: next }),
+    [updatePrefs],
+  );
+  // Shown once per city: switching city changes how the map is read.
+  const seenCities = usePersistentSet("market-city-oriented");
+  const [tourStep, setTourStep] = useState<number | null>(null);
   const [now, setNow] = useState(0);
   useEffect(() => {
     const update = () => setNow(Date.now());
@@ -81,11 +155,6 @@ export default function MarketCity() {
     () => (tomorrow === null ? today : tomorrowSnapshot(today, tomorrow)),
     [today, tomorrow],
   );
-  const [cityId, setCityId] = usePersistentValue(
-    "market-city-city",
-    defaultCityId,
-  );
-  const city = getCity(cityId);
   const source = dataMode === "snapshot" && cached ? cached : simulated;
   // A city renders only its own market universe, so the pulse, search, lists
   // and catalysts all agree with the skyline.
@@ -210,6 +279,7 @@ export default function MarketCity() {
   const goToBookmark = useCallback(
     (b: CameraBookmark) => {
       setMenu(null);
+      updatePrefs({ bookmarkId: b.id });
       if (b.ticker) {
         setSelected(b.ticker);
         setDeep(b.deep);
@@ -223,7 +293,7 @@ export default function MarketCity() {
       }
       setResetKey((n) => n + 1);
     },
-    [focusSector, reset],
+    [focusSector, reset, updatePrefs],
   );
   // Hydrate a scenario shared via ?scenario= link, once on mount.
   useEffect(() => {
@@ -393,11 +463,31 @@ export default function MarketCity() {
     .join("|");
   const tierByTicker = useMemo(() => {
     const map = new Map<string, string>();
-    for (const plot of city.createPlots(snapshot.companies))
+    for (const plot of plotsFor(city, snapshot.companies))
       if (plot.tier) map.set(plot.ticker, plot.tier);
     return map;
     // eslint-disable-next-line react-hooks/exhaustive-deps -- Placement depends on structure, not quote ticks.
   }, [city, structuralKey]);
+  // Reopening a city returns to the view it was left in, rather than dropping
+  // the reader back at the overview every time they switch.
+  const restored = useRef<string | null>(null);
+  useEffect(() => {
+    if (!prefsReady || !cameraBookmarks.hydrated) return;
+    if (restored.current === city.id) return;
+    restored.current = city.id;
+    const saved = cameraBookmarks.bookmarks.find(
+      (b) => b.id === prefs.bookmarkId,
+    );
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Restore this city's remembered view once its stored state has been read.
+    if (saved) goToBookmark(saved);
+  }, [
+    city.id,
+    prefsReady,
+    prefs.bookmarkId,
+    cameraBookmarks.hydrated,
+    cameraBookmarks.bookmarks,
+    goToBookmark,
+  ]);
   const company = snapshot.companies.find((c) => c.ticker === selected);
   const tierName = company
     ? city.tiers.find((t) => t.id === tierByTicker.get(company.ticker))?.name
@@ -735,6 +825,36 @@ export default function MarketCity() {
         <DistrictDirectory
           onSector={focusSector}
           onSubsector={focusSubsector}
+          onClose={() => setMenu(null)}
+        />
+      )}
+      {!listMode && !selected && seenCities.hydrated && !seenCities.has(city.id) && (
+        <CityOnboarding
+          city={city}
+          onStartTour={() => {
+            seenCities.add(city.id);
+            setTourStep(0);
+          }}
+          onDismiss={() => seenCities.add(city.id)}
+        />
+      )}
+      {tourStep !== null && (
+        <GuidedTour
+          city={city}
+          step={tourStep}
+          setStep={setTourStep}
+          onVisit={focusSector}
+          onFinish={() => {
+            setTourStep(null);
+            reset();
+          }}
+        />
+      )}
+      {menu === "landmarks" && (
+        <LandmarkIndex
+          city={city}
+          onSector={focusSector}
+          onCompany={onSelect}
           onClose={() => setMenu(null)}
         />
       )}

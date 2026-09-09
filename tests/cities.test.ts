@@ -1,7 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createDemo } from "../src/data/demo";
-import { cities, companiesForCity, getCity } from "../src/domain/cities";
+import { cities, getCity } from "../src/domain/cities/all";
+import { companiesForCity } from "../src/domain/cities";
 import { boroughShapes, newYorkDistricts } from "../src/domain/cities/newyork";
 import {
   LONDON_RADIUS,

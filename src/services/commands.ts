@@ -1,5 +1,5 @@
 import type { Intent, Snapshot } from "@/domain/types";
-import { sectors } from "@/domain/city";
+import { sectorIdentities as sectors } from "@/domain/sectors";
 import { subsectors } from "@/domain/subsectors";
 import { weightedChange } from "@/domain/analytics";
 import { companyGroups, findGroup } from "@/domain/groups";

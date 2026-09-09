@@ -54,5 +54,5 @@ export function useCameraBookmarks() {
       setBookmarks((prev) => prev.filter((b) => b.id !== id)),
     [],
   );
-  return { bookmarks, save, remove };
+  return { bookmarks, save, remove, hydrated };
 }
