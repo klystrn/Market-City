@@ -2781,6 +2781,32 @@ placement, no overlaps, session independence, the New York borough ranking reall
 following the seeded sector market-cap order, every lot inside its own borough polygon,
 and London's largest-first zone ordering and single-wedge sectors.
 
+## 75.9 Landmark fidelity and label decluttering (owner follow-up)
+
+Two complaints, both addressed in `src/three/CityLandmarks.tsx`: too many floating
+landmark names, and several landmarks not looking like the real place they name.
+
+- **A label now means something.** Only a landmark that identifies a sector carries a
+  floating name — the same role Tokyo's sector landmarks always played. Every purely
+  decorative landmark relies on its own shape to be recognizable instead.
+- **Bespoke shapes for the landmarks that need one**, via an id-keyed lookup checked
+  before the shared per-kind renderer: Tower Bridge vs. Brooklyn Bridge, the Gherkin's
+  taper, Canary Wharf's pyramid roof, the Empire State/Chrysler/One World Trade Center's
+  own profiles, Battersea's four chimneys (replacing a train-shed shape that was simply
+  wrong for a power station), St Paul's/Greenwich/Tate Modern each distinct from the O2
+  and from each other, and Washington Square Arch as an actual arch rather than the
+  placeholder museum block its data `kind` had defaulted it to.
+- **Real parks, not one template.** Hyde Park (the Serpentine), Regent's Park (the
+  Boating Lake), Central Park (the Reservoir and the Lake on its long north-south strip,
+  with sparser trees matching its open meadows) and Prospect Park (the Lake beside a
+  wooded cluster on one side, rather than a symmetric border) each get their own water
+  body and tree arrangement, sized as a fraction of that park's own footprint.
+- **A real bug fixed along the way.** The Shard (`ticker: "AAPL"`) and Apple's own
+  company building were rendering at the exact same coordinates. A landmark with a
+  `ticker` now renders no mesh at all: the company's building already stands there,
+  carrying both the identity (Apple's logo) and the daily-change colour encoding a
+  second shape would have duplicated or obscured.
+
 ---
 
 # 76. Idea Backlog
