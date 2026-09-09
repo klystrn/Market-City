@@ -199,3 +199,50 @@ narrow-viewport header and popover layout.
    placed lots, so a city draws no road network where it has not built. This also
    fixed a real bug from the first multi-city commit: traffic ran on Tokyo's street
    coordinates in every city. Vehicles now travel the active city's own carriageways.
+
+### Landmark fidelity and label decluttering (owner follow-up)
+Two complaints from the shipped multi-city build: too many floating landmark
+names cluttering the skyline, and several landmarks not looking like the real
+place they name. Both are fixed in `src/three/CityLandmarks.tsx`.
+
+1. **Labels only where they carry information.** A landmark label is now shown
+   only when the landmark identifies a sector (`landmark.sector` set) — the same
+   role Tokyo's original sector landmarks always played. Every purely decorative
+   landmark (Tower Bridge, Buckingham Palace, the London Eye, St Paul's, Central
+   Park, the Statue of Liberty, and others) lost its label and now has to be
+   recognizable from its shape alone.
+2. **Bespoke shapes for the landmarks that need one.** A small id-keyed lookup,
+   checked before the shared per-kind renderer, gives the most iconic buildings
+   their own geometry instead of the generic template every other landmark of
+   that kind uses: Tower Bridge (bascule towers with turrets) is now visually
+   distinct from Brooklyn Bridge (Gothic suspension piers with fanned cables);
+   the Gherkin tapers through five rings instead of standing as a plain cylinder;
+   Canary Wharf gets its pyramidal roof; the Empire State Building, Chrysler
+   Building and One World Trade Center each get their own real profile (setback
+   tiers, a terraced sunburst crown, a chamfered tapering obelisk) instead of
+   sharing one spire template; Battersea Power Station is a brick block with four
+   chimneys, replacing a train-shed shape that was simply wrong for it; St Paul's,
+   Greenwich Observatory and Tate Modern are each distinct from the O2's flat
+   dome and from each other; Washington Square Arch is an actual arch rather than
+   the placeholder museum block its data `kind` had defaulted it to; and the
+   Statue of Liberty and Buckingham Palace — both the only landmark of their kind
+   — were improved in place (a draped robe, raised torch and crown; a porticoed
+   facade with columns, pediment and flag) rather than needing a bespoke
+   override.
+3. **Parks modelled on their real counterparts.** `PARK_STYLES` in the same file
+   gives Hyde Park, Regent's Park, Central Park and Prospect Park each their own
+   water body — the Serpentine, the Boating Lake, the Reservoir and the Lake on
+   Central Park's long north-south strip, and Prospect Park Lake — sized and
+   positioned as a fraction of that park's own footprint, plus a crossing pair of
+   paths on every park. Prospect Park's trees cluster on one side (the Ravine)
+   instead of bordering the lawn symmetrically like the royal parks, and Central
+   Park is deliberately sparser (more open meadow, per the real park) rather than
+   using the same tree density as the others.
+4. **A real bug found and fixed along the way.** The Shard (`ticker: "AAPL"`) and
+   Apple's own company building were both rendering at the exact same
+   coordinates — an unrelated static landmark mesh directly overlapping the
+   company's performance-coloured building. A landmark with a `ticker` now
+   renders no mesh and no label at all: the company's own building already
+   stands there and already carries the identity (Apple's logo sculpture) and
+   the daily-change colour encoding a second shape would have duplicated or
+   obscured.
