@@ -16,16 +16,19 @@ export function Boxes({
   color = "#ffffff",
   geometry = box,
   glow = 0,
+  glowColor,
 }: {
   parts: Part[];
   color?: string;
   geometry?: THREE.BufferGeometry;
   /**
-   * How much the instances light themselves. Instanced colour multiplies into
-   * emissive as well as diffuse, so a lit window keeps its own tint rather than
-   * every glowing thing turning the same white.
+   * How much the instances light themselves. Three multiplies instance colour
+   * into diffuse only — emissive is a single material uniform — so a glowing
+   * batch takes one shared `glowColor` rather than per-instance tints. Batch
+   * things that glow differently separately.
    */
   glow?: number;
+  glowColor?: string;
 }) {
   const mesh = useRef<THREE.InstancedMesh>(null);
   const { invalidate } = useThree();
@@ -51,7 +54,7 @@ export function Boxes({
     <instancedMesh ref={mesh} args={[geometry, undefined, parts.length]}>
       <meshStandardMaterial
         roughness={0.86}
-        emissive={glow > 0 ? "#ffffff" : "#000000"}
+        emissive={glow > 0 ? (glowColor ?? color) : "#000000"}
         emissiveIntensity={glow}
       />
     </instancedMesh>

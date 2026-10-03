@@ -564,25 +564,23 @@ function CityScene(props: Props) {
             with the sun low — which is what makes the lit windows and street
             lamps register as lights instead of bright paint. Kept well above
             true darkness so a company's green or red is still legible. */}
-        <ambientLight
-          intensity={night ? 0.5 : props.dark ? 0.95 : 0.85}
-        />
+        <ambientLight intensity={night ? 0.26 : props.dark ? 0.95 : 0.85} />
         <hemisphereLight
           args={[
-            night ? "#53658f" : "#ffffff",
-            night ? "#2f3845" : props.dark ? "#424d48" : "#a2b6a0",
-            night ? 0.62 : 0.85,
+            night ? "#35456e" : "#ffffff",
+            night ? "#161c29" : props.dark ? "#424d48" : "#a2b6a0",
+            night ? 0.4 : 0.85,
           ]}
         />
         <directionalLight
-          position={night ? [-70, 32, 20] : [-35, 65, 35]}
-          intensity={night ? 0.62 : 2.1}
-          color={night ? "#8fa3cc" : "#fff1d6"}
+          position={night ? [-70, 26, 20] : [-35, 65, 35]}
+          intensity={night ? 0.34 : 2.1}
+          color={night ? "#6f86b8" : "#fff1d6"}
         />
         <fog
           attach="fog"
           args={[
-            night ? "#232c42" : props.dark ? "#222d2b" : "#e9eee6",
+            night ? "#121829" : props.dark ? "#222d2b" : "#e9eee6",
             props.snapshot.market.vix > 25 ? 450 : 650,
             1200,
           ]}
@@ -712,6 +710,7 @@ function CityScene(props: Props) {
             />
           )}
           <Buildings
+            night={night}
             plots={plots}
             companies={props.snapshot.companies}
             dark={props.dark}

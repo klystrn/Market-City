@@ -336,10 +336,23 @@ function architecture(plots: Plot[]) {
   }
   return pieces;
 }
+/**
+ * Which pieces light up after the close: the window bands only.
+ *
+ * Not the main masses, and specifically not `towerGlass` or `taperGlass` —
+ * those are whole glazed shafts, not windows, so lighting them turns entire
+ * buildings a uniform warm gold and erases the difference between a company up
+ * on the day and one down. Emissive is a constant added after the diffuse
+ * colour, so anything large enough to dominate a building's silhouette will
+ * always flatten the one encoding that colour has to keep carrying.
+ */
+const lit = new Set<MaterialKind>(["glass"]);
 interface Props {
   plots: Plot[];
   companies: Company[];
   dark: boolean;
+  /** The exchange session is closed or after-hours. */
+  night: boolean;
   matches: string[] | null;
   focus: string | null;
   selected: string | null;
@@ -472,6 +485,9 @@ function Batch({
           metalness={
             kind === "towerGlass" || kind === "taperGlass" ? 0.4 : 0.05
           }
+          {...(props.night && lit.has(kind)
+            ? { emissive: "#ffc361", emissiveIntensity: 1.15 }
+            : {})}
         />
       )}
     </instancedMesh>

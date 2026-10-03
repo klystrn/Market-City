@@ -378,8 +378,18 @@ export default function UrbanFabric({
       <Boxes parts={parts.lampHeads} />
       {/* Lit at night: a separate instanced mesh, because emissiveness is a
           material property and these are the only instances that have it. */}
-      <Boxes parts={parts.litWindows} color="#ffd98a" glow={1.05} />
-      <Boxes parts={parts.litLamps} color="#ffe6b4" glow={1.5} />
+      <Boxes
+        parts={parts.litWindows}
+        color="#ffd07a"
+        glow={1.25}
+        glowColor="#ffc361"
+      />
+      <Boxes
+        parts={parts.litLamps}
+        color="#ffe6b4"
+        glow={1.8}
+        glowColor="#ffdca0"
+      />
     </group>
   );
 }

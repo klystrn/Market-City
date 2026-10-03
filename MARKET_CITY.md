@@ -3017,6 +3017,22 @@ are the daily-change encoding, and a terrace painted red would read as a company
 having a bad day. Avoiding two hues leaves plenty of range, and height still
 keeps the fabric below the towers.
 
+**Dusk goes properly dark (owner follow-up).** The first evening was too timid
+to read as one. It is now a real night — low ambient, deep blue fog — with the
+company towers' window bands lit warm so the city still has shape. The first
+attempt at that lit `towerGlass` as well, which is a whole glazed shaft rather
+than a window: entire buildings turned uniform gold and the difference between
+a company up on the day and one down disappeared. Emissive is a constant added
+after the diffuse colour, so anything large enough to dominate a silhouette
+will always flatten the encoding colour carries. Only the small window bands
+light up.
+
+A related mistake, now fixed: `Boxes` set its emissive to white and relied on
+instance colour to tint it. Three multiplies instance colour into diffuse only
+— emissive is one material uniform — so every glowing thing was washing toward
+white regardless of its colour. Glowing batches now take an explicit shared
+glow colour, and things that glow differently are batched separately.
+
 **Lights come on when the exchange closes, not when the market falls.** The
 scene already had a `night` flag meaning the session is closed or after-hours,
 and a `dark` flag meaning the index is *down*. Lighting the windows from `dark`
