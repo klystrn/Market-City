@@ -62,7 +62,7 @@ export const tokyo: CityDefinition = {
   },
   bakedLayout,
   // Measured 67 lots, 15 landmarks, 192 road segments, 33 labels.
-  budget: { lots: 120, landmarks: 24, roadSegments: 260, labels: 60 },
+  budget: { lots: 120, landmarks: 24, roadSegments: 260, labels: 60, fabric: 520 },
   surround: "sea",
   camera: {
     offset: [270, 285, 330],

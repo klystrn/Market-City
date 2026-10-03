@@ -71,9 +71,6 @@ export default function Terrain({
       crowns: Part[] = [],
       curbs: Part[] = [],
       lamps: Part[] = [],
-      neighborhoods: Part[] = [],
-      neighborhoodRoofs: Part[] = [],
-      neighborhoodWindows: Part[] = [],
       petals: Part[] = [];
     for (const road of roads) {
       for (let i = 1; i < road.points.length; i++) {
@@ -250,69 +247,6 @@ export default function Terrain({
             });
         }
       }
-    // Muted architectural colors distinguish urban scenery from stock-performance buildings.
-    const wallColors = [
-      "#dbb989",
-      "#dfcbb0",
-      "#a4bbca",
-      "#bac7cc",
-      "#d9b6a7",
-      "#c4c9b0",
-    ];
-    // Low-rise scenery reads as the neighbourhood a company town sits in, so it
-    // has to stay clearly secondary to the buildings that carry market data.
-    // The grid is spaced well wider than a block and keeps only some of the
-    // cells, which leaves gaps between blocks instead of a continuous carpet.
-    for (let x = -148; x < 139; x += 5.2)
-      for (let z = -140; z < 163; z += 5.4) {
-        if (
-          ![-1.4, 1.4].every((dx) =>
-            [-1.4, 1.4].every((dz) => isLand([x + dx, z + dz])),
-          ) ||
-          nearRoad(x, z, 1.8) ||
-          nearLandmark(x, z, 2)
-        )
-          continue;
-        const town = sectors.find(
-          (s) =>
-            Math.abs(x - s.x) < s.width / 2 + 8 &&
-            Math.abs(z - s.z) < s.depth / 2 + 8,
-        );
-        if (
-          !town ||
-          plots.some(
-            (p) =>
-              Math.abs(x - p.x) < p.width / 2 + 2 &&
-              Math.abs(z - p.z) < p.depth / 2 + 2,
-          )
-        )
-          continue;
-        const seed = Math.abs(Math.round(x * 13 + z * 7));
-        if (seed % 10 >= 6) continue;
-        const h = 1.5 + (seed % 5) * 0.6,
-          w = seed % 3 === 0 ? 2.6 : 3.4,
-          d = 3.2;
-        neighborhoods.push({
-          position: [x, 1.1 + h / 2, z],
-          scale: [w, h, d],
-          color: wallColors[seed % wallColors.length],
-        });
-        neighborhoodRoofs.push({
-          position: [x, 1.15 + h, z],
-          scale: [w + 0.15, 0.17, d + 0.15],
-          color: seed % 4 === 0 ? town.color : seed % 2 ? "#f0e1c5" : "#7f9dad",
-        });
-        for (const sign of [-1, 1]) {
-          neighborhoodWindows.push({
-            position: [x, 1.1 + h * 0.65, z + sign * (d / 2 + 0.01)],
-            scale: [w * 0.8, 0.4, 0.03],
-          });
-          neighborhoodWindows.push({
-            position: [x + sign * (w / 2 + 0.01), 1.1 + h * 0.65, z],
-            scale: [0.03, 0.4, d * 0.8],
-          });
-        }
-      }
     const plotsides = plots.map((p) => ({
       position: [p.x, 1.04, p.z] as [number, number, number],
       scale: [p.width + 0.8, 0.1, p.depth + 0.8] as [number, number, number],
@@ -328,9 +262,6 @@ export default function Terrain({
       crowns,
       curbs,
       lamps,
-      neighborhoods,
-      neighborhoodRoofs,
-      neighborhoodWindows,
       plotsides,
       petals,
     };
@@ -354,14 +285,6 @@ export default function Terrain({
         </mesh>
       ))}
       {mapFeatures.mountains && <Mountains season={season} />}
-      <group visible={mapFeatures.context}>
-        <Boxes parts={parts.neighborhoods} />
-        <Boxes parts={parts.neighborhoodRoofs} />
-        <Boxes
-          parts={parts.neighborhoodWindows}
-          color={dark ? "#a4c7cf" : "#447d94"}
-        />
-      </group>
       <Boxes parts={parts.curbs} color={dark ? "#748e91" : "#cec4b3"} />
       <Boxes parts={parts.sidewalks} color={dark ? "#8f9995" : "#e6d7bd"} />
       <Boxes parts={parts.plotsides} color={dark ? "#80968f" : "#d9cfb6"} />

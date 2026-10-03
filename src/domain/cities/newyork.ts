@@ -502,7 +502,7 @@ export const newYork: CityDefinition = {
   },
   bakedLayout,
   // Measured 133 lots, 16 landmarks, 61 road segments, 30 labels.
-  budget: { lots: 180, landmarks: 24, roadSegments: 140, labels: 60 },
+  budget: { lots: 180, landmarks: 24, roadSegments: 140, labels: 60, fabric: 460 },
   surround: "sea",
   // Opens over the Hudson looking east-south-east down the built length of
   // Manhattan, which puts Queens across the East River and Brooklyn beyond the

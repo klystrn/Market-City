@@ -20,6 +20,7 @@ import { etMinuteOfIso } from "@/domain/intraday";
 import MarketDisasters from "./MarketDisasters";
 import Terrain from "./Terrain";
 import CityTerrain from "./CityTerrain";
+import UrbanFabric from "./UrbanFabric";
 import CityLandmarks from "./CityLandmarks";
 import BreadthRibbons from "./BreadthRibbons";
 import MassColumns from "./MassColumns";
@@ -610,6 +611,21 @@ function CityScene(props: Props) {
                 />
               )}
             </>
+          )}
+          {/* The ordinary city between the company lots. Drawn for every city
+              from one generator, so a layout change cannot leave one of them
+              looking like a diagram and the others like a place. */}
+          {props.mapFeatures.context && (
+            <UrbanFabric
+              city={props.city}
+              plots={plots}
+              season={props.season}
+              dark={props.dark}
+              // A struggling device thins the fabric rather than losing it.
+              // Dropping it entirely would not read as lower detail; it would
+              // read as a city that is missing most of its buildings.
+              detail={effectiveTier === 2 ? 0.34 : effectiveTier === 1 ? 0.6 : 1}
+            />
           )}
           {props.mapFeatures.breadthRibbons && (
             <BreadthRibbons

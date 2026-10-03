@@ -55,6 +55,13 @@ export interface CityBudget {
   roadSegments: number;
   /** Floating labels that can share the screen: districts, landmarks, buildings. */
   labels: number;
+  /**
+   * Ordinary buildings filling the streets between company lots. This one is a
+   * hard cap passed to the generator rather than a figure measured afterwards:
+   * the fabric would otherwise grow with the road network, and a city that
+   * gained a few streets would quietly gain hundreds of instances with it.
+   */
+  fabric: number;
 }
 export interface CityDefinition {
   id: CityId;

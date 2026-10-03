@@ -320,3 +320,32 @@ carrying forward:
    sector, subsector and market cap — never price or volume — so a quote refresh
    reuses the fixture and a roster change falls back to solving in the browser. A
    stale fixture is a slower boot, never a wrong city.
+
+### The ordinary city (owner follow-up)
+The owner asked for a more realistic city, in the vein of the city-building
+games. Every building in Market City carried market data — company lots and
+landmarks, and nothing else — so the ground between them was bare. §75.12 of
+`MARKET_CITY.md` has the detail; the parts worth carrying forward:
+
+1. **Fabric is placed by fronting streets, not scattered on a grid.** A
+   neighbourhood is a line of buildings facing a road at a consistent setback.
+   Following the road network means the fabric inherits each city's existing
+   shape rather than imposing a fourth one, and one generator serves all three.
+2. **Blocks are deep.** Rows step back from the street into the block interior,
+   thinning as they go. Street frontage alone left New York nearly empty — it
+   has few roads and very deep boroughs.
+3. **The backdrop must stay a backdrop.** Muted walls, never the green and red
+   of a daily move, and nothing tall enough to compete with a mega-cap. The
+   ordinary city is what makes the market legible as a place; it is not itself
+   the subject.
+4. **Tokyo's own filler was deleted rather than kept alongside.** Two generators
+   for one thing drift apart. Tokyo gained pitched roofs, shopfronts and parked
+   cars it never had.
+5. **This budget is a cap, not a measurement.** The fabric grows with the road
+   network, so the figure is passed *into* the generator rather than measured
+   after it. The risk runs the other way, so the test asserts a floor too: a
+   city that could no longer front its streets would otherwise pass every check
+   while looking deserted.
+6. **Degrading thins rather than hides.** Dropping the fabric at the lowest
+   quality tier did not read as lower detail, it read as a city missing most of
+   its buildings. A struggling device keeps every third building instead.
