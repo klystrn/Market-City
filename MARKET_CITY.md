@@ -3053,6 +3053,40 @@ and anything mounted on the front wall offsets by `(cos r, -sin r)`.
 
 ---
 
+## 75.14 Measuring before optimising (owner follow-up)
+
+Every performance decision so far had been a guess. The scene trims itself when
+frames get slow, but nothing recorded what slow was or what it cost, so there
+was no way to tell whether draw calls, triangle count or fill rate was the
+constraint. `?perf=1` now renders a readout from the renderer's own counters
+rather than from anything the app believes about itself: average and worst
+frame time, draw calls, triangles, resident geometries and compiled programs.
+
+It leads with frame time in milliseconds rather than frames per second, because
+milliseconds are the unit a budget is spent in — the gap between 60fps and
+50fps reads as a rounding error while 16.7ms against 20ms does not. It samples
+once a second rather than per frame, since a setState every frame would distort
+the number it is measuring. And it is opt-in and absent otherwise: a permanent
+overlay is one more thing to draw.
+
+**Baseline, measured at the default camera with adaptive quality off:**
+
+| City | Draw calls | Triangles | Geometries |
+| --- | --- | --- | --- |
+| New York | 231 | 383k | 222 |
+| London | 255 | 425k | 229 |
+| Tokyo | 144 | 357k | 108 |
+
+These were taken in a software rasteriser, so the frame times that came with
+them describe this test environment and not any real device — but draw calls,
+triangle count and geometry count are hardware-independent, and they are what
+the remaining optimisation work targets. The gap between Tokyo's 108 resident
+geometries and New York's 222 is the clearest signal in the table: the shared
+terrain builds one extruded geometry per land polygon and the landmarks build
+one per landmark, none of them instanced.
+
+---
+
 # 76. Idea Backlog
 
 Proposals only. Nothing here is approved scope until the owner selects it. Items

@@ -34,6 +34,11 @@ import EarningsArrivals from "./EarningsArrivals";
 import IntradayTrails from "./IntradayTrails";
 import VolatilityHalos from "./VolatilityHalos";
 import PerformanceMonitor, { type QualityTier } from "./PerformanceMonitor";
+import PerfOverlay, {
+  PerfReadout,
+  usePerfEnabled,
+  type PerfSample,
+} from "./PerfOverlay";
 import { pct, weightedChange } from "@/domain/analytics";
 
 import type { MapFeatures } from "@/domain/map-features";
@@ -538,6 +543,8 @@ function CityScene(props: Props) {
     return (selected ? [selected, ...rest] : rest).slice(0, 5);
   }, [props.snapshot.companies, props.selected]);
   const sessionMinute = etMinuteOfIso(props.snapshot.generatedAt);
+  const perf = usePerfEnabled();
+  const [perfSample, setPerfSample] = useState<PerfSample | null>(null);
   const dpr: [number, number] =
     effectiveTier >= 2 ? [1, 1] : effectiveTier === 1 ? [1, 1.25] : [1, 1.6];
   return (
@@ -798,7 +805,9 @@ function CityScene(props: Props) {
           resetKey={props.resetKey}
         />
         <Ready onReady={props.onReady} onFailure={props.onFailure} />
+        {perf && <PerfOverlay onSample={setPerfSample} />}
       </Canvas>
+      {perf && <PerfReadout sample={perfSample} />}
     </SceneBoundary>
   );
 }
