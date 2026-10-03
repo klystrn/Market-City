@@ -449,3 +449,126 @@ export function generateFabric(input: FabricInput): FabricResult {
   }
   return { blocks, furniture, interiors };
 }
+/**
+ * Bump when generation changes shape. The fixture is keyed on the plots it was
+ * built from, but the generator is an input too — the same lesson the baked
+ * layouts learned when choosing building forms by sector changed every lot
+ * without changing a single company.
+ */
+export const FABRIC_VERSION = 1;
+/**
+ * What a baked fabric was built for. The generator reads the city's roads,
+ * land, water and landmarks — all fixed in the city module and so covered by
+ * the version — plus the plots, which are not. Only position and size matter:
+ * a plot's ticker or tier could change without moving anything.
+ */
+export function fabricKey(plots: Plot[]): string {
+  return [
+    `f${FABRIC_VERSION}`,
+    ...plots
+      .map((p) => `${p.x.toFixed(2)},${p.z.toFixed(2)},${p.width},${p.depth}`)
+      .sort(),
+  ].join("|");
+}
+/**
+ * The fixture format: arrays of numbers rather than objects with field names,
+ * and coordinates rounded to the centimetre. Full float precision is
+ * meaningless for scenery, and the field names would be repeated some fifteen
+ * hundred times per city. Together those take the three cities from 116KB of
+ * readable JSON to 37KB gzipped, split across their own lazy chunks so a
+ * visitor downloads only the city they are looking at.
+ */
+/**
+ * One record. Rows are typed as plain arrays rather than fixed-length tuples
+ * because TypeScript widens a JSON import to exactly this, and asserting a
+ * tuple shape over a file on disk would be a claim the compiler cannot check.
+ * `decodeFabric` reads positionally and coerces instead.
+ */
+type Row = readonly (number | string)[];
+export interface BakedFabric {
+  key: string;
+  blocks: Row[];
+  interiors: Row[];
+  trees: Row[];
+  lamps: Row[];
+  cars: Row[];
+  crossings: Row[];
+}
+// Adding zero collapses -0 to 0. JSON has no negative zero, so a rotation of
+// -0 survives encoding but comes back as 0 and the fixture compares unequal to
+// what the generator just produced — which would make the staleness test fail
+// forever on a file that is in fact current.
+const round = (n: number) => Math.round(n * 100) / 100 + 0;
+export function encodeFabric(key: string, f: FabricResult): BakedFabric {
+  return {
+    key,
+    blocks: f.blocks.map((b) => [
+      round(b.x), round(b.z), round(b.width), round(b.depth),
+      round(b.height), round(b.rotation), b.kind, b.district ?? "", b.seed,
+    ]),
+    interiors: f.interiors.map((i) => [
+      round(i.x), round(i.z), round(i.width), round(i.depth),
+      round(i.rotation), i.kind, i.seed,
+    ]),
+    trees: f.furniture.trees.map((p) => [round(p[0]), round(p[1])]),
+    lamps: f.furniture.lamps.map((p) => [round(p[0]), round(p[1])]),
+    cars: f.furniture.cars.map((c) => [
+      round(c.at[0]), round(c.at[1]), round(c.rotation), c.seed,
+    ]),
+    crossings: f.furniture.crossings.map((c) => [
+      round(c.at[0]), round(c.at[1]), round(c.rotation), c.width,
+    ]),
+  };
+}
+const num = (r: Row, i: number) => Number(r[i]);
+const point = (r: Row, i = 0): Point => [num(r, i), num(r, i + 1)];
+export function decodeFabric(baked: BakedFabric): FabricResult {
+  return {
+    blocks: baked.blocks.map((r) => ({
+      x: num(r, 0),
+      z: num(r, 1),
+      width: num(r, 2),
+      depth: num(r, 3),
+      height: num(r, 4),
+      rotation: num(r, 5),
+      kind: String(r[6]) as FabricKind,
+      district: String(r[7]) || undefined,
+      seed: num(r, 8),
+    })),
+    interiors: baked.interiors.map((r) => ({
+      x: num(r, 0),
+      z: num(r, 1),
+      width: num(r, 2),
+      depth: num(r, 3),
+      rotation: num(r, 4),
+      kind: String(r[5]) as InteriorKind,
+      seed: num(r, 6),
+    })),
+    furniture: {
+      trees: baked.trees.map((r) => point(r)),
+      lamps: baked.lamps.map((r) => point(r)),
+      cars: baked.cars.map((r) => ({
+        at: point(r),
+        rotation: num(r, 2),
+        seed: num(r, 3),
+      })),
+      crossings: baked.crossings.map((r) => ({
+        at: point(r),
+        rotation: num(r, 2),
+        width: num(r, 3),
+      })),
+    },
+  };
+}
+/**
+ * The city's fabric, from the fixture baked at build time when it still
+ * applies and generated in the browser when it does not — a live provider
+ * snapshot can carry a roster that moves the lots.
+ */
+export function fabricFor(
+  input: FabricInput & { baked?: BakedFabric },
+): FabricResult {
+  return input.baked && input.baked.key === fabricKey(input.plots)
+    ? decodeFabric(input.baked)
+    : generateFabric(input);
+}

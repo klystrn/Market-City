@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import type { CityDefinition } from "@/domain/cities/types";
 import type { Plot } from "@/domain/types";
-import { generateFabric, type FabricBlock } from "@/domain/cities/fabric";
+import { fabricFor, type FabricBlock } from "@/domain/cities/fabric";
 import { seasonPalette, type Season } from "@/domain/seasons";
 import { Boxes, cylinder, treeGeometry, type Part } from "./SceneryParts";
 // The ordinary city around the company buildings: terraces fronting the
@@ -169,7 +169,8 @@ export default function UrbanFabric({
 }) {
   const fabric = useMemo(
     () =>
-      generateFabric({
+      fabricFor({
+        baked: city.bakedFabric,
         land: city.land,
         water: city.water,
         roads: city.roads(plots),

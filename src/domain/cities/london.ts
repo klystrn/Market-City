@@ -1,4 +1,5 @@
 import bakedLayout from "@/data/layouts/london.json";
+import bakedFabric from "@/data/fabric/london.json";
 import type { Company, Plot } from "../types";
 import type { Point, Road } from "../geography";
 import { massing } from "../massing";
@@ -529,6 +530,7 @@ export const london: CityDefinition = {
   createPlots: createLondonPlots,
   tierOutline: londonTierOutline,
   bakedLayout,
+  bakedFabric,
   // Measured 133 lots, 16 landmarks, 144 road segments, 26 labels.
   budget: { lots: 180, landmarks: 24, roadSegments: 220, labels: 60, fabric: 520 },
   surround: "land",

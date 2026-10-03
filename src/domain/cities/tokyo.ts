@@ -1,4 +1,5 @@
 import bakedLayout from "@/data/layouts/tokyo.json";
+import bakedFabric from "@/data/fabric/tokyo.json";
 import { createPlots } from "../city";
 import { landmarks, sectors, cityRoads, mainland, islands, waterOutline, channels } from "../geography";
 import { civicSites } from "../civic";
@@ -61,6 +62,7 @@ export const tokyo: CityDefinition = {
     ];
   },
   bakedLayout,
+  bakedFabric,
   // Measured 67 lots, 15 landmarks, 192 road segments, 33 labels.
   budget: { lots: 120, landmarks: 24, roadSegments: 260, labels: 60, fabric: 520 },
   surround: "sea",

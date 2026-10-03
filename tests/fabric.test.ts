@@ -4,7 +4,12 @@ import { createDemo } from "../src/data/demo";
 import { cities } from "../src/domain/cities/all";
 import { companiesForCity } from "../src/domain/cities";
 import { plotsFor } from "../src/domain/cities/layout-key";
-import { generateFabric } from "../src/domain/cities/fabric";
+import {
+  decodeFabric,
+  encodeFabric,
+  fabricKey,
+  generateFabric,
+} from "../src/domain/cities/fabric";
 import { pointInPolygon } from "../src/domain/geography";
 
 const demo = createDemo();
@@ -119,4 +124,45 @@ test("shops only ever front a street", () => {
       );
     }
   }
+});
+
+test("the baked fabric matches what the generator would build", () => {
+  // A stale fixture is the failure mode this whole mechanism invites: the key
+  // covers the lots and the version covers the generator, but only re-solving
+  // proves the file on disk is actually what today's code produces.
+  for (const city of cities) {
+    const plots = plotsFor(city, companiesForCity(demo.companies, city));
+    const input = {
+      land: city.land,
+      water: city.water,
+      roads: city.roads(plots),
+      plots,
+      landmarks: city.landmarks,
+      districts: city.districts,
+      maxBlocks: city.budget.fabric,
+    };
+    assert.ok(city.bakedFabric, `${city.id} ships no baked fabric`);
+    assert.equal(
+      city.bakedFabric!.key,
+      fabricKey(plots),
+      `${city.id}'s baked fabric was built for different lots; run npm run bake:layouts`,
+    );
+    const fresh = encodeFabric(fabricKey(plots), generateFabric(input));
+    assert.deepEqual(
+      decodeFabric(city.bakedFabric!).blocks,
+      decodeFabric(fresh).blocks,
+      `${city.id}'s baked fabric is stale; run npm run bake:layouts`,
+    );
+  }
+});
+
+test("a city whose lots moved falls back to generating", () => {
+  const city = cities[0];
+  const plots = plotsFor(city, companiesForCity(demo.companies, city));
+  const moved = plots.map((p, i) => (i ? p : { ...p, x: p.x + 40 }));
+  assert.notEqual(
+    fabricKey(moved),
+    fabricKey(plots),
+    "moving a lot must change the key, or a stale fixture would be reused",
+  );
 });

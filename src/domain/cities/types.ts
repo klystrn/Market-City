@@ -1,6 +1,7 @@
 import type { Company, Plot, Sector } from "../types";
 import type { Point, Road } from "../geography";
 import type { BakedLayout } from "./layout-key";
+import type { BakedFabric } from "./fabric";
 export type CityId = "tokyo" | "london" | "newyork";
 export type UniverseId = "nasdaq100" | "sp500";
 export type LandmarkKind =
@@ -94,6 +95,8 @@ export interface CityDefinition {
   surround: "sea" | "land";
   /** Placement solved at build time, used whenever it still matches the roster. */
   bakedLayout?: BakedLayout;
+  /** Ordinary buildings solved at build time; regenerated if the lots moved. */
+  bakedFabric?: BakedFabric;
   /**
    * What this city is allowed to draw. Every count is an upper bound the city
    * must stay under, declared next to the city so adding one is a deliberate

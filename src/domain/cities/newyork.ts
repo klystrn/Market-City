@@ -1,4 +1,5 @@
 import bakedLayout from "@/data/layouts/newyork.json";
+import bakedFabric from "@/data/fabric/newyork.json";
 import type { Company, Plot } from "../types";
 import type { Point, Road } from "../geography";
 import { massing } from "../massing";
@@ -501,6 +502,7 @@ export const newYork: CityDefinition = {
     return shape ? [...shape, shape[0]] : [];
   },
   bakedLayout,
+  bakedFabric,
   // Measured 133 lots, 16 landmarks, 61 road segments, 30 labels.
   budget: { lots: 180, landmarks: 24, roadSegments: 140, labels: 60, fabric: 460 },
   surround: "sea",

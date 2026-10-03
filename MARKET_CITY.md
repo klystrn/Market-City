@@ -3126,6 +3126,39 @@ makes this an optimisation rather than a change.
 
 ---
 
+## 75.16 Baking the ordinary buildings (owner follow-up)
+
+With generation down to 9-52ms the case for a fixture was no longer obvious: it
+trades CPU for download. The deciding factor was the encoding. Written as
+readable JSON the three cities come to 116KB; written as arrays of numbers
+rounded to the centimetre they come to 37KB gzipped, split so a visitor
+downloads only the city they are looking at — 9KB for New York, 18KB for
+London, 10KB for Tokyo, each riding the lazy chunk that city already fetches.
+Against 9-52ms on this machine, and several times that on a phone, that is
+worth paying.
+
+Field names would otherwise be repeated some fifteen hundred times per city,
+and full float precision is meaningless for scenery.
+
+**Two things the fixture mechanism needed that the layouts taught.** It carries
+a `FABRIC_VERSION` alongside a key derived from the lots, because the generator
+is an input as much as the lots are — the lesson from building forms by sector
+changing every lot without changing a company. And a test re-solves each city
+and compares, because a key and a version both passing still does not prove the
+file on disk is what today's code produces.
+
+**Negative zero cost an hour.** A rotation of -0 encodes fine, but JSON has no
+negative zero, so it comes back as 0 and the staleness test fails forever on a
+file that is in fact current. Rounding now adds zero, which collapses -0 to 0
+before it is written.
+
+**Rows are typed as plain arrays, not fixed-length tuples.** TypeScript widens
+a JSON import to exactly that, and asserting a tuple shape over a file on disk
+would be a claim the compiler cannot check; the decoder reads positionally and
+coerces instead.
+
+---
+
 # 76. Idea Backlog
 
 Proposals only. Nothing here is approved scope until the owner selects it. Items
