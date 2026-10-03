@@ -3087,6 +3087,45 @@ one per landmark, none of them instanced.
 
 ---
 
+## 75.15 Making city generation fast (owner follow-up)
+
+Generation ran once per city switch and took long enough to be felt. Three
+changes, and the order in which they were found is the point: **the one I
+predicted would help was the one that made things worse.**
+
+**A spatial index for the overlap checks — the proposed fix — was a
+regression on its own.** The obvious shape is to store each item in the cells
+its own box touches and read every cell within the query's margin. That makes
+each query widen to the size of the largest thing indexed, so a city with one
+big park scans fifty cells rather than comparing against sixteen landmarks.
+London went from 200ms to 247ms. Inverting it fixed that: pad on *insert* by
+the largest margin any caller uses, and a query then reads exactly one cell,
+because anything that could match is already in it.
+
+**The real cost was the land test.** `onLand` runs a point-in-polygon crossing
+count against every land and water polygon, four corners per candidate. London's
+coastline and Tokyo's bay are hundred-vertex polygons, so this was tens of
+millions of edge comparisons — far more than the overlap scan. Bounding boxes
+around each polygon let an obviously-outside point cost four comparisons
+instead of a full pass, which took Tokyo from 262ms to 34ms.
+
+**Bounding boxes do nothing for a polygon that contains the query**, which is
+London: one large outline that nearly every candidate falls inside. The fix
+there was ordering. The land test ran first, before four O(1) grid lookups that
+would have rejected most candidates anyway. Putting the cheap tests first
+halved London again.
+
+| City | Before | After |
+| --- | --- | --- |
+| New York | 19.9ms | 9.1ms |
+| London | 199.7ms | 51.9ms |
+| Tokyo | 262.6ms | 15.0ms |
+
+Block counts are identical before and after in all three cities, which is what
+makes this an optimisation rather than a change.
+
+---
+
 # 76. Idea Backlog
 
 Proposals only. Nothing here is approved scope until the owner selects it. Items

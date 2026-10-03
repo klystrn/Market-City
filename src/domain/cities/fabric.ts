@@ -78,10 +78,44 @@ function noise(seed: number): number {
   const x = Math.sin(seed * 12.9898) * 43758.5453;
   return x - Math.floor(x);
 }
-function onLand(p: Point, land: Point[][], water: Point[][]): boolean {
+/**
+ * A polygon with its bounding box, so a point obviously outside it costs four
+ * comparisons instead of a full crossing count.
+ *
+ * This is what actually made generation slow, not the overlap checks: London's
+ * coastline and Tokyo's bay are hundred-vertex polygons, and every candidate
+ * position tests four corners against every land and water polygon in the
+ * city. The crossing test is linear in vertices, so the work was tens of
+ * millions of edge comparisons — far more than the overlap scan the grid
+ * replaced.
+ */
+interface BoundedPolygon {
+  points: Point[];
+  minX: number;
+  maxX: number;
+  minZ: number;
+  maxZ: number;
+}
+function bound(points: Point[]): BoundedPolygon {
+  let minX = Infinity,
+    maxX = -Infinity,
+    minZ = Infinity,
+    maxZ = -Infinity;
+  for (const [x, z] of points) {
+    if (x < minX) minX = x;
+    if (x > maxX) maxX = x;
+    if (z < minZ) minZ = z;
+    if (z > maxZ) maxZ = z;
+  }
+  return { points, minX, maxX, minZ, maxZ };
+}
+function inBounded(p: Point, polygon: BoundedPolygon): boolean {
   return (
-    land.some((polygon) => pointInPolygon(p, polygon)) &&
-    !water.some((polygon) => pointInPolygon(p, polygon))
+    p[0] >= polygon.minX &&
+    p[0] <= polygon.maxX &&
+    p[1] >= polygon.minZ &&
+    p[1] <= polygon.maxZ &&
+    pointInPolygon(p, polygon.points)
   );
 }
 /** Distance from a point to a line segment, which is how road clearance is judged. */
@@ -95,6 +129,60 @@ function distanceToSegment([x, z]: Point, a: Point, b: Point): number {
     Math.min(1, ((x - a[0]) * dx + (z - a[1]) * dz) / lengthSquared),
   );
   return Math.hypot(x - (a[0] + dx * t), z - (a[1] + dz * t));
+}
+/**
+ * A uniform grid over the ground, so a clearance test looks at the handful of
+ * things near a point instead of every road segment, lot and building in the
+ * city. Each candidate position was previously checked against all of them,
+ * which made generation quadratic in the number of buildings placed.
+ *
+ * The padding goes on *insert*, not on query. The obvious way round — store
+ * each item in the cells its own box touches, then read every cell within the
+ * query margin — is slower than no index at all here: one large landmark
+ * forces every query to widen to that landmark's size, and a city with a big
+ * park ends up scanning fifty cells to avoid comparing against sixteen
+ * landmarks. Expanding each item by the largest margin any caller uses means a
+ * query reads exactly one cell, and anything that could possibly match is
+ * already in it.
+ *
+ * Items appear in several cells, so a query can return one more than once.
+ * Every caller is an existence test, so a duplicate costs one comparison.
+ */
+const CELL = 8;
+/**
+ * The largest margin any clearance test may pass. Queries read a single cell,
+ * which is only correct while every margin stays within what insertion padded
+ * by, so a caller wanting more has to raise this too.
+ */
+const MAX_MARGIN = 7;
+class Grid<T> {
+  private cells = new Map<number, T[]>();
+  private static readonly empty: never[] = [];
+  private static key(cx: number, cz: number) {
+    // Two 16-bit cell coordinates packed into one number: a string key would
+    // allocate on every insert and every query.
+    return ((cx & 0xffff) << 16) | (cz & 0xffff);
+  }
+  add(minX: number, minZ: number, maxX: number, maxZ: number, item: T) {
+    const loX = Math.floor((minX - MAX_MARGIN) / CELL),
+      hiX = Math.floor((maxX + MAX_MARGIN) / CELL),
+      loZ = Math.floor((minZ - MAX_MARGIN) / CELL),
+      hiZ = Math.floor((maxZ + MAX_MARGIN) / CELL);
+    for (let cx = loX; cx <= hiX; cx++)
+      for (let cz = loZ; cz <= hiZ; cz++) {
+        const key = Grid.key(cx, cz);
+        const bucket = this.cells.get(key);
+        if (bucket) bucket.push(item);
+        else this.cells.set(key, [item]);
+      }
+  }
+  /** Everything that could be within MAX_MARGIN of this point. */
+  at([x, z]: Point): readonly T[] {
+    return (
+      this.cells.get(Grid.key(Math.floor(x / CELL), Math.floor(z / CELL))) ??
+      Grid.empty
+    );
+  }
 }
 export function generateFabric(input: FabricInput): FabricResult {
   const { land, water, roads, plots, landmarks, districts, maxBlocks } = input;
@@ -116,16 +204,55 @@ export function generateFabric(input: FabricInput): FabricResult {
         width: road.width,
         bridge: road.bridge === true,
       });
-  const clearOfRoads = (p: Point, margin: number) =>
-    !segments.some((s) => distanceToSegment(p, s.a, s.b) < s.width / 2 + margin);
-  const clearOfPlots = (p: Point, margin: number) =>
-    !plots.some(
-      (plot) =>
-        Math.abs(p[0] - plot.x) < plot.width / 2 + margin &&
-        Math.abs(p[1] - plot.z) < plot.depth / 2 + margin,
+  // Everything that already owns ground goes into a grid, so a clearance test
+  // reads a few nearby cells rather than the whole city. `reach` has to cover
+  // the queried margin plus the half-extent of the largest thing indexed,
+  // since an item is found by the cells its own box touches.
+  const roadGrid = new Grid<(typeof segments)[number]>();
+  for (const s of segments) {
+    const pad = s.width / 2;
+    roadGrid.add(
+      Math.min(s.a[0], s.b[0]) - pad,
+      Math.min(s.a[1], s.b[1]) - pad,
+      Math.max(s.a[0], s.b[0]) + pad,
+      Math.max(s.a[1], s.b[1]) + pad,
+      s,
     );
+  }
+  const plotGrid = new Grid<Plot>();
+  for (const plot of plots)
+    plotGrid.add(
+      plot.x - plot.width / 2,
+      plot.z - plot.depth / 2,
+      plot.x + plot.width / 2,
+      plot.z + plot.depth / 2,
+      plot,
+    );
+  const landmarkGrid = new Grid<CityLandmark>();
+  for (const l of landmarks) {
+    const halfWidth = (l.width ?? l.radius * 2) / 2;
+    const halfDepth = (l.depth ?? l.radius * 2) / 2;
+    landmarkGrid.add(l.x - halfWidth, l.z - halfDepth, l.x + halfWidth, l.z + halfDepth, l);
+  }
+  const landBounds = land.map(bound);
+  const waterBounds = water.map(bound);
+  const onLand = (p: Point) =>
+    landBounds.some((poly) => inBounded(p, poly)) &&
+    !waterBounds.some((poly) => inBounded(p, poly));
+  const clearOfRoads = (p: Point, margin: number) =>
+    !roadGrid
+      .at(p)
+      .some((s) => distanceToSegment(p, s.a, s.b) < s.width / 2 + margin);
+  const clearOfPlots = (p: Point, margin: number) =>
+    !plotGrid
+      .at(p)
+      .some(
+        (plot) =>
+          Math.abs(p[0] - plot.x) < plot.width / 2 + margin &&
+          Math.abs(p[1] - plot.z) < plot.depth / 2 + margin,
+      );
   const clearOfLandmarks = (p: Point, margin: number) =>
-    !landmarks.some((l) => {
+    !landmarkGrid.at(p).some((l) => {
       const halfWidth = (l.width ?? l.radius * 2) / 2 + margin;
       const halfDepth = (l.depth ?? l.radius * 2) / 2 + margin;
       return Math.abs(p[0] - l.x) < halfWidth && Math.abs(p[1] - l.z) < halfDepth;
@@ -136,14 +263,22 @@ export function generateFabric(input: FabricInput): FabricResult {
         Math.abs(p[0] - d.x) <= d.width / 2 + 6 &&
         Math.abs(p[1] - d.z) <= d.depth / 2 + 6,
     );
-  // Blocks already placed, kept as a flat list: the fabric is small enough that
-  // a linear overlap check is cheaper than maintaining a spatial index.
+  // Buildings are indexed as they are placed. This is the one that mattered:
+  // every candidate was compared against every building already standing, so
+  // the cost grew with the square of the city.
+  const blockGrid = new Grid<FabricBlock>();
   const clearOfBlocks = (p: Point, halfSpan: number) =>
-    !blocks.some(
-      (b) =>
-        Math.abs(p[0] - b.x) < Math.max(b.width, b.depth) / 2 + halfSpan &&
-        Math.abs(p[1] - b.z) < Math.max(b.width, b.depth) / 2 + halfSpan,
-    );
+    !blockGrid
+      .at(p)
+      .some(
+        (b) =>
+          Math.abs(p[0] - b.x) < Math.max(b.width, b.depth) / 2 + halfSpan &&
+          Math.abs(p[1] - b.z) < Math.max(b.width, b.depth) / 2 + halfSpan,
+      );
+  const remember = (b: FabricBlock) => {
+    const half = Math.max(b.width, b.depth) / 2;
+    blockGrid.add(b.x - half, b.z - half, b.x + half, b.z + half, b);
+  };
   let placed = 0;
   for (const [index, s] of segments.entries()) {
     // Nothing fronts a bridge — it crosses water, and a terrace in the river
@@ -191,11 +326,11 @@ export function generateFabric(input: FabricInput): FabricResult {
             const at: Point = [cx, cz];
             const span = 4.4;
             if (
-              onLand(at, land, water) &&
               clearOfRoads(at, 1.6) &&
               clearOfPlots(at, span) &&
               clearOfLandmarks(at, span) &&
-              clearOfBlocks(at, span * 0.5)
+              clearOfBlocks(at, span * 0.5) &&
+              onLand(at)
             ) {
               const pick = noise(seed + 12);
               interiors.push({
@@ -229,11 +364,16 @@ export function generateFabric(input: FabricInput): FabricResult {
           [cx - halfSpan, cz + halfSpan],
           [cx + halfSpan, cz + halfSpan],
         ];
-        if (!corners.every((c) => onLand(c, land, water))) continue;
+        // Cheapest first. The grid tests are a single cell lookup each; the
+        // land test is a crossing count against the city's coastline, which for
+        // a city drawn as one large polygon cannot be rejected by a bounding
+        // box and so costs a pass over every edge. Rejecting on the cheap tests
+        // first removes most candidates before that ever runs.
         if (!clearOfRoads(at, 2.2)) continue;
         if (!clearOfPlots(at, halfSpan + 1.4)) continue;
         if (!clearOfLandmarks(at, halfSpan + 1)) continue;
         if (!clearOfBlocks(at, halfSpan + 0.5)) continue;
+        if (!corners.every((c) => onLand(c))) continue;
         const district = districtAt(at);
         const roll = noise(seed + 3);
         // A corner shop every so often, houses on the quieter stretches, and
@@ -247,7 +387,7 @@ export function generateFabric(input: FabricInput): FabricResult {
             : kind === "shop"
               ? 3.2 + noise(seed + 4) * 1.2
               : 3.4 + noise(seed + 4) * 3.6;
-        blocks.push({
+        const block: FabricBlock = {
           x: cx,
           z: cz,
           width,
@@ -261,7 +401,9 @@ export function generateFabric(input: FabricInput): FabricResult {
           kind,
           district: district?.id,
           seed,
-        });
+        };
+        blocks.push(block);
+        remember(block);
         placed++;
       }
     // Street furniture sits in the verge between kerb and front gardens, so it
@@ -274,8 +416,8 @@ export function generateFabric(input: FabricInput): FabricResult {
           s.a[0] + ux * along + nx * vergeOffset * side,
           s.a[1] + uz * along + nz * vergeOffset * side,
         ];
-        if (!onLand(at, land, water)) continue;
         if (!clearOfPlots(at, 1.2) || !clearOfLandmarks(at, 1)) continue;
+        if (!onLand(at)) continue;
         // Alternate, so a street gets both light and shade rather than a row of
         // one or the other.
         if (noise(seed) > 0.45) furniture.trees.push(at);
@@ -295,13 +437,13 @@ export function generateFabric(input: FabricInput): FabricResult {
             s.a[0] + ux * along + nx * kerbOffset * side,
             s.a[1] + uz * along + nz * kerbOffset * side,
           ];
-          if (!onLand(at, land, water)) continue;
+          if (!onLand(at)) continue;
           furniture.cars.push({ at, rotation: facing, seed });
         }
     // A crossing at each end, where this street meets the next one.
     for (const end of [0.12, 0.88]) {
       const at: Point = [s.a[0] + dx * end, s.a[1] + dz * end];
-      if (!onLand(at, land, water)) continue;
+      if (!onLand(at)) continue;
       furniture.crossings.push({ at, rotation: facing, width: s.width });
     }
   }
