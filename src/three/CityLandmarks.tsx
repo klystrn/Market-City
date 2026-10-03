@@ -15,6 +15,12 @@ import { Boxes, cylinder, treeGeometry, type Part } from "./SceneryParts";
 // would just overlap. Its real-world identity comes through on the company
 // card instead.
 const GROUND = 1.1;
+// One unit cube shared by every box-shaped piece of every landmark. Written as
+// an inline <boxGeometry /> each of these allocated its own buffer, so a city
+// with sixteen landmarks carried about a hundred identical geometries — half
+// of everything resident in the scene. The meshes already size themselves with
+// `scale`, so the shared buffer is the same cube in every case.
+const unitBox = new THREE.BoxGeometry(1, 1, 1);
 // A short diagonal strut between two points in the landmark's local X-Y plane
 // (X across, Y up), used for bridge cables and roof struts.
 function Beam({
@@ -37,13 +43,12 @@ function Beam({
   const length = Math.hypot(dx, dy) || 0.01;
   const angle = Math.atan2(dy, dx);
   return (
-    <mesh
+    <mesh geometry={unitBox}
       position={[(x1 + x2) / 2, (y1 + y2) / 2, 0]}
       rotation={[0, 0, angle]}
       scale={[length, thickness, thickness]}
     >
-      <boxGeometry />
-      <meshStandardMaterial color={color} />
+            <meshStandardMaterial color={color} />
     </mesh>
   );
 }
@@ -56,13 +61,12 @@ function Wheel({ landmark }: { landmark: CityLandmark }) {
         <meshStandardMaterial color="#c9d6dc" metalness={0.4} roughness={0.4} />
       </mesh>
       {Array.from({ length: 8 }, (_, i) => (
-        <mesh
+        <mesh geometry={unitBox}
           key={`spoke-${i}`}
           rotation={[(i / 8) * Math.PI, Math.PI / 2, 0]}
           scale={[0.06, r * 1.8, 0.06]}
         >
-          <boxGeometry />
-          <meshStandardMaterial color="#dbe4e7" />
+                    <meshStandardMaterial color="#dbe4e7" />
         </mesh>
       ))}
       {/* Rim capsules, the detail that actually reads as "Ferris wheel" rather
@@ -70,19 +74,17 @@ function Wheel({ landmark }: { landmark: CityLandmark }) {
       {Array.from({ length: 16 }, (_, i) => {
         const a = (i / 16) * Math.PI * 2;
         return (
-          <mesh
+          <mesh geometry={unitBox}
             key={`pod-${i}`}
             position={[Math.cos(a) * r * 0.9, Math.sin(a) * r * 0.9, 0]}
             scale={[0.34, 0.24, 0.26]}
           >
-            <boxGeometry />
-            <meshStandardMaterial color="#f2f6f2" />
+                        <meshStandardMaterial color="#f2f6f2" />
           </mesh>
         );
       })}
-      <mesh position={[0, -r * 0.95, 0]} scale={[r * 0.5, r * 0.2, r * 0.5]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#b9c6c9" />
+      <mesh geometry={unitBox} position={[0, -r * 0.95, 0]} scale={[r * 0.5, r * 0.2, r * 0.5]}>
+                <meshStandardMaterial color="#b9c6c9" />
       </mesh>
     </group>
   );
@@ -100,28 +102,25 @@ function SuspensionBridge({ landmark }: { landmark: CityLandmark }) {
       position={[landmark.x, GROUND, landmark.z]}
       rotation={[0, landmark.rotation ?? 0, 0]}
     >
-      <mesh position={[0, deckY, 0]} scale={[r * 2.6, 0.26, 0.42]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#9b8f78" />
+      <mesh geometry={unitBox} position={[0, deckY, 0]} scale={[r * 2.6, 0.26, 0.42]}>
+                <meshStandardMaterial color="#9b8f78" />
       </mesh>
       {[-1, 1].map((side) => (
         <group key={side}>
           {[-1, 1].map((leg) => (
-            <mesh
+            <mesh geometry={unitBox}
               key={leg}
               position={[side * towerX, r * 0.85, leg * r * 0.2]}
               scale={[r * 0.2, r * 1.7, r * 0.2]}
             >
-              <boxGeometry />
-              <meshStandardMaterial color="#c9beac" />
+                            <meshStandardMaterial color="#c9beac" />
             </mesh>
           ))}
-          <mesh
+          <mesh geometry={unitBox}
             position={[side * towerX, r * 1.78, 0]}
             scale={[r * 0.5, r * 0.22, r * 0.46]}
           >
-            <boxGeometry />
-            <meshStandardMaterial color="#b3a68f" />
+                        <meshStandardMaterial color="#b3a68f" />
           </mesh>
           <mesh position={[side * towerX, r * 1.98, 0]}>
             <coneGeometry args={[r * 0.32, r * 0.4, 4]} />
@@ -155,9 +154,8 @@ function TowerBridge({ landmark }: { landmark: CityLandmark }) {
     >
       {[-1, 1].map((side) => (
         <group key={side} position={[side * r * 0.62, 0, 0]}>
-          <mesh position={[0, r * 1.1, 0]} scale={[r * 0.5, r * 2.2, r * 0.5]}>
-            <boxGeometry />
-            <meshStandardMaterial color="#8a95a0" />
+          <mesh geometry={unitBox} position={[0, r * 1.1, 0]} scale={[r * 0.5, r * 2.2, r * 0.5]}>
+                        <meshStandardMaterial color="#8a95a0" />
           </mesh>
           {[
             [-1, -1],
@@ -170,23 +168,19 @@ function TowerBridge({ landmark }: { landmark: CityLandmark }) {
               <meshStandardMaterial color="#5f6a76" />
             </mesh>
           ))}
-          <mesh position={[0, r * 2.5, 0]} scale={[r * 0.56, 0.12, r * 0.56]}>
-            <boxGeometry />
-            <meshStandardMaterial color="#4d5760" />
+          <mesh geometry={unitBox} position={[0, r * 2.5, 0]} scale={[r * 0.56, 0.12, r * 0.56]}>
+                        <meshStandardMaterial color="#4d5760" />
           </mesh>
         </group>
       ))}
-      <mesh position={[0, r * 1.9, 0]} scale={[r * 1.24, 0.22, 0.5]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#8fa3ac" />
+      <mesh geometry={unitBox} position={[0, r * 1.9, 0]} scale={[r * 1.24, 0.22, 0.5]}>
+                <meshStandardMaterial color="#8fa3ac" />
       </mesh>
-      <mesh position={[0, 0.6, 0]} scale={[r * 2.6, 0.3, r * 0.5]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#b4a893" />
+      <mesh geometry={unitBox} position={[0, 0.6, 0]} scale={[r * 2.6, 0.3, r * 0.5]}>
+                <meshStandardMaterial color="#b4a893" />
       </mesh>
-      <mesh position={[0, 0.42, 0]} scale={[r * 2.6, 0.1, r * 0.56]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#2f5f8a" />
+      <mesh geometry={unitBox} position={[0, 0.42, 0]} scale={[r * 2.6, 0.1, r * 0.56]}>
+                <meshStandardMaterial color="#2f5f8a" />
       </mesh>
     </group>
   );
@@ -198,13 +192,11 @@ function Statue({ landmark }: { landmark: CityLandmark }) {
   const h = landmark.height ?? 12;
   return (
     <group position={[landmark.x, GROUND, landmark.z]}>
-      <mesh position={[0, h * 0.09, 0]} scale={[h * 0.5, h * 0.18, h * 0.5]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#9b9082" />
+      <mesh geometry={unitBox} position={[0, h * 0.09, 0]} scale={[h * 0.5, h * 0.18, h * 0.5]}>
+                <meshStandardMaterial color="#9b9082" />
       </mesh>
-      <mesh position={[0, h * 0.22, 0]} scale={[h * 0.36, h * 0.16, h * 0.36]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#a89d8d" />
+      <mesh geometry={unitBox} position={[0, h * 0.22, 0]} scale={[h * 0.36, h * 0.16, h * 0.36]}>
+                <meshStandardMaterial color="#a89d8d" />
       </mesh>
       <mesh position={[0, h * 0.56, 0]}>
         <coneGeometry args={[h * 0.16, h * 0.5, 8]} />
@@ -226,13 +218,12 @@ function Statue({ landmark }: { landmark: CityLandmark }) {
           </mesh>
         );
       })}
-      <mesh
+      <mesh geometry={unitBox}
         position={[h * 0.13, h * 0.78, 0]}
         rotation={[0, 0, -0.5]}
         scale={[h * 0.32, h * 0.05, h * 0.05]}
       >
-        <boxGeometry />
-        <meshStandardMaterial color="#6fae9c" />
+                <meshStandardMaterial color="#6fae9c" />
       </mesh>
       <mesh position={[h * 0.22, h * 0.95, 0]}>
         <coneGeometry args={[h * 0.045, h * 0.09, 6]} />
@@ -252,9 +243,8 @@ function TentDome({ landmark }: { landmark: CityLandmark }) {
   const r = landmark.radius;
   return (
     <group position={[landmark.x, GROUND, landmark.z]}>
-      <mesh position={[0, r * 0.4, 0]} scale={[r * 1.5, r * 0.8, r * 1.5]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#ddd2c0" />
+      <mesh geometry={unitBox} position={[0, r * 0.4, 0]} scale={[r * 1.5, r * 0.8, r * 1.5]}>
+                <meshStandardMaterial color="#ddd2c0" />
       </mesh>
       <mesh position={[0, r * 0.8, 0]}>
         <sphereGeometry
@@ -266,21 +256,19 @@ function TentDome({ landmark }: { landmark: CityLandmark }) {
           roughness={0.4}
         />
       </mesh>
-      <mesh position={[0, r * 1.5, 0]} scale={[0.14, r * 0.4, 0.14]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#e8dcc4" />
+      <mesh geometry={unitBox} position={[0, r * 1.5, 0]} scale={[0.14, r * 0.4, 0.14]}>
+                <meshStandardMaterial color="#e8dcc4" />
       </mesh>
       {Array.from({ length: 8 }, (_, i) => {
         const a = (i / 8) * Math.PI * 2;
         return (
-          <mesh
+          <mesh geometry={unitBox}
             key={i}
             position={[Math.cos(a) * r * 1.5, r * 0.55, Math.sin(a) * r * 1.5]}
             rotation={[0, 0, 0]}
             scale={[0.08, r * 1.1, 0.08]}
           >
-            <boxGeometry />
-            <meshStandardMaterial color="#e0c452" />
+                        <meshStandardMaterial color="#e0c452" />
           </mesh>
         );
       })}
@@ -294,9 +282,8 @@ function StPauls({ landmark }: { landmark: CityLandmark }) {
   const r = landmark.radius;
   return (
     <group position={[landmark.x, GROUND, landmark.z]}>
-      <mesh position={[0, r * 0.3, 0]} scale={[r * 1.8, r * 0.6, r * 1.1]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#d8d0bd" />
+      <mesh geometry={unitBox} position={[0, r * 0.3, 0]} scale={[r * 1.8, r * 0.6, r * 1.1]}>
+                <meshStandardMaterial color="#d8d0bd" />
       </mesh>
       <mesh position={[0, r * 0.85, 0]}>
         <cylinderGeometry args={[r * 0.62, r * 0.68, r * 0.7, 16]} />
@@ -306,9 +293,8 @@ function StPauls({ landmark }: { landmark: CityLandmark }) {
         <sphereGeometry args={[r * 0.62, 16, 10, 0, Math.PI * 2, 0, Math.PI / 2]} />
         <meshStandardMaterial color="#8fa6ac" metalness={0.2} roughness={0.5} />
       </mesh>
-      <mesh position={[0, r * 1.86, 0]} scale={[0.16, r * 0.34, 0.16]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#cfc7b1" />
+      <mesh geometry={unitBox} position={[0, r * 1.86, 0]} scale={[0.16, r * 0.34, 0.16]}>
+                <meshStandardMaterial color="#cfc7b1" />
       </mesh>
       <mesh position={[0, r * 2.06, 0]}>
         <coneGeometry args={[r * 0.1, r * 0.18, 8]} />
@@ -327,17 +313,15 @@ function Greenwich({ landmark }: { landmark: CityLandmark }) {
         <cylinderGeometry args={[r * 1.3, r * 1.5, r * 0.36, 16]} />
         <meshStandardMaterial color="#7fae6c" />
       </mesh>
-      <mesh position={[0, r * 0.55, 0]} scale={[r * 1.1, r * 0.5, r * 0.8]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#d3c7a9" />
+      <mesh geometry={unitBox} position={[0, r * 0.55, 0]} scale={[r * 1.1, r * 0.5, r * 0.8]}>
+                <meshStandardMaterial color="#d3c7a9" />
       </mesh>
       <mesh position={[r * 0.3, r * 0.92, 0]}>
         <sphereGeometry args={[r * 0.32, 12, 8]} />
         <meshStandardMaterial color="#4c5a63" metalness={0.3} roughness={0.4} />
       </mesh>
-      <mesh position={[-r * 0.3, r * 1.05, 0]} scale={[0.06, r * 0.5, 0.06]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#8a7f6a" />
+      <mesh geometry={unitBox} position={[-r * 0.3, r * 1.05, 0]} scale={[0.06, r * 0.5, 0.06]}>
+                <meshStandardMaterial color="#8a7f6a" />
       </mesh>
       <mesh position={[-r * 0.3, r * 1.32, 0]}>
         <sphereGeometry args={[r * 0.1, 8, 8]} />
@@ -396,25 +380,22 @@ function Spire({ landmark }: { landmark: CityLandmark }) {
   const r = landmark.radius;
   return (
     <group position={[landmark.x, GROUND, landmark.z]}>
-      <mesh position={[0, h * 0.32, 0]} scale={[r * 1.7, h * 0.64, r * 1.7]}>
-        <boxGeometry />
-        <meshStandardMaterial
+      <mesh geometry={unitBox} position={[0, h * 0.32, 0]} scale={[r * 1.7, h * 0.64, r * 1.7]}>
+                <meshStandardMaterial
           color={landmark.color ?? "#9fb3bd"}
           metalness={0.3}
           roughness={0.4}
         />
       </mesh>
-      <mesh position={[0, h * 0.76, 0]} scale={[r * 1.1, h * 0.26, r * 1.1]}>
-        <boxGeometry />
-        <meshStandardMaterial color={landmark.color ?? "#adc0c8"} />
+      <mesh geometry={unitBox} position={[0, h * 0.76, 0]} scale={[r * 1.1, h * 0.26, r * 1.1]}>
+                <meshStandardMaterial color={landmark.color ?? "#adc0c8"} />
       </mesh>
       <mesh position={[0, h * 0.95, 0]}>
         <coneGeometry args={[r * 0.5, h * 0.16, 6]} />
         <meshStandardMaterial color="#c8d6da" metalness={0.5} roughness={0.3} />
       </mesh>
-      <mesh position={[0, h * 1.12, 0]} scale={[0.1, h * 0.2, 0.1]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#dbe5e8" />
+      <mesh geometry={unitBox} position={[0, h * 1.12, 0]} scale={[0.1, h * 0.2, 0.1]}>
+                <meshStandardMaterial color="#dbe5e8" />
       </mesh>
     </group>
   );
@@ -426,21 +407,17 @@ function EmpireState({ landmark }: { landmark: CityLandmark }) {
   const r = landmark.radius;
   return (
     <group position={[landmark.x, GROUND, landmark.z]}>
-      <mesh position={[0, h * 0.28, 0]} scale={[r * 1.7, h * 0.56, r * 1.7]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#b7a98d" />
+      <mesh geometry={unitBox} position={[0, h * 0.28, 0]} scale={[r * 1.7, h * 0.56, r * 1.7]}>
+                <meshStandardMaterial color="#b7a98d" />
       </mesh>
-      <mesh position={[0, h * 0.64, 0]} scale={[r * 1.15, h * 0.24, r * 1.15]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#c2b596" />
+      <mesh geometry={unitBox} position={[0, h * 0.64, 0]} scale={[r * 1.15, h * 0.24, r * 1.15]}>
+                <meshStandardMaterial color="#c2b596" />
       </mesh>
-      <mesh position={[0, h * 0.82, 0]} scale={[r * 0.7, h * 0.12, r * 0.7]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#cabf9e" />
+      <mesh geometry={unitBox} position={[0, h * 0.82, 0]} scale={[r * 0.7, h * 0.12, r * 0.7]}>
+                <meshStandardMaterial color="#cabf9e" />
       </mesh>
-      <mesh position={[0, h * 0.95, 0]} scale={[0.12, h * 0.22, 0.12]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#d8cfae" />
+      <mesh geometry={unitBox} position={[0, h * 0.95, 0]} scale={[0.12, h * 0.22, 0.12]}>
+                <meshStandardMaterial color="#d8cfae" />
       </mesh>
       <mesh position={[0, h * 1.08, 0]}>
         <coneGeometry args={[0.05, h * 0.1, 6]} />
@@ -460,9 +437,8 @@ function Chrysler({ landmark }: { landmark: CityLandmark }) {
   const r = landmark.radius;
   return (
     <group position={[landmark.x, GROUND, landmark.z]}>
-      <mesh position={[0, h * 0.34, 0]} scale={[r * 1.6, h * 0.68, r * 1.6]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#c7bfae" />
+      <mesh geometry={unitBox} position={[0, h * 0.34, 0]} scale={[r * 1.6, h * 0.68, r * 1.6]}>
+                <meshStandardMaterial color="#c7bfae" />
       </mesh>
       {[0.7, 0.82, 0.92].map((t, i) => (
         <mesh key={i} position={[0, h * t, 0]}>
@@ -472,9 +448,8 @@ function Chrysler({ landmark }: { landmark: CityLandmark }) {
           <meshStandardMaterial color="#d7d2c2" metalness={0.55} roughness={0.25} />
         </mesh>
       ))}
-      <mesh position={[0, h * 1.02, 0]} scale={[0.1, h * 0.22, 0.1]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#e4e0d2" metalness={0.5} roughness={0.2} />
+      <mesh geometry={unitBox} position={[0, h * 1.02, 0]} scale={[0.1, h * 0.22, 0.1]}>
+                <meshStandardMaterial color="#e4e0d2" metalness={0.5} roughness={0.2} />
       </mesh>
     </group>
   );
@@ -493,20 +468,18 @@ function OneWtc({ landmark }: { landmark: CityLandmark }) {
         const rad = r * (1 - t * 0.55);
         const segH = h / segs;
         return (
-          <mesh
+          <mesh geometry={unitBox}
             key={i}
             position={[0, segH * (i + 0.5), 0]}
             rotation={[0, Math.PI / 4, 0]}
             scale={[rad * 1.3, segH * 1.02, rad * 1.3]}
           >
-            <boxGeometry />
-            <meshStandardMaterial color="#a9c3cc" metalness={0.4} roughness={0.3} />
+                        <meshStandardMaterial color="#a9c3cc" metalness={0.4} roughness={0.3} />
           </mesh>
         );
       })}
-      <mesh position={[0, h + 1, 0]} scale={[0.1, 2, 0.1]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#cfe0e5" />
+      <mesh geometry={unitBox} position={[0, h + 1, 0]} scale={[0.1, 2, 0.1]}>
+                <meshStandardMaterial color="#cfe0e5" />
       </mesh>
     </group>
   );
@@ -566,9 +539,8 @@ function CanaryWharf({ landmark }: { landmark: CityLandmark }) {
   const r = landmark.radius;
   return (
     <group position={[landmark.x, GROUND, landmark.z]}>
-      <mesh position={[0, h / 2, 0]} scale={[r * 1.1, h, r * 1.1]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#c3ccd1" metalness={0.35} roughness={0.3} />
+      <mesh geometry={unitBox} position={[0, h / 2, 0]} scale={[r * 1.1, h, r * 1.1]}>
+                <meshStandardMaterial color="#c3ccd1" metalness={0.35} roughness={0.3} />
       </mesh>
       <mesh position={[0, h + r * 0.55, 0]}>
         <coneGeometry args={[r * 0.85, r * 1.1, 4]} />
@@ -581,26 +553,23 @@ function Museum({ landmark }: { landmark: CityLandmark }) {
   const r = landmark.radius;
   return (
     <group position={[landmark.x, GROUND, landmark.z]}>
-      <mesh position={[0, r * 0.35, 0]} scale={[r * 2, r * 0.7, r * 1.5]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#ddd3bd" />
+      <mesh geometry={unitBox} position={[0, r * 0.35, 0]} scale={[r * 2, r * 0.7, r * 1.5]}>
+                <meshStandardMaterial color="#ddd3bd" />
       </mesh>
       {Array.from({ length: 5 }, (_, i) => (
-        <mesh
+        <mesh geometry={unitBox}
           key={i}
           position={[(i - 2) * r * 0.36, r * 0.42, r * 0.78]}
           scale={[r * 0.13, r * 0.84, r * 0.13]}
         >
-          <boxGeometry />
-          <meshStandardMaterial color="#f2e9d3" />
+                    <meshStandardMaterial color="#f2e9d3" />
         </mesh>
       ))}
-      <mesh
+      <mesh geometry={unitBox}
         position={[0, r * 0.86, r * 0.5]}
         scale={[r * 1.9, r * 0.16, r * 0.8]}
       >
-        <boxGeometry />
-        <meshStandardMaterial color="#c9bda4" />
+                <meshStandardMaterial color="#c9bda4" />
       </mesh>
     </group>
   );
@@ -613,13 +582,11 @@ function TateModern({ landmark }: { landmark: CityLandmark }) {
   const chimneyH = r * 2.6;
   return (
     <group position={[landmark.x, GROUND, landmark.z]}>
-      <mesh position={[0, r * 0.45, 0]} scale={[r * 2.2, r * 0.9, r * 1.3]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#8a5a48" />
+      <mesh geometry={unitBox} position={[0, r * 0.45, 0]} scale={[r * 2.2, r * 0.9, r * 1.3]}>
+                <meshStandardMaterial color="#8a5a48" />
       </mesh>
-      <mesh position={[0, chimneyH / 2, 0]} scale={[r * 0.34, chimneyH, r * 0.34]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#7a4d3d" />
+      <mesh geometry={unitBox} position={[0, chimneyH / 2, 0]} scale={[r * 0.34, chimneyH, r * 0.34]}>
+                <meshStandardMaterial color="#7a4d3d" />
       </mesh>
     </group>
   );
@@ -632,18 +599,15 @@ function WashingtonSquareArch({ landmark }: { landmark: CityLandmark }) {
   return (
     <group position={[landmark.x, GROUND, landmark.z]}>
       {[-1, 1].map((side) => (
-        <mesh key={side} position={[side * r * 0.55, r * 0.7, 0]} scale={[r * 0.32, r * 1.4, r * 0.5]}>
-          <boxGeometry />
-          <meshStandardMaterial color="#e7e2d3" />
+        <mesh geometry={unitBox} key={side} position={[side * r * 0.55, r * 0.7, 0]} scale={[r * 0.32, r * 1.4, r * 0.5]}>
+                    <meshStandardMaterial color="#e7e2d3" />
         </mesh>
       ))}
-      <mesh position={[0, r * 1.5, 0]} scale={[r * 1.5, r * 0.3, r * 0.5]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#e7e2d3" />
+      <mesh geometry={unitBox} position={[0, r * 1.5, 0]} scale={[r * 1.5, r * 0.3, r * 0.5]}>
+                <meshStandardMaterial color="#e7e2d3" />
       </mesh>
-      <mesh position={[0, r * 0.75, 0]} scale={[r * 0.7, r * 1.2, r * 0.3]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#cfd6c9" />
+      <mesh geometry={unitBox} position={[0, r * 0.75, 0]} scale={[r * 0.7, r * 1.2, r * 0.3]}>
+                <meshStandardMaterial color="#cfd6c9" />
       </mesh>
     </group>
   );
@@ -652,40 +616,34 @@ function Palace({ landmark }: { landmark: CityLandmark }) {
   const r = landmark.radius;
   return (
     <group position={[landmark.x, GROUND, landmark.z]}>
-      <mesh position={[0, r * 0.36, 0]} scale={[r * 2.4, r * 0.72, r * 1.1]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#d9cdb4" />
+      <mesh geometry={unitBox} position={[0, r * 0.36, 0]} scale={[r * 2.4, r * 0.72, r * 1.1]}>
+                <meshStandardMaterial color="#d9cdb4" />
       </mesh>
       {[-1, 1].map((side) => (
-        <mesh
+        <mesh geometry={unitBox}
           key={side}
           position={[side * r * 1.1, r * 0.3, r * 0.6]}
           scale={[r * 0.55, r * 0.6, r * 0.9]}
         >
-          <boxGeometry />
-          <meshStandardMaterial color="#cfc2a8" />
+                    <meshStandardMaterial color="#cfc2a8" />
         </mesh>
       ))}
       {/* Portico columns, so it reads as a state building rather than a plain
           block — Buckingham Palace is the only palace-kind landmark, so this
           is the generic renderer rather than a bespoke override. */}
       {[-0.5, -0.17, 0.17, 0.5].map((cx, i) => (
-        <mesh key={i} position={[cx * r * 1.6, r * 0.34, r * 0.62]} scale={[0.14, r * 0.6, 0.14]}>
-          <boxGeometry />
-          <meshStandardMaterial color="#efe6d2" />
+        <mesh geometry={unitBox} key={i} position={[cx * r * 1.6, r * 0.34, r * 0.62]} scale={[0.14, r * 0.6, 0.14]}>
+                    <meshStandardMaterial color="#efe6d2" />
         </mesh>
       ))}
-      <mesh position={[0, r * 0.78, 0]} scale={[r * 2.5, r * 0.12, r * 1.2]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#a9a08a" />
+      <mesh geometry={unitBox} position={[0, r * 0.78, 0]} scale={[r * 2.5, r * 0.12, r * 1.2]}>
+                <meshStandardMaterial color="#a9a08a" />
       </mesh>
-      <mesh position={[0, r * 1.05, 0]} scale={[0.06, r * 0.36, 0.06]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#8a7f6a" />
+      <mesh geometry={unitBox} position={[0, r * 1.05, 0]} scale={[0.06, r * 0.36, 0.06]}>
+                <meshStandardMaterial color="#8a7f6a" />
       </mesh>
-      <mesh position={[r * 0.16, r * 1.2, 0]} scale={[r * 0.28, r * 0.16, 0.02]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#c94c3f" />
+      <mesh geometry={unitBox} position={[r * 0.16, r * 1.2, 0]} scale={[r * 0.28, r * 0.16, 0.02]}>
+                <meshStandardMaterial color="#c94c3f" />
       </mesh>
     </group>
   );
@@ -694,9 +652,8 @@ function Terminal({ landmark }: { landmark: CityLandmark }) {
   const r = landmark.radius;
   return (
     <group position={[landmark.x, GROUND, landmark.z]}>
-      <mesh position={[0, r * 0.34, 0]} scale={[r * 2.1, r * 0.68, r * 1.4]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#c8b79b" />
+      <mesh geometry={unitBox} position={[0, r * 0.34, 0]} scale={[r * 2.1, r * 0.68, r * 1.4]}>
+                <meshStandardMaterial color="#c8b79b" />
       </mesh>
       <mesh position={[0, r * 0.72, 0]} rotation={[0, 0, Math.PI / 2]}>
         <cylinderGeometry
@@ -724,9 +681,8 @@ function Battersea({ landmark }: { landmark: CityLandmark }) {
   const chimneyH = r * 2.2;
   return (
     <group position={[landmark.x, GROUND, landmark.z]}>
-      <mesh position={[0, r * 0.5, 0]} scale={[r * 2.1, r, r * 1.3]}>
-        <boxGeometry />
-        <meshStandardMaterial color="#b5735a" />
+      <mesh geometry={unitBox} position={[0, r * 0.5, 0]} scale={[r * 2.1, r, r * 1.3]}>
+                <meshStandardMaterial color="#b5735a" />
       </mesh>
       {[
         [-1, -1],
@@ -734,9 +690,8 @@ function Battersea({ landmark }: { landmark: CityLandmark }) {
         [-1, 1],
         [1, 1],
       ].map(([sx, sz], i) => (
-        <mesh key={i} position={[sx * r * 0.78, chimneyH / 2, sz * r * 0.5]} scale={[r * 0.16, chimneyH, r * 0.16]}>
-          <boxGeometry />
-          <meshStandardMaterial color="#e9e4da" />
+        <mesh geometry={unitBox} key={i} position={[sx * r * 0.78, chimneyH / 2, sz * r * 0.5]} scale={[r * 0.16, chimneyH, r * 0.16]}>
+                    <meshStandardMaterial color="#e9e4da" />
         </mesh>
       ))}
     </group>

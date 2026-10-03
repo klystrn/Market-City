@@ -346,39 +346,41 @@ export default function UrbanFabric({
         if (noise2(i * 7 + 1) > 0.6) litWindows.push(...windows.splice(i, 1));
       litLamps.push(...lampHeads.splice(0, lampHeads.length));
     }
+    // Everything that is a cube in the default material, in draw order: ground
+    // patches first so the things standing on them sort above.
+    const windowTint = dark ? "#f3d9a2" : "#9fb9c6";
+    for (const w of windows) w.color ??= windowTint;
+    for (const t of trunks) t.color ??= "#7b6248";
     return {
-      walls,
-      roofs,
-      windows,
-      trims,
-      trunks,
+      boxes: [
+        ...ground,
+        ...crossings,
+        ...furnishings,
+        ...walls,
+        ...roofs,
+        ...trims,
+        ...windows,
+        ...cars,
+        ...lampHeads,
+      ],
+      posts: [...trunks, ...lamps],
       crowns,
-      lamps,
-      lampHeads,
-      cars,
-      crossings,
-      ground,
-      furnishings,
       litWindows,
       litLamps,
     };
   }, [fabric, season, dark, night, detail]);
+  // One batch per geometry-and-material combination rather than one per kind of
+  // thing. Colour travels per instance, so ground, crossings, walls, roofs,
+  // trims, windows, cars and street furniture are all the same cube with the
+  // same material and belong in a single instanced mesh; separating them by
+  // what they represent cost a draw call each for no rendering reason.
+  // What genuinely cannot merge: the two other geometries, and anything that
+  // lights itself, since emissiveness is a material property.
   return (
     <group>
-      <Boxes parts={parts.ground} />
-      <Boxes parts={parts.crossings} />
-      <Boxes parts={parts.furnishings} />
-      <Boxes parts={parts.walls} />
-      <Boxes parts={parts.roofs} />
-      <Boxes parts={parts.trims} />
-      <Boxes parts={parts.windows} color={dark ? "#f3d9a2" : "#9fb9c6"} />
-      <Boxes parts={parts.cars} />
-      <Boxes parts={parts.trunks} color="#7b6248" geometry={cylinder} />
+      <Boxes parts={parts.boxes} />
+      <Boxes parts={parts.posts} color="#5c6165" geometry={cylinder} />
       <Boxes parts={parts.crowns} geometry={treeGeometry} />
-      <Boxes parts={parts.lamps} color="#5c6165" geometry={cylinder} />
-      <Boxes parts={parts.lampHeads} />
-      {/* Lit at night: a separate instanced mesh, because emissiveness is a
-          material property and these are the only instances that have it. */}
       <Boxes
         parts={parts.litWindows}
         color="#ffd07a"

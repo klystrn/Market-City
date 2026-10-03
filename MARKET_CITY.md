@@ -3159,6 +3159,51 @@ coerces instead.
 
 ---
 
+## 75.17 Draw calls, and a proposal the measurements killed (owner follow-up)
+
+With the readout in place it became possible to attribute the frame rather than
+guess at it. Turning each layer off in turn, on New York at the default camera:
+
+| Layer | Draw calls | Geometries |
+| --- | --- | --- |
+| District landmarks | 97 | 101 |
+| City blocks (the fabric) | 12 | 0 |
+| Everything else | 121 | 121 |
+
+**Landmarks dominated, and for an avoidable reason.** Every box-shaped piece of
+every landmark declared its own inline `<boxGeometry />`, and each of those
+allocates a separate buffer even though all fifty-one are the same unit cube —
+the meshes already size themselves with `scale`. Sharing one cube took resident
+geometries from 222 to 151.
+
+**Batching by material instead of by meaning.** The fabric drew a separate
+instanced mesh for ground, crossings, walls, roofs, trims, windows, cars and
+street furniture. Colour travels per instance, so all of those are the same
+cube in the same material and belong in one mesh; they were separated by what
+they represent, which is a reason to name them differently and not a reason to
+draw them apart. Twelve batches became three. Only the two other geometries and
+the self-lit night instances genuinely cannot merge, since emissiveness is a
+material property.
+
+**Per-district culling turned out to be a bad trade, and the numbers are why.**
+Zooming from the overview into one district takes draw calls from 222 to 136 —
+landmark meshes are small and separate, so the frustum already removes most of
+them — but triangles fall only from 383k to 380k. The triangles are in the
+instanced meshes, which are one object each and so are all-or-nothing. Splitting
+them into spatial tiles would let those triangles cull, at the cost of
+multiplying their draw calls by the tile count at the overview, where every tile
+is visible anyway. That trades the resource this scene has plenty of for the one
+it is actually short of: 380k triangles is unremarkable for any GPU, while
+several hundred draw calls is the real cost on a phone. So this proposal is not
+implemented, and the measurement is the reason.
+
+The remaining prize is the 97 landmark draw calls, which needs those meshes
+instanced rather than merely sharing a geometry. That is a rewrite of how each
+landmark emits its pieces, not a mechanical change, and it is better done
+deliberately than folded into this pass.
+
+---
+
 # 76. Idea Backlog
 
 Proposals only. Nothing here is approved scope until the owner selects it. Items
