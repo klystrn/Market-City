@@ -529,7 +529,7 @@ export const london: CityDefinition = {
   tierOutline: londonTierOutline,
   bakedLayout,
   // Measured 133 lots, 16 landmarks, 144 road segments, 26 labels.
-  budget: { lots: 180, landmarks: 24, roadSegments: 220, labels: 60 },
+  budget: { lots: 180, landmarks: 24, roadSegments: 220, labels: 60, fabric: 520 },
   surround: "land",
   camera: {
     offset: [250, 275, 300],

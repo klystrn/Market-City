@@ -2915,6 +2915,66 @@ is therefore a slower boot, never a wrong city.
 
 ---
 
+## 75.12 The ordinary city (owner follow-up)
+
+The owner asked for a more realistic city, in the vein of the city-building
+games. The diagnosis was that every building in Market City carried market
+data: company lots, landmarks, and nothing else. A real city is mostly
+*ordinary* buildings — terraces, houses, a corner shop — and without them a
+layout reads as a diagram of a market rather than a place. New York and London
+had no such buildings at all; their open ground was bare green between road
+grids. Tokyo had a grid-scattered filler of its own.
+
+**One generator, placed by fronting streets.** `src/domain/cities/fabric.ts`
+generates the fabric for all three cities. It is pure and deterministic, so the
+same city always builds the same way and a test can count it. Buildings are
+placed by *fronting a road* rather than scattering on a grid: a real
+neighbourhood is a line of buildings facing a street at a consistent setback,
+and following the road network means the fabric inherits whatever shape each
+city already has — a Manhattan grid, a London radial, a Tokyo town — instead of
+imposing a fourth one on top.
+
+**Blocks are deep, not a single line.** Rows step back from each street into
+the block interior, thinning as they go, until they run out of land or hit a
+company lot, a landmark or another building. Without this New York stayed
+nearly empty: it has few roads and very deep boroughs, so street frontage alone
+filled almost nothing. Shops are generated only on the front row — a row deep
+inside a block has no passing trade to open onto, and a shopfront drawn there
+would face the back of another building.
+
+**Three kinds, and what each one is for.** A terrace is the ordinary case; a
+house carries a pitched roof and chimney so some of the skyline is not flat;
+a shop has a glazed ground floor and an awning, which is most of what makes a
+shopping street legible from a distance. All of them use muted wall colours and
+never the green and red of a daily move, and none is tall enough to compete with
+a mega-cap for the eye. The ordinary city is the backdrop; the market is still
+the subject.
+
+**Street furniture does the rest.** Trees and lamp posts alternate along the
+verge, parked cars hug the kerb, and zebra stripes mark where one street meets
+another. The cars are the cheapest possible cue that a strip of grey is a street
+someone uses rather than a path.
+
+**Tokyo's own filler was deleted rather than kept alongside.** Two generators
+for the same thing would have drifted apart, and the shared one is better —
+Tokyo gains pitched roofs, shopfronts and parked cars that its grid never had.
+
+**The budget gained a `fabric` entry, and it works the other way round.** The
+other budget figures are measured after the fact and capped from above. This one
+is a hard cap passed *into* the generator, because the fabric grows with the road
+network and a city that gained a few streets would otherwise quietly gain
+hundreds of instances. The risk therefore runs the other way, so the test asserts
+a floor as well: a city whose roads or land changed such that almost nothing can
+front a street would pass every other check while looking deserted.
+
+**Degrading thins rather than hides.** The first wiring dropped the fabric
+entirely at the lowest quality tier, which did not read as lower detail — it
+read as a city missing most of its buildings. A struggling device now keeps
+every third building, spread across the whole city rather than truncated to a
+dense corner and an empty remainder.
+
+---
+
 # 76. Idea Backlog
 
 Proposals only. Nothing here is approved scope until the owner selects it. Items
