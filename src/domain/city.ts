@@ -1,7 +1,7 @@
 import type { Company, Plot } from "./types";
 import { sectors, cityStreets } from "./geography";
 import { subsectors } from "./subsectors";
-import { signatureForms } from "./forms";
+import { formFor } from "./forms";
 export { sectors } from "./geography";
 export function createPlots(companies: Company[]): Plot[] {
   const streets = cityStreets();
@@ -31,11 +31,11 @@ export function createPlots(companies: Company[]): Plot[] {
             width,
             depth,
             height: 4 + Math.log10(c.marketCap / 4e10 + 1) * 11,
-            variant:
-              signatureForms[c.ticker] ??
-              (group.tickers.indexOf(c.ticker) +
-                subsectors.indexOf(group) * 3) %
-                12,
+            variant: formFor(
+              c.ticker,
+              group.tickers.indexOf(c.ticker) + subsectors.indexOf(group) * 3,
+              c.sector,
+            ),
             // Tokyo's market-cap band is the sector town itself, so the company
             // card can name it the way the zone and borough cities do.
             tier: sector.id,

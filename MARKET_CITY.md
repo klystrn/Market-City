@@ -2975,6 +2975,68 @@ dense corner and an empty remainder.
 
 ---
 
+## 75.13 Making it look like a city (owner follow-up)
+
+Four changes, all chosen by the owner: building shapes that say what a company
+does, block interiors, a brighter palette, and lights after the close.
+
+**A building's shape now comes from its industry, not its index position.**
+`formFor` previously picked one of twelve massings from a company's position in
+the listing, so a bank and a warehouse operator could end up with the same
+silhouette by accident of ordering — the shape said nothing true. Each sector
+now draws from its own set: financials get the crystalline spire and the deco
+setback, materials and energy get broad low plant masses, real estate gets the
+terraces and the oval, technology the glass shafts and campuses. Several per
+sector, so a street is not a row of identical buildings. The sixteen curated
+signature buildings still override everything, because their brand accents are
+positioned for a flat centred facade and a sector form would put a logo on a
+taper.
+
+What did *not* change is as important: height and footprint remain the
+market-cap encoding, and colour remains the daily move. Industrial buildings are
+not squashed down to look like real plants, however much that would help the
+illusion, because height means something here.
+
+**This broke the baked-layout cache, which was a flaw in the cache.** Every
+lot's `variant` changed without a single company changing, so the structural key
+still matched and the stale fixtures silently won. The key now carries a
+`LAYOUT_VERSION`, bumped whenever placement logic changes. The original key was
+right that prices must not invalidate a layout and wrong that the roster was the
+only other input: the generator is an input too.
+
+**Blocks have interiors.** A gap in a back row is no longer bare ground: it
+becomes a garden square with trees and a bench, a paved square with a fountain,
+or a car park with bays and a couple of cars in them. Car parks only appear on
+the row immediately behind the frontage, since a car has to be able to reach
+one.
+
+**The palette is brighter, but still cannot lie.** The owner asked for something
+more toy-like, so walls, roofs and awnings moved to saturated blues, yellows,
+teals, violets and terracottas — and deliberately *not* green or red. Those two
+are the daily-change encoding, and a terrace painted red would read as a company
+having a bad day. Avoiding two hues leaves plenty of range, and height still
+keeps the fabric below the towers.
+
+**Lights come on when the exchange closes, not when the market falls.** The
+scene already had a `night` flag meaning the session is closed or after-hours,
+and a `dark` flag meaning the index is *down*. Lighting the windows from `dark`
+would have made a falling market look like nightfall, so the lights key to
+`night`. The first attempt lit windows while leaving full daylight, which read
+as glowing paint rather than lights; after-hours now genuinely dims and cools
+the scene — enough to make a lit window register, not so much that a company's
+green or red stops being legible. Roughly two windows in five light up, fixed
+per building so the city does not flicker as the camera moves.
+
+**A real orientation bug surfaced while doing this.** Fabric buildings were
+rotated so their depth ran *along* the street, and their windows and shopfronts
+were offset along the wrong local axis — which only became visible once the
+windows glowed and appeared as diagonal slashes floating off the walls. The
+rotation convention is now stated on the type: at a block's rotation its local X
+axis points at the road, so width runs along the street and depth back from it,
+and anything mounted on the front wall offsets by `(cos r, -sin r)`.
+
+---
+
 # 76. Idea Backlog
 
 Proposals only. Nothing here is approved scope until the owner selects it. Items

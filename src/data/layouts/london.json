@@ -1,6 +1,6 @@
 {
   "city": "london",
-  "key": "AAPL:technology:hardware:3400000000000|ABBV:healthcare:pharma:340000000000|ABNB:consumer:travel-dining:80000000000|ABT:healthcare:medical-technology:200000000000|ACN:technology:it-services:220000000000|ADBE:technology:software:230000000000|ADI:technology:semiconductors:115000000000|ADP:industrials:transport-services:115000000000|ADSK:technology:software:60000000000|AEP:utilities:grid-utilities:55000000000|AMAT:technology:semiconductors:160000000000|AMD:technology:semiconductors:240000000000|AMGN:healthcare:pharma:170000000000|AMT:realestate:digital-property:100000000000|AMZN:consumer:retail:1950000000000|APD:materials:chemicals:65000000000|AVGO:technology:semiconductors:820000000000|AXP:financials:payments:180000000000|BAC:financials:banking:310000000000|BKNG:consumer:travel-dining:145000000000|BLK:financials:capital-markets:135000000000|BMY:healthcare:pharma:105000000000|BRK.B:financials:capital-markets:960000000000|C:financials:banking:120000000000|CAT:industrials:machinery:180000000000|CDNS:technology:software:74000000000|CEG:utilities:power:70000000000|CHTR:communications:telecom:48000000000|CL:staples:household-food:85000000000|CMCSA:communications:telecom:155000000000|CMG:consumer:travel-dining:80000000000|COIN:financials:capital-markets:55000000000|COP:energy:oil-gas:125000000000|COST:staples:essentials-retail:390000000000|CRM:technology:software:280000000000|CSCO:technology:hardware:210000000000|CSGP:realestate:commercial-property:31000000000|CSX:industrials:transport-services:66000000000|CTAS:industrials:commercial-services:78000000000|CVX:energy:oil-gas:275000000000|DE:industrials:machinery:110000000000|DHR:healthcare:medical-technology:185000000000|DIS:communications:internet-media:175000000000|DUK:utilities:grid-utilities:90000000000|EOG:energy:energy-services:70000000000|EQIX:realestate:digital-property:85000000000|ETN:industrials:machinery:130000000000|EXC:utilities:grid-utilities:39000000000|FANG:energy:oil-gas:52000000000|FAST:industrials:commercial-services:42000000000|FCX:materials:mining:65000000000|GE:industrials:aerospace:185000000000|GILD:healthcare:pharma:105000000000|GOOGL:communications:internet-media:2050000000000|GS:financials:capital-markets:160000000000|HD:consumer:retail:385000000000|HON:industrials:machinery:135000000000|IBM:technology:hardware:200000000000|IDXX:healthcare:medical-technology:40000000000|INTU:technology:software:175000000000|ISRG:healthcare:medical-technology:170000000000|JNJ:healthcare:pharma:390000000000|JPM:financials:banking:610000000000|KDP:staples:household-food:50000000000|KHC:staples:household-food:42000000000|KLAC:technology:semiconductors:95000000000|KO:staples:household-food:295000000000|LIN:materials:chemicals:220000000000|LLY:healthcare:pharma:850000000000|LMT:industrials:aerospace:135000000000|LOW:consumer:retail:150000000000|LRCX:technology:semiconductors:100000000000|LULU:consumer:retail:33000000000|MA:financials:payments:450000000000|MAR:consumer:travel-dining:68000000000|MCD:consumer:travel-dining:210000000000|MDLZ:staples:household-food:100000000000|META:communications:internet-media:1400000000000|MNST:staples:household-food:50000000000|MPC:energy:energy-services:60000000000|MRK:healthcare:pharma:280000000000|MRVL:technology:semiconductors:62000000000|MS:financials:capital-markets:160000000000|MSFT:technology:software:3200000000000|MU:technology:memory:105000000000|NEE:utilities:power:170000000000|NEM:materials:mining:55000000000|NFLX:communications:internet-media:310000000000|NKE:consumer:retail:125000000000|NOW:technology:software:165000000000|NVDA:technology:semiconductors:3100000000000|NXPI:technology:semiconductors:60000000000|O:realestate:commercial-property:55000000000|ODFL:industrials:transport-services:42000000000|ORCL:technology:software:460000000000|ORLY:consumer:retail:68000000000|PANW:technology:software:110000000000|PCAR:industrials:machinery:52000000000|PEP:staples:household-food:235000000000|PFE:healthcare:pharma:160000000000|PG:staples:household-food:400000000000|PLD:realestate:commercial-property:115000000000|PM:staples:household-food:180000000000|PYPL:financials:payments:72000000000|QCOM:technology:semiconductors:190000000000|REGN:healthcare:pharma:115000000000|RTX:industrials:aerospace:160000000000|SBAC:realestate:digital-property:25000000000|SBUX:consumer:travel-dining:110000000000|SHW:materials:chemicals:95000000000|SLB:energy:energy-services:65000000000|SNPS:technology:software:78000000000|SO:utilities:grid-utilities:100000000000|SPG:realestate:commercial-property:60000000000|SPGI:financials:capital-markets:155000000000|T:communications:telecom:150000000000|TJX:consumer:retail:130000000000|TMO:healthcare:medical-technology:230000000000|TMUS:communications:telecom:235000000000|TSLA:consumer:automotive:740000000000|TTWO:communications:internet-media:27000000000|TXN:technology:semiconductors:185000000000|UNH:healthcare:health-services:510000000000|UNP:industrials:transport-services:150000000000|UPS:industrials:transport-services:115000000000|V:financials:payments:560000000000|VRTX:healthcare:pharma:120000000000|VZ:communications:telecom:180000000000|WELL:realestate:commercial-property:75000000000|WFC:financials:banking:210000000000|WMT:staples:essentials-retail:620000000000|XEL:utilities:grid-utilities:36000000000|XOM:energy:oil-gas:500000000000",
+  "key": "v2|AAPL:technology:hardware:3400000000000|ABBV:healthcare:pharma:340000000000|ABNB:consumer:travel-dining:80000000000|ABT:healthcare:medical-technology:200000000000|ACN:technology:it-services:220000000000|ADBE:technology:software:230000000000|ADI:technology:semiconductors:115000000000|ADP:industrials:transport-services:115000000000|ADSK:technology:software:60000000000|AEP:utilities:grid-utilities:55000000000|AMAT:technology:semiconductors:160000000000|AMD:technology:semiconductors:240000000000|AMGN:healthcare:pharma:170000000000|AMT:realestate:digital-property:100000000000|AMZN:consumer:retail:1950000000000|APD:materials:chemicals:65000000000|AVGO:technology:semiconductors:820000000000|AXP:financials:payments:180000000000|BAC:financials:banking:310000000000|BKNG:consumer:travel-dining:145000000000|BLK:financials:capital-markets:135000000000|BMY:healthcare:pharma:105000000000|BRK.B:financials:capital-markets:960000000000|C:financials:banking:120000000000|CAT:industrials:machinery:180000000000|CDNS:technology:software:74000000000|CEG:utilities:power:70000000000|CHTR:communications:telecom:48000000000|CL:staples:household-food:85000000000|CMCSA:communications:telecom:155000000000|CMG:consumer:travel-dining:80000000000|COIN:financials:capital-markets:55000000000|COP:energy:oil-gas:125000000000|COST:staples:essentials-retail:390000000000|CRM:technology:software:280000000000|CSCO:technology:hardware:210000000000|CSGP:realestate:commercial-property:31000000000|CSX:industrials:transport-services:66000000000|CTAS:industrials:commercial-services:78000000000|CVX:energy:oil-gas:275000000000|DE:industrials:machinery:110000000000|DHR:healthcare:medical-technology:185000000000|DIS:communications:internet-media:175000000000|DUK:utilities:grid-utilities:90000000000|EOG:energy:energy-services:70000000000|EQIX:realestate:digital-property:85000000000|ETN:industrials:machinery:130000000000|EXC:utilities:grid-utilities:39000000000|FANG:energy:oil-gas:52000000000|FAST:industrials:commercial-services:42000000000|FCX:materials:mining:65000000000|GE:industrials:aerospace:185000000000|GILD:healthcare:pharma:105000000000|GOOGL:communications:internet-media:2050000000000|GS:financials:capital-markets:160000000000|HD:consumer:retail:385000000000|HON:industrials:machinery:135000000000|IBM:technology:hardware:200000000000|IDXX:healthcare:medical-technology:40000000000|INTU:technology:software:175000000000|ISRG:healthcare:medical-technology:170000000000|JNJ:healthcare:pharma:390000000000|JPM:financials:banking:610000000000|KDP:staples:household-food:50000000000|KHC:staples:household-food:42000000000|KLAC:technology:semiconductors:95000000000|KO:staples:household-food:295000000000|LIN:materials:chemicals:220000000000|LLY:healthcare:pharma:850000000000|LMT:industrials:aerospace:135000000000|LOW:consumer:retail:150000000000|LRCX:technology:semiconductors:100000000000|LULU:consumer:retail:33000000000|MA:financials:payments:450000000000|MAR:consumer:travel-dining:68000000000|MCD:consumer:travel-dining:210000000000|MDLZ:staples:household-food:100000000000|META:communications:internet-media:1400000000000|MNST:staples:household-food:50000000000|MPC:energy:energy-services:60000000000|MRK:healthcare:pharma:280000000000|MRVL:technology:semiconductors:62000000000|MS:financials:capital-markets:160000000000|MSFT:technology:software:3200000000000|MU:technology:memory:105000000000|NEE:utilities:power:170000000000|NEM:materials:mining:55000000000|NFLX:communications:internet-media:310000000000|NKE:consumer:retail:125000000000|NOW:technology:software:165000000000|NVDA:technology:semiconductors:3100000000000|NXPI:technology:semiconductors:60000000000|O:realestate:commercial-property:55000000000|ODFL:industrials:transport-services:42000000000|ORCL:technology:software:460000000000|ORLY:consumer:retail:68000000000|PANW:technology:software:110000000000|PCAR:industrials:machinery:52000000000|PEP:staples:household-food:235000000000|PFE:healthcare:pharma:160000000000|PG:staples:household-food:400000000000|PLD:realestate:commercial-property:115000000000|PM:staples:household-food:180000000000|PYPL:financials:payments:72000000000|QCOM:technology:semiconductors:190000000000|REGN:healthcare:pharma:115000000000|RTX:industrials:aerospace:160000000000|SBAC:realestate:digital-property:25000000000|SBUX:consumer:travel-dining:110000000000|SHW:materials:chemicals:95000000000|SLB:energy:energy-services:65000000000|SNPS:technology:software:78000000000|SO:utilities:grid-utilities:100000000000|SPG:realestate:commercial-property:60000000000|SPGI:financials:capital-markets:155000000000|T:communications:telecom:150000000000|TJX:consumer:retail:130000000000|TMO:healthcare:medical-technology:230000000000|TMUS:communications:telecom:235000000000|TSLA:consumer:automotive:740000000000|TTWO:communications:internet-media:27000000000|TXN:technology:semiconductors:185000000000|UNH:healthcare:health-services:510000000000|UNP:industrials:transport-services:150000000000|UPS:industrials:transport-services:115000000000|V:financials:payments:560000000000|VRTX:healthcare:pharma:120000000000|VZ:communications:telecom:180000000000|WELL:realestate:commercial-property:75000000000|WFC:financials:banking:210000000000|WMT:staples:essentials-retail:620000000000|XEL:utilities:grid-utilities:36000000000|XOM:energy:oil-gas:500000000000",
   "plots": [
     {
       "ticker": "AAPL",
@@ -39,7 +39,7 @@
       "width": 6.450225323578477,
       "depth": 5.5471937782774905,
       "height": 17.666591986933096,
-      "variant": 4,
+      "variant": 0,
       "tier": "zone-3"
     },
     {
@@ -49,7 +49,7 @@
       "width": 5.810032470788014,
       "depth": 4.996627924877692,
       "height": 15.093267774736137,
-      "variant": 5,
+      "variant": 9,
       "tier": "zone-4"
     },
     {
@@ -59,7 +59,7 @@
       "width": 5.26025297992266,
       "depth": 4.523817562733488,
       "height": 12.883369821257748,
-      "variant": 6,
+      "variant": 7,
       "tier": "zone-4"
     },
     {
@@ -69,7 +69,7 @@
       "width": 5.089538666364595,
       "depth": 4.377003253073552,
       "height": 12.197165227543959,
-      "variant": 7,
+      "variant": 4,
       "tier": "zone-4"
     },
     {
@@ -79,7 +79,7 @@
       "width": 5.042405981844862,
       "depth": 4.336469144386581,
       "height": 12.007710319180328,
-      "variant": 8,
+      "variant": 0,
       "tier": "zone-5"
     },
     {
@@ -99,7 +99,7 @@
       "width": 4.941659201571493,
       "depth": 4.249826913351484,
       "height": 11.60274777102267,
-      "variant": 10,
+      "variant": 7,
       "tier": "zone-5"
     },
     {
@@ -109,7 +109,7 @@
       "width": 4.887626488943152,
       "depth": 4.203358780491111,
       "height": 11.385557455555807,
-      "variant": 11,
+      "variant": 4,
       "tier": "zone-5"
     },
     {
@@ -129,7 +129,7 @@
       "width": 4.801287907427685,
       "depth": 4.129107600387809,
       "height": 11.03851021613089,
-      "variant": 1,
+      "variant": 9,
       "tier": "zone-6"
     },
     {
@@ -139,7 +139,7 @@
       "width": 4.73974702415005,
       "depth": 4.076182440769043,
       "height": 10.791139999034517,
-      "variant": 2,
+      "variant": 7,
       "tier": "zone-6"
     },
     {
@@ -149,7 +149,7 @@
       "width": 4.674584057745461,
       "depth": 4.020142289661097,
       "height": 10.529210428192538,
-      "variant": 3,
+      "variant": 4,
       "tier": "zone-6"
     },
     {
@@ -159,7 +159,7 @@
       "width": 4.640505955772609,
       "depth": 3.9908351219644436,
       "height": 10.39222982222323,
-      "variant": 4,
+      "variant": 0,
       "tier": "zone-6"
     },
     {
@@ -169,7 +169,7 @@
       "width": 4.27477949290171,
       "depth": 3.6763103638954706,
       "height": 8.92215286362452,
-      "variant": 5,
+      "variant": 9,
       "tier": "zone-7"
     },
     {
@@ -179,7 +179,7 @@
       "width": 4.225551347153473,
       "depth": 3.633974158551987,
       "height": 8.724275022871804,
-      "variant": 6,
+      "variant": 7,
       "tier": "zone-7"
     },
     {
@@ -189,7 +189,7 @@
       "width": 4.1740327126283425,
       "depth": 3.5896681328603743,
       "height": 8.517190315466866,
-      "variant": 7,
+      "variant": 4,
       "tier": "zone-7"
     },
     {
@@ -199,7 +199,7 @@
       "width": 4.12,
       "depth": 3.5432,
       "height": 8.299999999999999,
-      "variant": 8,
+      "variant": 0,
       "tier": "zone-7"
     },
     {
@@ -219,7 +219,7 @@
       "width": 3.8448412368607245,
       "depth": 3.3065634637002232,
       "height": 7.193969677577423,
-      "variant": 10,
+      "variant": 7,
       "tier": "zone-7"
     },
     {
@@ -229,7 +229,7 @@
       "width": 3.7865408853139892,
       "depth": 3.256425161370031,
       "height": 6.959625127242505,
-      "variant": 11,
+      "variant": 4,
       "tier": "zone-8"
     },
     {
@@ -249,7 +249,7 @@
       "width": 3.554285688478291,
       "depth": 3.0566856920913303,
       "height": 6.026050316432347,
-      "variant": 1,
+      "variant": 9,
       "tier": "zone-8"
     },
     {
@@ -259,7 +259,7 @@
       "width": 3.554285688478291,
       "depth": 3.0566856920913303,
       "height": 6.026050316432347,
-      "variant": 2,
+      "variant": 7,
       "tier": "zone-8"
     },
     {
@@ -269,7 +269,7 @@
       "width": 6.624791644250899,
       "depth": 5.697320814055773,
       "height": 18.368280138655575,
-      "variant": 4,
+      "variant": 3,
       "tier": "zone-1"
     },
     {
@@ -289,7 +289,7 @@
       "width": 6.027879468865811,
       "depth": 5.183976343224597,
       "height": 15.968927276813552,
-      "variant": 6,
+      "variant": 0,
       "tier": "zone-3"
     },
     {
@@ -299,7 +299,7 @@
       "width": 5.785691910127126,
       "depth": 4.975695042709328,
       "height": 14.995428266197269,
-      "variant": 7,
+      "variant": 3,
       "tier": "zone-3"
     },
     {
@@ -309,7 +309,7 @@
       "width": 5.372972319277395,
       "depth": 4.62075619457856,
       "height": 13.336457361801294,
-      "variant": 8,
+      "variant": 3,
       "tier": "zone-4"
     },
     {
@@ -319,7 +319,7 @@
       "width": 4.941659201571493,
       "depth": 4.249826913351484,
       "height": 11.60274777102267,
-      "variant": 9,
+      "variant": 8,
       "tier": "zone-4"
     },
     {
@@ -329,7 +329,7 @@
       "width": 4.77094488801343,
       "depth": 4.10301260369155,
       "height": 10.916543177308885,
-      "variant": 10,
+      "variant": 0,
       "tier": "zone-5"
     },
     {
@@ -339,7 +339,7 @@
       "width": 4.640505955772609,
       "depth": 3.9908351219644436,
       "height": 10.39222982222323,
-      "variant": 11,
+      "variant": 3,
       "tier": "zone-5"
     },
     {
@@ -349,7 +349,7 @@
       "width": 4.640505955772609,
       "depth": 3.9908351219644436,
       "height": 10.39222982222323,
-      "variant": 0,
+      "variant": 3,
       "tier": "zone-6"
     },
     {
@@ -359,7 +359,7 @@
       "width": 4.605345830334243,
       "depth": 3.9605974140874487,
       "height": 10.250899906245486,
-      "variant": 1,
+      "variant": 8,
       "tier": "zone-6"
     },
     {
@@ -369,7 +369,7 @@
       "width": 4.452351109662265,
       "depth": 3.829021954309548,
       "height": 9.63592112707381,
-      "variant": 2,
+      "variant": 0,
       "tier": "zone-6"
     },
     {
@@ -389,7 +389,7 @@
       "width": 3.7561978658997344,
       "depth": 3.2303301646737714,
       "height": 6.837658088420501,
-      "variant": 4,
+      "variant": 3,
       "tier": "zone-7"
     },
     {
@@ -399,7 +399,7 @@
       "width": 3.4579248582103217,
       "depth": 2.9738153780608765,
       "height": 5.638717567315999,
-      "variant": 5,
+      "variant": 8,
       "tier": "zone-7"
     },
     {
@@ -419,7 +419,7 @@
       "width": 5.924303949049737,
       "depth": 5.094901396182774,
       "height": 15.552594305003847,
-      "variant": 8,
+      "variant": 7,
       "tier": "zone-3"
     },
     {
@@ -429,7 +429,7 @@
       "width": 5.627214747917572,
       "depth": 4.8394046832091115,
       "height": 14.358412222021617,
-      "variant": 9,
+      "variant": 6,
       "tier": "zone-3"
     },
     {
@@ -439,7 +439,7 @@
       "width": 5.47527123845775,
       "depth": 4.708733265073665,
       "height": 13.747658899683113,
-      "variant": 10,
+      "variant": 9,
       "tier": "zone-4"
     },
     {
@@ -449,7 +449,7 @@
       "width": 5.26025297992266,
       "depth": 4.523817562733488,
       "height": 12.883369821257748,
-      "variant": 11,
+      "variant": 1,
       "tier": "zone-4"
     },
     {
@@ -459,7 +459,7 @@
       "width": 5.042405981844862,
       "depth": 4.336469144386581,
       "height": 12.007710319180328,
-      "variant": 0,
+      "variant": 7,
       "tier": "zone-4"
     },
     {
@@ -469,7 +469,7 @@
       "width": 4.887626488943152,
       "depth": 4.203358780491111,
       "height": 11.385557455555807,
-      "variant": 1,
+      "variant": 6,
       "tier": "zone-5"
     },
     {
@@ -479,7 +479,7 @@
       "width": 4.801287907427685,
       "depth": 4.129107600387809,
       "height": 11.03851021613089,
-      "variant": 2,
+      "variant": 9,
       "tier": "zone-5"
     },
     {
@@ -489,7 +489,7 @@
       "width": 4.707644749514599,
       "depth": 4.048574484582555,
       "height": 10.662101444127309,
-      "variant": 3,
+      "variant": 1,
       "tier": "zone-5"
     },
     {
@@ -499,7 +499,7 @@
       "width": 4.707644749514599,
       "depth": 4.048574484582555,
       "height": 10.662101444127309,
-      "variant": 4,
+      "variant": 7,
       "tier": "zone-5"
     },
     {
@@ -509,7 +509,7 @@
       "width": 4.640505955772609,
       "depth": 3.9908351219644436,
       "height": 10.39222982222323,
-      "variant": 5,
+      "variant": 6,
       "tier": "zone-6"
     },
     {
@@ -519,7 +519,7 @@
       "width": 4.321912177421442,
       "depth": 3.7168444725824403,
       "height": 9.111607771988151,
-      "variant": 6,
+      "variant": 9,
       "tier": "zone-6"
     },
     {
@@ -529,7 +529,7 @@
       "width": 4.27477949290171,
       "depth": 3.6763103638954706,
       "height": 8.92215286362452,
-      "variant": 7,
+      "variant": 1,
       "tier": "zone-6"
     },
     {
@@ -539,7 +539,7 @@
       "width": 4.1740327126283425,
       "depth": 3.5896681328603743,
       "height": 8.517190315466866,
-      "variant": 8,
+      "variant": 7,
       "tier": "zone-6"
     },
     {
@@ -549,7 +549,7 @@
       "width": 4.1740327126283425,
       "depth": 3.5896681328603743,
       "height": 8.517190315466866,
-      "variant": 9,
+      "variant": 6,
       "tier": "zone-6"
     },
     {
@@ -559,7 +559,7 @@
       "width": 3.105252977886304,
       "depth": 2.6705175609822214,
       "height": 4.221114911111615,
-      "variant": 10,
+      "variant": 9,
       "tier": "zone-7"
     },
     {
@@ -589,7 +589,7 @@
       "width": 5.612924860246676,
       "depth": 4.827115379812142,
       "height": 14.300972477462132,
-      "variant": 0,
+      "variant": 10,
       "tier": "zone-5"
     },
     {
@@ -599,7 +599,7 @@
       "width": 4.941659201571493,
       "depth": 4.249826913351484,
       "height": 11.60274777102267,
-      "variant": 1,
+      "variant": 2,
       "tier": "zone-5"
     },
     {
@@ -609,7 +609,7 @@
       "width": 4.569032710591987,
       "depth": 3.9293681311091087,
       "height": 10.104935405320733,
-      "variant": 2,
+      "variant": 11,
       "tier": "zone-5"
     },
     {
@@ -619,7 +619,7 @@
       "width": 4.531488405699186,
       "depth": 3.8970800289013,
       "height": 9.954022022908491,
-      "variant": 3,
+      "variant": 1,
       "tier": "zone-6"
     },
     {
@@ -629,7 +629,7 @@
       "width": 4.410555548382434,
       "depth": 3.7930777716088935,
       "height": 9.467919361145078,
-      "variant": 4,
+      "variant": 10,
       "tier": "zone-6"
     },
     {
@@ -639,7 +639,7 @@
       "width": 4.367120533170543,
       "depth": 3.755723658526667,
       "height": 9.293327633332575,
-      "variant": 5,
+      "variant": 2,
       "tier": "zone-6"
     },
     {
@@ -649,7 +649,7 @@
       "width": 4.225551347153473,
       "depth": 3.633974158551987,
       "height": 8.724275022871804,
-      "variant": 6,
+      "variant": 11,
       "tier": "zone-6"
     },
     {
@@ -659,7 +659,7 @@
       "width": 3.8728794668294557,
       "depth": 3.330676341473332,
       "height": 7.306672366667421,
-      "variant": 7,
+      "variant": 1,
       "tier": "zone-6"
     },
     {
@@ -669,7 +669,7 @@
       "width": 3.8728794668294557,
       "depth": 3.330676341473332,
       "height": 7.306672366667421,
-      "variant": 8,
+      "variant": 10,
       "tier": "zone-7"
     },
     {
@@ -679,7 +679,7 @@
       "width": 3.6928977274009025,
       "depth": 3.175892045564776,
       "height": 6.583216355238923,
-      "variant": 9,
+      "variant": 2,
       "tier": "zone-7"
     },
     {
@@ -689,7 +689,7 @@
       "width": 3.6928977274009025,
       "depth": 3.175892045564776,
       "height": 6.583216355238923,
-      "variant": 10,
+      "variant": 11,
       "tier": "zone-7"
     },
     {
@@ -699,7 +699,7 @@
       "width": 3.1,
       "depth": 2.666,
       "height": 4.2,
-      "variant": 11,
+      "variant": 1,
       "tier": "zone-7"
     },
     {
@@ -739,7 +739,7 @@
       "width": 5.066223048792927,
       "depth": 4.356951821961917,
       "height": 12.103445588285297,
-      "variant": 4,
+      "variant": 2,
       "tier": "zone-3"
     },
     {
@@ -749,7 +749,7 @@
       "width": 4.77094488801343,
       "depth": 4.10301260369155,
       "height": 10.916543177308885,
-      "variant": 5,
+      "variant": 0,
       "tier": "zone-4"
     },
     {
@@ -759,7 +759,7 @@
       "width": 4.73974702415005,
       "depth": 4.076182440769043,
       "height": 10.791139999034517,
-      "variant": 6,
+      "variant": 4,
       "tier": "zone-4"
     },
     {
@@ -769,7 +769,7 @@
       "width": 4.605345830334243,
       "depth": 3.9605974140874487,
       "height": 10.250899906245486,
-      "variant": 7,
+      "variant": 9,
       "tier": "zone-4"
     },
     {
@@ -779,7 +779,7 @@
       "width": 4.569032710591987,
       "depth": 3.9293681311091087,
       "height": 10.104935405320733,
-      "variant": 8,
+      "variant": 2,
       "tier": "zone-5"
     },
     {
@@ -789,7 +789,7 @@
       "width": 3.307165155307747,
       "depth": 2.8441620335646625,
       "height": 5.032722683099768,
-      "variant": 9,
+      "variant": 0,
       "tier": "zone-5"
     },
     {
@@ -799,7 +799,7 @@
       "width": 3.1,
       "depth": 2.666,
       "height": 4.2,
-      "variant": 10,
+      "variant": 4,
       "tier": "zone-5"
     },
     {
@@ -809,7 +809,7 @@
       "width": 4.801287907427685,
       "depth": 4.129107600387809,
       "height": 11.03851021613089,
-      "variant": 4,
+      "variant": 5,
       "tier": "zone-3"
     },
     {
@@ -829,7 +829,7 @@
       "width": 4.640505955772609,
       "depth": 3.9908351219644436,
       "height": 10.39222982222323,
-      "variant": 6,
+      "variant": 1,
       "tier": "zone-4"
     },
     {
@@ -839,7 +839,7 @@
       "width": 4.569032710591987,
       "depth": 3.9293681311091087,
       "height": 10.104935405320733,
-      "variant": 7,
+      "variant": 5,
       "tier": "zone-4"
     },
     {
@@ -849,7 +849,7 @@
       "width": 4.452351109662265,
       "depth": 3.829021954309548,
       "height": 9.63592112707381,
-      "variant": 8,
+      "variant": 5,
       "tier": "zone-5"
     },
     {
@@ -869,7 +869,7 @@
       "width": 4.410555548382434,
       "depth": 3.7930777716088935,
       "height": 9.467919361145078,
-      "variant": 10,
+      "variant": 1,
       "tier": "zone-5"
     },
     {
@@ -879,7 +879,7 @@
       "width": 4.27477949290171,
       "depth": 3.6763103638954706,
       "height": 8.92215286362452,
-      "variant": 11,
+      "variant": 5,
       "tier": "zone-5"
     },
     {
@@ -889,7 +889,7 @@
       "width": 4.27477949290171,
       "depth": 3.6763103638954706,
       "height": 8.92215286362452,
-      "variant": 0,
+      "variant": 5,
       "tier": "zone-6"
     },
     {
@@ -899,7 +899,7 @@
       "width": 4.225551347153473,
       "depth": 3.633974158551987,
       "height": 8.724275022871804,
-      "variant": 1,
+      "variant": 9,
       "tier": "zone-6"
     },
     {
@@ -909,7 +909,7 @@
       "width": 3.8448412368607245,
       "depth": 3.3065634637002232,
       "height": 7.193969677577423,
-      "variant": 2,
+      "variant": 1,
       "tier": "zone-6"
     },
     {
@@ -919,7 +919,7 @@
       "width": 3.659837035631765,
       "depth": 3.147459850643318,
       "height": 6.450325339304154,
-      "variant": 3,
+      "variant": 5,
       "tier": "zone-6"
     },
     {
@@ -929,7 +929,7 @@
       "width": 3.395808526268737,
       "depth": 2.920395332591114,
       "height": 5.389034272256689,
-      "variant": 4,
+      "variant": 5,
       "tier": "zone-6"
     },
     {
@@ -939,7 +939,7 @@
       "width": 3.1592856905146465,
       "depth": 2.716985693842596,
       "height": 4.43830522657848,
-      "variant": 5,
+      "variant": 9,
       "tier": "zone-7"
     },
     {
@@ -949,7 +949,7 @@
       "width": 3.1592856905146465,
       "depth": 2.716985693842596,
       "height": 4.43830522657848,
-      "variant": 6,
+      "variant": 1,
       "tier": "zone-7"
     },
     {
@@ -969,7 +969,7 @@
       "width": 5.655252977886304,
       "depth": 4.863517560982221,
       "height": 14.471114911111616,
-      "variant": 8,
+      "variant": 1,
       "tier": "zone-3"
     },
     {
@@ -979,7 +979,7 @@
       "width": 5.627214747917572,
       "depth": 4.8394046832091115,
       "height": 14.358412222021617,
-      "variant": 9,
+      "variant": 5,
       "tier": "zone-3"
     },
     {
@@ -989,7 +989,7 @@
       "width": 5.318046140744315,
       "depth": 4.573519681040111,
       "height": 13.11567566377617,
-      "variant": 10,
+      "variant": 11,
       "tier": "zone-4"
     },
     {
@@ -999,7 +999,7 @@
       "width": 5.066223048792927,
       "depth": 4.356951821961917,
       "height": 12.103445588285297,
-      "variant": 11,
+      "variant": 1,
       "tier": "zone-4"
     },
     {
@@ -1009,7 +1009,7 @@
       "width": 4.77094488801343,
       "depth": 4.10301260369155,
       "height": 10.916543177308885,
-      "variant": 0,
+      "variant": 1,
       "tier": "zone-4"
     },
     {
@@ -1019,7 +1019,7 @@
       "width": 4.12,
       "depth": 3.5432,
       "height": 8.299999999999999,
-      "variant": 1,
+      "variant": 5,
       "tier": "zone-5"
     },
     {
@@ -1029,7 +1029,7 @@
       "width": 3.9400182605714464,
       "depth": 3.388415704091444,
       "height": 7.576543988571501,
-      "variant": 2,
+      "variant": 11,
       "tier": "zone-5"
     },
     {
@@ -1039,7 +1039,7 @@
       "width": 3.3523735110568476,
       "depth": 2.883041219508889,
       "height": 5.214442544444191,
-      "variant": 3,
+      "variant": 1,
       "tier": "zone-5"
     },
     {
@@ -1049,7 +1049,7 @@
       "width": 3.3523735110568476,
       "depth": 2.883041219508889,
       "height": 5.214442544444191,
-      "variant": 4,
+      "variant": 1,
       "tier": "zone-5"
     },
     {
@@ -1079,7 +1079,7 @@
       "width": 5.24029836926717,
       "depth": 4.506656597569766,
       "height": 12.803160111760192,
-      "variant": 11,
+      "variant": 5,
       "tier": "zone-2"
     },
     {
@@ -1089,7 +1089,7 @@
       "width": 4.367120533170543,
       "depth": 3.755723658526667,
       "height": 9.293327633332575,
-      "variant": 0,
+      "variant": 5,
       "tier": "zone-3"
     },
     {
@@ -1099,7 +1099,7 @@
       "width": 3.7250000020363547,
       "depth": 3.203500001751265,
       "height": 6.712254910146132,
-      "variant": 1,
+      "variant": 2,
       "tier": "zone-3"
     },
     {
@@ -1109,7 +1109,7 @@
       "width": 3.642929059439281,
       "depth": 3.1329189911177817,
       "height": 6.382361905589268,
-      "variant": 2,
+      "variant": 1,
       "tier": "zone-4"
     },
     {
@@ -1119,7 +1119,7 @@
       "width": 3.554285688478291,
       "depth": 3.0566856920913303,
       "height": 6.026050316432347,
-      "variant": 3,
+      "variant": 5,
       "tier": "zone-4"
     },
     {
@@ -1129,7 +1129,7 @@
       "width": 3.395808526268737,
       "depth": 2.920395332591114,
       "height": 5.389034272256689,
-      "variant": 4,
+      "variant": 5,
       "tier": "zone-4"
     },
     {
@@ -1149,7 +1149,7 @@
       "width": 4.12,
       "depth": 3.5432,
       "height": 8.299999999999999,
-      "variant": 2,
+      "variant": 1,
       "tier": "zone-2"
     },
     {
@@ -1159,7 +1159,7 @@
       "width": 4.003318399070278,
       "depth": 3.4428538232004393,
       "height": 7.830985721753078,
-      "variant": 3,
+      "variant": 11,
       "tier": "zone-3"
     },
     {
@@ -1169,7 +1169,7 @@
       "width": 3.7250000020363547,
       "depth": 3.203500001751265,
       "height": 6.712254910146132,
-      "variant": 4,
+      "variant": 11,
       "tier": "zone-3"
     },
     {
@@ -1189,7 +1189,7 @@
       "width": 3.1,
       "depth": 2.666,
       "height": 4.2,
-      "variant": 6,
+      "variant": 1,
       "tier": "zone-4"
     },
     {
@@ -1199,7 +1199,7 @@
       "width": 3.1,
       "depth": 2.666,
       "height": 4.2,
-      "variant": 7,
+      "variant": 11,
       "tier": "zone-4"
     },
     {
@@ -1219,7 +1219,7 @@
       "width": 4.063195193486562,
       "depth": 3.4943478663984435,
       "height": 8.07166695421069,
-      "variant": 5,
+      "variant": 1,
       "tier": "zone-3"
     },
     {
@@ -1229,7 +1229,7 @@
       "width": 3.642929059439281,
       "depth": 3.1329189911177817,
       "height": 6.382361905589268,
-      "variant": 6,
+      "variant": 9,
       "tier": "zone-3"
     },
     {
@@ -1239,7 +1239,7 @@
       "width": 3.642929059439281,
       "depth": 3.1329189911177817,
       "height": 6.382361905589268,
-      "variant": 7,
+      "variant": 5,
       "tier": "zone-4"
     },
     {
@@ -1249,7 +1249,7 @@
       "width": 3.4579248582103217,
       "depth": 2.9738153780608765,
       "height": 5.638717567315999,
-      "variant": 8,
+      "variant": 5,
       "tier": "zone-4"
     },
     {
@@ -1269,7 +1269,7 @@
       "width": 4.12,
       "depth": 3.5432,
       "height": 8.299999999999999,
-      "variant": 8,
+      "variant": 10,
       "tier": "zone-2"
     },
     {
@@ -1279,7 +1279,7 @@
       "width": 3.9400182605714464,
       "depth": 3.388415704091444,
       "height": 7.576543988571501,
-      "variant": 9,
+      "variant": 6,
       "tier": "zone-3"
     },
     {
@@ -1289,7 +1289,7 @@
       "width": 3.801406221648835,
       "depth": 3.269209350617998,
       "height": 7.019377949764925,
-      "variant": 10,
+      "variant": 1,
       "tier": "zone-3"
     },
     {
@@ -1299,7 +1299,7 @@
       "width": 3.554285688478291,
       "depth": 3.0566856920913303,
       "height": 6.026050316432347,
-      "variant": 11,
+      "variant": 10,
       "tier": "zone-4"
     },
     {
@@ -1309,7 +1309,7 @@
       "width": 3.4579248582103217,
       "depth": 2.9738153780608765,
       "height": 5.638717567315999,
-      "variant": 0,
+      "variant": 10,
       "tier": "zone-4"
     },
     {
@@ -1319,7 +1319,7 @@
       "width": 3.1,
       "depth": 2.666,
       "height": 4.2,
-      "variant": 1,
+      "variant": 6,
       "tier": "zone-4"
     },
     {
@@ -1329,7 +1329,7 @@
       "width": 3.1,
       "depth": 2.666,
       "height": 4.2,
-      "variant": 2,
+      "variant": 1,
       "tier": "zone-5"
     }
   ]

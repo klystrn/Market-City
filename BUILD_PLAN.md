@@ -349,3 +349,30 @@ landmarks, and nothing else — so the ground between them was bare. §75.12 of
 6. **Degrading thins rather than hides.** Dropping the fabric at the lowest
    quality tier did not read as lower detail, it read as a city missing most of
    its buildings. A struggling device keeps every third building instead.
+
+### Making it look like a city (owner follow-up)
+Owner-selected: building shapes true to the company, block interiors, a
+brighter palette, and lights after the close. §75.13 of `MARKET_CITY.md` has
+the detail; what to carry forward:
+
+1. **Shape comes from the industry, not the listing order.** Forms were picked
+   by index position, so a bank and a warehouse could share a silhouette by
+   accident. Each sector now has its own set of massings, several deep so a
+   street still varies.
+2. **The encodings did not move.** Height and footprint stay market cap, colour
+   stays the daily move. Industrial buildings are not squashed to look like
+   real plants, however much that would sell the illusion.
+3. **A cache key must cover the generator, not just its input.** Changing how
+   forms are chosen altered every lot while the roster was untouched, so the
+   baked layouts still matched their key and silently won. `LAYOUT_VERSION` now
+   forms part of the key — bump it whenever placement changes.
+4. **Bright is fine; green and red are not.** The palette moved toward the
+   toy-like, avoiding exactly the two hues that carry the daily-change
+   encoding.
+5. **Light the city by the session, not by the market.** `night` means the
+   exchange is closed; `dark` means the index is down. Lighting windows from
+   the latter would make a falling market look like dusk.
+6. **Lit windows exposed an orientation bug** that had been invisible while
+   unlit: buildings were turned ninety degrees out, so their windows and
+   shopfronts sat on the side walls. The rotation convention is now documented
+   on the type rather than re-derived at each call site.

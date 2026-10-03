@@ -384,7 +384,7 @@ export function createNewYorkPlots(companies: Company[]): Plot[] {
           width,
           depth,
           height: height * Math.min(1.7, Math.max(1, clipped)),
-          variant: formFor(company.ticker, i + row * 3),
+          variant: formFor(company.ticker, i + row * 3, company.sector),
           tier: district.tier,
         });
       });

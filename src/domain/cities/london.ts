@@ -343,6 +343,7 @@ export function createLondonPlots(companies: Company[]): Plot[] {
           variant: formFor(
             company.ticker,
             sectorIdentities.indexOf(sector) * 3 + index,
+            company.sector,
           ),
           tier: `zone-${rank}`,
         });
@@ -360,7 +361,7 @@ export function createLondonPlots(companies: Company[]): Plot[] {
         width: footprint,
         depth: footprint * 0.86,
         height,
-        variant: formFor(company.ticker, index),
+        variant: formFor(company.ticker, index, company.sector),
         tier: `zone-${ZONE_COUNT}`,
       });
     }

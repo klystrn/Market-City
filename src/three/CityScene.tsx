@@ -559,23 +559,30 @@ function CityScene(props: Props) {
         }}
       >
         {props.adaptiveQuality && <PerformanceMonitor onTier={setTier} />}
-        <ambientLight intensity={props.dark ? 0.95 : 0.85} />
+        {/* Once the exchange closes the city reads as evening rather than as
+            the same daylight with some windows switched on. Dimmer and cooler,
+            with the sun low — which is what makes the lit windows and street
+            lamps register as lights instead of bright paint. Kept well above
+            true darkness so a company's green or red is still legible. */}
+        <ambientLight
+          intensity={night ? 0.5 : props.dark ? 0.95 : 0.85}
+        />
         <hemisphereLight
           args={[
-            night ? "#8297b4" : "#ffffff",
-            props.dark ? "#424d48" : "#a2b6a0",
-            0.85,
+            night ? "#53658f" : "#ffffff",
+            night ? "#2f3845" : props.dark ? "#424d48" : "#a2b6a0",
+            night ? 0.62 : 0.85,
           ]}
         />
         <directionalLight
-          position={[-35, 65, 35]}
-          intensity={night ? 1 : 2.1}
-          color={night ? "#adbedd" : "#fff1d6"}
+          position={night ? [-70, 32, 20] : [-35, 65, 35]}
+          intensity={night ? 0.62 : 2.1}
+          color={night ? "#8fa3cc" : "#fff1d6"}
         />
         <fog
           attach="fog"
           args={[
-            props.dark ? "#222d2b" : "#e9eee6",
+            night ? "#232c42" : props.dark ? "#222d2b" : "#e9eee6",
             props.snapshot.market.vix > 25 ? 450 : 650,
             1200,
           ]}
@@ -621,6 +628,7 @@ function CityScene(props: Props) {
               plots={plots}
               season={props.season}
               dark={props.dark}
+              night={night}
               // A struggling device thins the fabric rather than losing it.
               // Dropping it entirely would not read as lower detail; it would
               // read as a city that is missing most of its buildings.
