@@ -4,37 +4,22 @@ import type { Plot } from "@/domain/types";
 import { fabricFor, type FabricBlock } from "@/domain/cities/fabric";
 import { seasonPalette, type Season } from "@/domain/seasons";
 import { Boxes, cylinder, treeGeometry, type Part } from "./SceneryParts";
+import { FABRIC_COLORS } from "./palette-fabric";
 // The ordinary city around the company buildings: terraces fronting the
 // streets, corner shops, street trees, lamp posts and parked cars.
 //
-// The palette is bright and toy-like on purpose, but it deliberately avoids
-// green and red. Those two are the daily-change encoding: a terrace painted
-// red would read as a company having a bad day. Everything here lives in the
-// blues, yellows, teals, violets and terracottas that are left — which is
-// enough range to be lively while keeping the one channel that means something
-// unambiguous. Height does the rest of the work: nothing in the fabric is tall
-// enough to compete with a mega-cap tower.
-const WALLS = [
-  "#f0d9a8",
-  "#e8b98c",
-  "#9fc6d8",
-  "#d9a6b8",
-  "#c3b6dd",
-  "#f2cf7c",
-  "#8fc2bd",
-  "#e9a98c",
-  "#aebfe0",
-];
-const ROOFS = [
-  "#c27a52",
-  "#8c6f9e",
-  "#4f7f96",
-  "#b35f4e",
-  "#5d7f8c",
-  "#a8713f",
-];
-const CARS = ["#edeef0", "#7f93a8", "#d9b04a", "#4f6f8f", "#8e6fb0", "#55707a"];
-const AWNINGS = ["#e07a5f", "#5aa88c", "#4f85b5", "#d9a441", "#a46fae"];
+// The palette is bright and toy-like on purpose, but it has to stay clear of
+// green and red. Those two are the daily-change encoding: a terrace painted red
+// would read as a company having a bad day.
+//
+// "Stay clear" is now measured rather than asserted. An earlier version of this
+// comment claimed the palette avoided green and red while five of its colours
+// did not — one awning sat within a perceptual distance of 8.6 from the
+// declining red, which is to say it was that red. Every colour here is checked
+// by tests/palette.test.ts against src/domain/palette.ts, and a new one that
+// strays into the encoding fails the build.
+const { walls: WALLS, roofs: ROOFS, cars: CARS, awnings: AWNINGS } =
+  FABRIC_COLORS;
 const GROUND = 1.04;
 /** Stable pseudo-randomness for choices made at render time rather than in the
  * generator — which windows are lit, which bays hold a car. Same hash as the

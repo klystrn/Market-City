@@ -3204,6 +3204,57 @@ deliberately than folded into this pass.
 
 ---
 
+## 75.18 Keeping decoration out of the encoding (owner follow-up)
+
+Exactly one thing in Market City encodes the daily move: a company building's
+colour. Every other coloured surface is decoration, and decoration that lands on
+the signal's colour makes the signal ambiguous — a reader glancing at a district
+cannot tell which of two similar colours is data.
+
+The flagged problem was autumn foliage sitting on the declining red. Measuring
+it in CIE L\*a\*b\* found that true, and found worse things that were not
+flagged:
+
+| Colour | Nearest encoding colour | Distance |
+| --- | --- | --- |
+| Summer leaf `#45a05d` | strongest advance | 14.5 |
+| Spring evergreen `#38815c` | strongest advance | 11.2 |
+| Autumn leaf `#d96336` | strongest decline | 22.9 |
+| Fabric awning `#e07a5f` | weakest decline | **8.6** |
+| Fabric awning `#5aa88c` | weakest advance | **11.6** |
+
+Summer foliage and the evergreens were closer to the advancing green than
+autumn ever was to the declining red. Worse, the ordinary-buildings palette
+shipped a comment claiming it avoided green and red while five of its colours
+did not — one awning at a distance of 8.6, which is to say it *was* that red.
+**A constraint stated only in a comment is not a constraint.**
+
+`src/domain/palette.ts` now defines the rule and `tests/palette.test.ts`
+enforces it over every scenery palette in the app. Objects must clear green and
+red by 25. The flat-change grey gets a lower bar of 12, because being mistaken
+for a company that is *not* moving is a milder error than being mistaken for one
+that is, and a strict bar there would outlaw every pale or desaturated colour the
+city legitimately needs — frost, stone, concrete. Ground is lower still at 15 and
+tested separately: grass is green, and the ground is the one surface that cannot
+be mistaken for a building.
+
+**The sector palette turned out to have a second, unrelated problem.** Districts
+are told apart by colour, and three pairs were too close to distinguish —
+technology and real estate at 10.4, financials and energy at 10.9, financials and
+staples at 12.7 — while four sectors sat near the encoding themselves. Every
+sector is now at least 21 from its nearest neighbour and 27 from the encoding.
+
+**An optimiser was the wrong tool for that.** Searching for the palette that
+maximises minimum separation produced an unusable result: electric blue, acid
+yellow-green, and — for communications — a pure red that passed the numeric
+threshold while being, to any reader, the colour of a falling market. Excluding
+the red and green *hue bands* outright helped and still gave garish corners of
+the gamut, because maximising a minimum distance always pushes there. The palette
+that shipped is hand-picked, keeps each sector's existing character, and uses the
+measurements to check the result rather than to choose it.
+
+---
+
 # 76. Idea Backlog
 
 Proposals only. Nothing here is approved scope until the owner selects it. Items
