@@ -3255,6 +3255,31 @@ measurements to check the result rather than to choose it.
 
 ---
 
+## 75.19 Landmarks baked by finish (owner follow-up)
+
+§75.17 left the 97 landmark draw calls as the remaining prize. They are now gone,
+by merging rather than instancing. The landmarks are two dozen different shapes
+with a handful of copies each, which is exactly the case instancing does not
+serve: it would have produced dozens of one- and two-instance meshes. Every
+landmark in `src/three/landmark-geometry.ts` now describes itself as a list of
+pieces, and the city's whole set is baked once into one geometry per *finish*
+(metalness, roughness, emissive, sidedness), with colour carried per vertex.
+
+| City | Pieces | Draw calls before | Draw calls after |
+| --- | --- | --- | --- |
+| New York | 97 | 97 | 8 |
+| London | 108 | 108 | 8 |
+
+Whole-frame draw calls on New York at the default camera went from 222 to 139,
+with triangles unchanged. Before/after screenshots of both cities differ only
+where traffic moved between captures. The ponds joined the bake, since they
+share the water finish. `tests/landmarks.test.ts` asserts the merge really
+collapses (at least four pieces per batch), loses no vertices, paints every
+vertex, and that every structural landmark still draws while company stand-ins
+draw nothing.
+
+---
+
 # 76. Idea Backlog
 
 Proposals only. Nothing here is approved scope until the owner selects it. Items
