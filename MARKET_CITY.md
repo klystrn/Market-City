@@ -3280,6 +3280,32 @@ draw nothing.
 
 ---
 
+## 75.20 Universe diff (owner follow-up)
+
+Switching city switches universe, and two things change without explanation: a
+third of the skyline disappears, and the headline move can change size or even
+sign. *Tools → Universe diff* now says which companies each universe holds and
+why the two headlines differ.
+
+- **Exact, not descriptive.** With *s* the cap-weighted move of the companies in
+  both, and *w* the share of a universe's market cap held by companies only it
+  contains, moving at *o*: move(A) − move(B) = wA·(oA − s) − wB·(oB − s). The
+  panel's sentence is built from those two terms, so it cannot disagree with the
+  headlines. `tests/universe-diff.test.ts` asserts the identity over several
+  simulated sessions in both directions, and that each side's move equals what
+  that city's pulse shows.
+- **Chips know whether they are on the map.** A company in the current universe
+  opens its card; one that is not is drawn dashed and does nothing, and a
+  button switches to the city that does show it.
+- **The overlap is stated honestly.** Every seeded company is treated as an
+  S&P 500 member, so in this dataset the Nasdaq-100 is a strict subset. The
+  panel says so, and that the real indexes overlap less, instead of letting a
+  "0 only in Nasdaq-100" stand as a fact about the indexes.
+- A stale universe note claimed the S&P set held 100 companies; the roster has
+  been 133 since §75.9. The note no longer states a count.
+
+---
+
 # 76. Idea Backlog
 
 Proposals only. Nothing here is approved scope until the owner selects it. Items
@@ -3298,8 +3324,7 @@ the last nine.
 
 ## Features
 
-1. **Universe diff** — a panel listing which companies appear in one universe but not
-   the other, so switching indexes is explicable rather than surprising.
+The selected feature proposal shipped (§75.20); none is outstanding.
 
 ## Optimisation
 

@@ -2570,3 +2570,131 @@ button.landmark-role:focus-visible {
   font-size: 10.5px;
   line-height: 1.35;
 }
+
+/* Universe diff */
+.universe-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 14px;
+}
+.universe-tiles > div {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--soft);
+}
+.universe-tiles strong {
+  display: block;
+  font-size: 20px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.universe-tiles small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 2px;
+}
+.universe-moves {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 12px 0 0;
+}
+.universe-moves > div {
+  padding: 0 2px;
+}
+.universe-moves dt {
+  color: var(--muted);
+  font-size: 11px;
+}
+.universe-moves dd {
+  margin: 2px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.universe-why {
+  margin: 12px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.universe-sectors {
+  margin-top: 14px;
+  display: grid;
+  gap: 2px;
+}
+.universe-sector-head,
+.universe-sector {
+  display: grid;
+  grid-template-columns: 1fr 86px 86px;
+  align-items: baseline;
+  gap: 4px 10px;
+  padding: 8px 10px;
+  font-variant-numeric: tabular-nums;
+}
+.universe-sector-head {
+  color: var(--muted);
+  font-size: 11px;
+  border-bottom: 1px solid var(--line);
+}
+.universe-sector {
+  border-radius: 9px;
+  font-size: 12px;
+}
+.universe-sector:nth-child(even) {
+  background: var(--soft);
+}
+.universe-sector strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+.universe-chips {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: 11px;
+}
+.universe-chip {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 100px;
+  border: 1px solid var(--line);
+}
+button.universe-chip:hover,
+button.universe-chip:focus-visible {
+  background: var(--soft);
+}
+.universe-chip.off-map {
+  color: var(--muted);
+  border-style: dashed;
+}
+.universe-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 9px 14px;
+  border-radius: 100px;
+  background: var(--soft);
+  font-size: 12px;
+  font-weight: 600;
+}
+.universe-switch:hover,
+.universe-switch:focus-visible {
+  background: color-mix(in srgb, var(--soft) 70%, var(--ink) 6%);
+}
+@media (max-width: 520px) {
+  .universe-sector-head,
+  .universe-sector {
+    grid-template-columns: 1fr 70px 70px;
+  }
+  .universe-tiles strong {
+    font-size: 17px;
+  }
+  .universe-moves dd {
+    font-size: 13px;
+  }
+}

@@ -11,4 +11,5 @@ export type Menu =
   | "directory"
   | "landmarks"
   | "history"
+  | "universes"
   | null;

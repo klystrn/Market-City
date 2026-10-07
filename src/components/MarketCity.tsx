@@ -42,6 +42,7 @@ import { validateSnapshot } from "@/services/snapshot";
 import Dialog from "./Dialog";
 import WatchlistPanel from "./WatchlistPanel";
 import ComparePanel from "./ComparePanel";
+import UniverseDiffPanel from "./UniverseDiffPanel";
 import CameraBookmarks from "./CameraBookmarks";
 import DistrictDirectory from "./DistrictDirectory";
 import LandmarkIndex from "./LandmarkIndex";
@@ -798,6 +799,15 @@ function MarketCityView({
           tickers={compareSet}
           snapshot={snapshot}
           onRemove={(t) => setCompareSet((prev) => prev.filter((x) => x !== t))}
+          onClose={() => setMenu(null)}
+        />
+      )}
+      {menu === "universes" && (
+        <UniverseDiffPanel
+          companies={source.companies}
+          universe={city.universe}
+          onSelect={onSelect}
+          onSwitchCity={setCityId}
           onClose={() => setMenu(null)}
         />
       )}

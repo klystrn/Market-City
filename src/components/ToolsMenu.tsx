@@ -7,6 +7,7 @@ import {
   Camera,
   Compass,
   Landmark,
+  GitCompareArrows,
   MapPin,
   X,
 } from "lucide-react";
@@ -64,6 +65,12 @@ export default function ToolsMenu({
       label: "Landmark index",
       hint: "What each place means",
       icon: MapPin,
+    },
+    {
+      id: "universes",
+      label: "Universe diff",
+      hint: "S&P 500 vs Nasdaq-100",
+      icon: GitCompareArrows,
     },
     {
       id: "history",

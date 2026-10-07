@@ -2,7 +2,7 @@ import type { UniverseId } from "./cities/types";
 // Index membership for the seeded development universe.
 //
 // Provenance and limits:
-// - The seeded 100 companies are an S&P 500-style development subset. Every one
+// - The seeded companies are an S&P 500-style development subset. Every one
 //   of them is treated as an S&P 500 member here.
 // - `nasdaq100Members` lists the seeded companies that also belong to the
 //   Nasdaq-100, which admits only Nasdaq-listed companies and holds essentially
@@ -98,7 +98,7 @@ export const universeNames: Record<UniverseId, string> = {
 };
 export const universeNotes: Record<UniverseId, string> = {
   sp500:
-    "Seeded S&P 500-style development subset of 100 companies, not the full index.",
+    "Seeded S&P 500-style development subset, not the full index.",
   nasdaq100:
     "Seeded Nasdaq-100 members only. The rest of the index is not in this dataset.",
 };
