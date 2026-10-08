@@ -4,6 +4,7 @@ import { Html, OrbitControls } from "@react-three/drei";
 import {
   Component,
   memo,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -23,6 +24,9 @@ import CityTerrain from "./CityTerrain";
 import UrbanFabric from "./UrbanFabric";
 import CityLandmarks from "./CityLandmarks";
 import SunLight from "./SunLight";
+import StreetLife from "./StreetLife";
+import { FABRIC_COLORS } from "./palette-fabric";
+import { vehicleShape } from "@/domain/street-life";
 import BreadthRibbons from "./BreadthRibbons";
 import MassColumns from "./MassColumns";
 import { plotsFor } from "@/domain/cities/layout-key";
@@ -40,7 +44,7 @@ import PerfOverlay, {
   usePerfEnabled,
   type PerfSample,
 } from "./PerfOverlay";
-import { pct, weightedChange } from "@/domain/analytics";
+import { pct, weather, weightedChange } from "@/domain/analytics";
 
 import type { MapFeatures } from "@/domain/map-features";
 type Props = {
@@ -86,19 +90,22 @@ class SceneBoundary extends Component<
 }
 const box = new THREE.BoxGeometry(1, 1, 1);
 // Vehicles run on the active city's own carriageways, so each city's traffic
-// follows the streets it actually draws rather than another city's grid.
+// follows the streets it actually draws rather than another city's grid. The
+// mix of cars, vans, lorries and buses is decoration; where traffic gathers —
+// on the streets serving the busiest companies — is the layer's meaning.
 function Traffic({
   city,
   plots,
   companies,
-  enabled,
-  dark,
+  shown,
+  moving,
 }: {
   city: CityDefinition;
   plots: Plot[];
   companies: Company[];
-  enabled: boolean;
-  dark: boolean;
+  shown: boolean;
+  /** Animate; otherwise hold still where they are rather than vanish. */
+  moving: boolean;
 }) {
   const ref = useRef<THREE.InstancedMesh>(null);
   const cabins = useRef<THREE.InstancedMesh>(null);
@@ -147,49 +154,100 @@ function Traffic({
           },
         ),
       )
-      .slice(0, 240);
+      .slice(0, 240)
+      .map((v, i) => ({ ...v, shape: vehicleShape(i) }));
   }, [city, plots, companies]);
-  useFrame((_, delta) => {
-    if (!enabled || !ref.current) return;
-    elapsed.current += Math.min(delta, 0.1);
-    vehicles.forEach(({ run, offset, speed }, i) => {
-      const t = ((elapsed.current * speed + offset) % run.length) / run.length;
-      const along = i % 2 === 0 ? t : 1 - t;
-      // Half a lane either side of the centre line, so the two directions pass.
-      const lane = i % 2 === 0 ? 0.42 : -0.42;
-      object.position.set(
-        run.a[0] + (run.b[0] - run.a[0]) * along - Math.sin(run.angle) * lane,
-        run.y,
-        run.a[1] + (run.b[1] - run.a[1]) * along + Math.cos(run.angle) * lane,
-      );
-      object.rotation.set(0, -run.angle, 0);
-      object.scale.set(0.85, 0.28, 0.4);
-      object.updateMatrix();
-      ref.current!.setMatrixAt(i, object.matrix);
-      object.position.y = run.y + 0.2;
-      object.scale.set(0.44, 0.18, 0.34);
-      object.updateMatrix();
-      cabins.current?.setMatrixAt(i, object.matrix);
+  // Liveries are fixed per vehicle, so they are written once.
+  useEffect(() => {
+    const tint = new THREE.Color();
+    vehicles.forEach(({ shape }, i) => {
+      const body =
+        shape.kind === "bus"
+          ? FABRIC_COLORS.buses[i % FABRIC_COLORS.buses.length]
+          : shape.kind === "truck"
+            ? FABRIC_COLORS.trucks[i % FABRIC_COLORS.trucks.length]
+            : FABRIC_COLORS.cars[i % FABRIC_COLORS.cars.length];
+      ref.current?.setColorAt(i, tint.set(body));
+      cabins.current?.setColorAt(i, tint.set("#3d4d5a"));
     });
-    ref.current.instanceMatrix.needsUpdate = true;
-    if (cabins.current) cabins.current.instanceMatrix.needsUpdate = true;
+    for (const mesh of [ref, cabins])
+      if (mesh.current?.instanceColor)
+        mesh.current.instanceColor.needsUpdate = true;
+    invalidate();
+  }, [vehicles, shown, invalidate]);
+  const pose = useCallback(
+    (time: number) => {
+      if (!ref.current) return;
+      vehicles.forEach(({ run, offset, speed, shape }, i) => {
+        const t = ((time * speed + offset) % run.length) / run.length;
+        const forward = i % 2 === 0 ? 1 : -1;
+        const along = forward > 0 ? t : 1 - t;
+        // Half a lane either side of the centre line, so the two directions pass.
+        const lane = forward > 0 ? 0.42 : -0.42;
+        const x =
+          run.a[0] + (run.b[0] - run.a[0]) * along - Math.sin(run.angle) * lane;
+        const z =
+          run.a[1] + (run.b[1] - run.a[1]) * along + Math.cos(run.angle) * lane;
+        const bottom = run.y - 0.14;
+        object.rotation.set(0, -run.angle, 0);
+        object.position.set(x, bottom + shape.height / 2, z);
+        object.scale.set(shape.length, shape.height, shape.width);
+        object.updateMatrix();
+        ref.current!.setMatrixAt(i, object.matrix);
+        // Glass: a cabin on a car or van, the cab of a lorry at its front end,
+        // and a band of windows along a bus.
+        const fx = Math.cos(run.angle) * forward,
+          fz = Math.sin(run.angle) * forward;
+        if (shape.kind === "bus") {
+          object.position.set(x, bottom + shape.height * 0.68, z);
+          object.scale.set(shape.length * 0.92, 0.13, shape.width * 1.04);
+        } else if (shape.kind === "truck") {
+          const ahead = shape.length / 2 - (shape.length * shape.cabin) / 2;
+          object.position.set(
+            x + fx * ahead,
+            bottom + shape.height + 0.08,
+            z + fz * ahead,
+          );
+          object.scale.set(shape.length * shape.cabin, 0.16, shape.width * 0.9);
+        } else {
+          object.position.set(x, bottom + shape.height + 0.09, z);
+          object.scale.set(shape.length * shape.cabin, 0.18, shape.width * 0.85);
+        }
+        object.updateMatrix();
+        cabins.current?.setMatrixAt(i, object.matrix);
+      });
+      ref.current.instanceMatrix.needsUpdate = true;
+      if (cabins.current) cabins.current.instanceMatrix.needsUpdate = true;
+    },
+    [vehicles, object],
+  );
+  // Placed once on mount, so stopped traffic is still traffic.
+  useEffect(() => {
+    if (!shown) return;
+    pose(elapsed.current);
+    invalidate();
+  }, [shown, pose, invalidate]);
+  useFrame((_, delta) => {
+    if (!shown || !moving) return;
+    elapsed.current += Math.min(delta, 0.1);
+    pose(elapsed.current);
     invalidate();
   });
-  return enabled ? (
+  return shown ? (
     <>
       <instancedMesh
         ref={ref}
         args={[box, undefined, vehicles.length]}
         frustumCulled={false}
       >
-        <meshBasicMaterial color={dark ? "#efcf83" : "#f9f2cd"} />
+        <meshStandardMaterial roughness={0.55} />
       </instancedMesh>
       <instancedMesh
         ref={cabins}
         args={[box, undefined, vehicles.length]}
         frustumCulled={false}
       >
-        <meshBasicMaterial color={dark ? "#9cafb0" : "#c0d7d6"} />
+        <meshStandardMaterial roughness={0.3} metalness={0.2} />
       </instancedMesh>
     </>
   ) : null;
@@ -752,15 +810,18 @@ function CityScene(props: Props) {
             companies={plots.map((p) =>
               props.snapshot.companies.find((c) => c.ticker === p.ticker)!,
             )}
-            enabled={
-              props.traffic &&
-              !props.reduced &&
-              visible &&
-              active &&
-              effectiveTier < 2
-            }
-            dark={props.dark}
+            shown={props.traffic && effectiveTier < 2}
+            moving={!props.reduced && visible && active}
           />
+          {props.mapFeatures.life && effectiveTier < 2 && (
+            <StreetLife
+              city={props.city}
+              plots={plots}
+              sky={weather(props.snapshot)}
+              moving={!props.reduced && visible && active}
+              night={night}
+            />
+          )}
           {props.mapFeatures.connections && (
             <SupplyChainLines
               plots={plots}

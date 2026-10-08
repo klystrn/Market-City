@@ -18,4 +18,12 @@ export const FABRIC_COLORS = {
   roofs: ["#b78a46", "#8c6f9e", "#4f7f96", "#9c6478", "#5d7f8c", "#a8713f"],
   cars: ["#edeef0", "#7f93a8", "#d9b04a", "#4f6f8f", "#8e6fb0", "#55707a"],
   awnings: ["#dfa23f", "#4f9aa8", "#4f85b5", "#d9a441", "#a46fae"],
+  // Pedestrians: muted everyday clothing, never the encoding's green or red.
+  clothes: ["#3f5368", "#7a6a8f", "#c9a25a", "#5e7d8c", "#efd9a8", "#4a4a55", "#a7825e"],
+  // Hulls: the ferry first (a harbour-ferry white), then working boats.
+  hulls: ["#f2f0ea", "#35506b", "#c99a3f", "#5c6b78"],
+  // Buses and lorries get livery colours a car would not, so a bus reads as
+  // a bus from overview distance.
+  buses: ["#e2b23d", "#3f6fa8"],
+  trucks: ["#f1e6c6", "#6d7f8f", "#b88a4a"],
 } as const;

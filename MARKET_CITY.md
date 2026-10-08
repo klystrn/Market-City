@@ -3343,6 +3343,43 @@ furniture and a sim-style status strip. This section covers the first.
 
 ---
 
+## 75.22 Street life (owner follow-up)
+
+People on the pavements, a mix of traffic, boats on the water and the shade of
+passing clouds, under *Layers & view → Street life*. `src/domain/street-life.ts`
+holds the placement, pure and deterministic; `StreetLife.tsx` draws and
+animates it.
+
+- **It encodes nothing new.** Vehicles still gather on the streets serving the
+  busiest companies, which was already the traffic layer's meaning; the mix of
+  cars, vans, lorries and buses on top of that is decoration. People and boats
+  are spread evenly, so a crowded pavement never reads as a signal.
+- **Clouds follow the weather the header already states.** Five clouds on a
+  clear day, ten in haze, eighteen when overcast — so the sky never
+  contradicts the words beside it. They are drawn only into the shadow map: an
+  overhead camera would otherwise look through them at the buildings they hide,
+  and as shade alone they pass over without hiding anything.
+- **Still is not empty.** Traffic used to disappear thirty seconds after the
+  last input and under reduced motion. Now everything holds where it is
+  instead, so the city does not empty out the moment the reader stops to look.
+- **People are drawn larger than true scale**, as city-builders draw them. At
+  true scale a person is a pixel and the pavements read as deserted.
+- **Water means different things per city.** New York's sea is everything off
+  the land, London has only the Thames polygon, Tokyo's bay is a drawn outline.
+  At sea, a route must pass within reach of the shore, which puts boats in the
+  rivers and harbours where they are seen rather than in open water.
+- **A test caught a seam in the Thames.** A route sampled every 1.5 units passed
+  a single point outside the river polygon, where its banks are joined. Routes
+  are now sampled every half unit, and `tests/street-life.test.ts` checks every
+  boat stays afloat, pavements stay off the carriageway, people are spread over
+  the whole city, and cloud cover rises with the weather.
+- New colours — clothing, hulls, bus and lorry liveries — joined
+  `FABRIC_COLORS`, so the palette test holds them to the same distance from the
+  encoding as everything else. It rejected a cream coat and a grey lorry for
+  sitting too near the flat-change grey.
+
+---
+
 # 76. Idea Backlog
 
 Proposals only. Nothing here is approved scope until the owner selects it. Items
