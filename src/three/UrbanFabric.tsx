@@ -18,8 +18,14 @@ import { FABRIC_COLORS } from "./palette-fabric";
 // declining red, which is to say it was that red. Every colour here is checked
 // by tests/palette.test.ts against src/domain/palette.ts, and a new one that
 // strays into the encoding fails the build.
-const { walls: WALLS, roofs: ROOFS, cars: CARS, awnings: AWNINGS } =
-  FABRIC_COLORS;
+const {
+  walls: WALLS,
+  roofs: ROOFS,
+  cars: CARS,
+  awnings: AWNINGS,
+  fixtures: FIXTURES,
+} = FABRIC_COLORS;
+const [PLANT, TIMBER, SOLAR, FRAME, SLATS, DARK, GLASS] = FIXTURES;
 const GROUND = 1.04;
 /** Stable pseudo-randomness for choices made at render time rather than in the
  * generator — which windows are lit, which bays hold a car. Same hash as the
@@ -28,12 +34,44 @@ function noise2(seed: number): number {
   const x = Math.sin(seed * 12.9898) * 43758.5453;
   return x - Math.floor(x);
 }
+/**
+ * The street a point stands beside: its direction, and which way is away from
+ * the carriageway. Shelters and benches face the street they serve, which on
+ * London's radials and Tokyo's bends is rarely an axis.
+ */
+function besideStreet(
+  [x, z]: [number, number],
+  segments: [number, number, number, number][],
+) {
+  let best = Infinity,
+    angle = 0,
+    nx = 1,
+    nz = 0;
+  for (const [ax, az, bx, bz] of segments) {
+    const dx = bx - ax,
+      dz = bz - az;
+    const len2 = dx * dx + dz * dz || 1;
+    const t = Math.max(0, Math.min(1, ((x - ax) * dx + (z - az) * dz) / len2));
+    const px = ax + dx * t,
+      pz = az + dz * t;
+    const d = Math.hypot(x - px, z - pz);
+    if (d < best) {
+      best = d;
+      // Boxes turn about Y so that local Z runs along (sin r, cos r).
+      angle = Math.atan2(dx, dz);
+      nx = d ? (x - px) / d : 1;
+      nz = d ? (z - pz) / d : 0;
+    }
+  }
+  return { angle, nx, nz };
+}
 function blockParts(
   b: FabricBlock,
   walls: Part[],
   roofs: Part[],
   windows: Part[],
   trims: Part[],
+  posts: Part[],
 ) {
   const base = GROUND + 0.04;
   // The block's own axes in world space. Local X points at the street, local Z
@@ -85,13 +123,60 @@ function blockParts(
       rotation: b.rotation,
       color: ROOFS[(b.seed + 2) % ROOFS.length],
     });
-    if (b.height > 4.5)
-      trims.push({
-        position: [b.x, base + b.height + 0.45, b.z],
-        scale: [b.depth * 0.4, 0.5, b.width * 0.4],
-        rotation: b.rotation,
-        color: "#9aa0a0",
+    // What a flat roof carries varies the way it does on a real skyline: a
+    // timber water tank on its legs, a pair of plant units, or a row of
+    // solar panels. Fixed per building, so the roofscape does not reshuffle.
+    const top = base + b.height + 0.2;
+    const pick = noise2(b.seed * 3 + 17);
+    if (b.height > 4.5 && pick < 0.3) {
+      const [tx, tz] = front(-b.depth * 0.18);
+      for (const [lx, lz] of [
+        [-0.32, -0.32],
+        [0.32, -0.32],
+        [-0.32, 0.32],
+        [0.32, 0.32],
+      ])
+        trims.push({
+          position: [tx + lx, top + 0.3, tz + lz],
+          scale: [0.08, 0.6, 0.08],
+          color: DARK,
+        });
+      posts.push({
+        position: [tx, top + 1.15, tz],
+        scale: [1.0, 1.1, 1.0],
+        color: TIMBER,
       });
+      trims.push({
+        position: [tx, top + 1.78, tz],
+        scale: [0.7, 0.16, 0.7],
+        rotation: Math.PI / 4,
+        color: TIMBER,
+      });
+    } else if (pick < 0.65) {
+      for (const along of [-0.22, 0.2]) {
+        const [ux, uz] = [
+          b.x + Math.sin(b.rotation) * b.width * along,
+          b.z + Math.cos(b.rotation) * b.width * along,
+        ];
+        trims.push({
+          position: [ux, top + 0.25, uz],
+          scale: [b.depth * 0.3, 0.5, b.width * 0.22],
+          rotation: b.rotation,
+          color: PLANT,
+        });
+      }
+    } else if (pick < 0.85) {
+      const rows = Math.max(1, Math.floor(b.depth / 1.4));
+      for (let r = 0; r < rows; r++) {
+        const [px, pz] = front((r - (rows - 1) / 2) * 1.2);
+        trims.push({
+          position: [px, top + 0.12, pz],
+          scale: [0.85, 0.08, b.width * 0.7],
+          rotation: b.rotation,
+          color: SOLAR,
+        });
+      }
+    }
   }
   // Ground-floor retail: a glazed band across the street frontage, with an
   // awning over it. This is what separates a shopping street from a
@@ -166,6 +251,27 @@ export default function UrbanFabric({
       }),
     [city, plots],
   );
+  // Every street segment, flattened once for the furniture that faces them.
+  const segments = useMemo(
+    () =>
+      city
+        .roads(plots)
+        .filter((r) => !r.bridge)
+        .flatMap((r) =>
+          r.points
+            .slice(1)
+            .map(
+              (b, i) =>
+                [r.points[i][0], r.points[i][1], b[0], b[1]] as [
+                  number,
+                  number,
+                  number,
+                  number,
+                ],
+            ),
+        ),
+    [city, plots],
+  );
   const parts = useMemo(() => {
     const walls: Part[] = [],
       roofs: Part[] = [],
@@ -180,17 +286,35 @@ export default function UrbanFabric({
       ground: Part[] = [],
       furnishings: Part[] = [],
       litWindows: Part[] = [],
-      litLamps: Part[] = [];
+      litLamps: Part[] = [],
+      posts: Part[] = [];
     // Thinning keeps every nth item rather than truncating the list, so a
     // struggling device still gets a city spread over its whole area instead of
     // a dense corner and an empty remainder.
     const keep = (i: number) => detail >= 1 || i % Math.round(1 / detail) === 0;
     fabric.blocks.forEach((b, i) => {
-      if (keep(i)) blockParts(b, walls, roofs, windows, trims);
+      if (keep(i)) blockParts(b, walls, roofs, windows, trims, posts);
     });
     const leaf = seasonPalette[season].leaf;
     fabric.furniture.trees.forEach(([x, z], i) => {
       if (!keep(i)) return;
+      // A bench and a bin beside every third street tree.
+      if (i % 3 === 1) {
+        const { angle } = besideStreet([x, z], segments);
+        const bx = x + Math.sin(angle) * 1.1,
+          bz = z + Math.cos(angle) * 1.1;
+        furnishings.push({
+          position: [bx, GROUND + 0.24, bz],
+          scale: [0.36, 0.12, 1.0],
+          rotation: angle,
+          color: SLATS,
+        });
+        posts.push({
+          position: [bx + Math.sin(angle) * 0.8, GROUND + 0.22, bz + Math.cos(angle) * 0.8],
+          scale: [0.24, 0.44, 0.24],
+          color: DARK,
+        });
+      }
       // Kept deliberately smaller than a house. A street tree the size of the
       // building behind it stops reading as a tree and starts reading as a
       // lollipop dropped on the map.
@@ -209,6 +333,30 @@ export default function UrbanFabric({
         position: [x, GROUND + 2.8, z],
         scale: [0.5, 0.16, 0.22],
         color: dark ? "#ffe9b0" : "#dfd8c4",
+      });
+      // Every seventh lamp stands by a bus shelter: a roof, a glazed back
+      // facing away from the kerb, and a bench under it.
+      if (i % 7 !== 3) return;
+      const { angle, nx, nz } = besideStreet([x, z], segments);
+      const sx = x + Math.sin(angle) * 1.3,
+        sz = z + Math.cos(angle) * 1.3;
+      furnishings.push({
+        position: [sx, GROUND + 1.25, sz],
+        scale: [0.9, 0.08, 1.7],
+        rotation: angle,
+        color: FRAME,
+      });
+      furnishings.push({
+        position: [sx + nx * 0.4, GROUND + 0.65, sz + nz * 0.4],
+        scale: [0.06, 1.15, 1.6],
+        rotation: angle,
+        color: GLASS,
+      });
+      furnishings.push({
+        position: [sx + nx * 0.18, GROUND + 0.28, sz + nz * 0.18],
+        scale: [0.32, 0.1, 1.3],
+        rotation: angle,
+        color: SLATS,
       });
     });
     fabric.furniture.cars.forEach(({ at: [x, z], rotation, seed }, i) => {
@@ -306,6 +454,29 @@ export default function UrbanFabric({
     // Zebra stripes, drawn just above the asphalt.
     fabric.furniture.crossings.forEach(({ at: [x, z], rotation, width }, i) => {
       if (!keep(i)) return;
+      // A signal post at one end of each crossing, alternating sides. Its
+      // lamp is amber only: green and red are the daily-move encoding, and a
+      // street full of them would read as market data.
+      const reach = (width / 2 + 0.7) * (i % 2 ? 1 : -1);
+      const px = x + Math.cos(rotation) * reach,
+        pz = z - Math.sin(rotation) * reach;
+      posts.push({
+        position: [px, GROUND + 1.2, pz],
+        scale: [0.11, 2.4, 0.11],
+        color: DARK,
+      });
+      furnishings.push({
+        position: [px, GROUND + 2.35, pz],
+        scale: [0.22, 0.6, 0.22],
+        rotation,
+        color: DARK,
+      });
+      furnishings.push({
+        position: [px, GROUND + 2.35, pz],
+        scale: [0.24, 0.14, 0.24],
+        rotation,
+        color: AWNINGS[0],
+      });
       const stripes = Math.max(3, Math.round(width / 0.65));
       for (let s = 0; s < stripes; s++) {
         const offset = (s - (stripes - 1) / 2) * 0.62;
@@ -348,12 +519,12 @@ export default function UrbanFabric({
         ...cars,
         ...lampHeads,
       ],
-      posts: [...trunks, ...lamps],
+      posts: [...trunks, ...lamps, ...posts],
       crowns,
       litWindows,
       litLamps,
     };
-  }, [fabric, season, dark, night, detail]);
+  }, [fabric, segments, season, dark, night, detail]);
   // One batch per geometry-and-material combination rather than one per kind of
   // thing. Colour travels per instance, so ground, crossings, walls, roofs,
   // trims, windows, cars and street furniture are all the same cube with the

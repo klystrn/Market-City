@@ -3380,6 +3380,30 @@ animates it.
 
 ---
 
+## 75.23 Street furniture (owner follow-up)
+
+The fabric already placed street trees, lamps, parked cars and zebra
+crossings. This pass adds what makes a street look used, all in
+`UrbanFabric.tsx` and all derived from data the generator already produces, so
+no fixture had to be re-baked and the city layout is untouched.
+
+- **Rooftops vary.** A flat roof carries a timber water tank on legs, a pair of
+  plant units, a row of solar panels, or nothing, fixed per building so the
+  roofscape never reshuffles.
+- **Crossings get a signal post, lit amber only.** Green and red are the
+  daily-move encoding; a street of traffic lights in those colours would read
+  as market data.
+- **Bus shelters stand at every seventh lamp; a bench and bin beside every
+  third street tree.** Both face the street they serve, found from the nearest
+  carriageway segment, since on London's radials and Tokyo's bends that is
+  rarely an axis.
+- **The palette test caught two untested greys.** The rooftop unit colour that
+  had shipped since §75.13 sat 8.8 from the flat-change grey, as did the first
+  shelter frame. All fixture colours now live in `FABRIC_COLORS.fixtures`, so
+  the test covers them.
+
+---
+
 # 76. Idea Backlog
 
 Proposals only. Nothing here is approved scope until the owner selects it. Items

@@ -25,5 +25,8 @@ export const FABRIC_COLORS = {
   // Buses and lorries get livery colours a car would not, so a bus reads as
   // a bus from overview distance.
   buses: ["#e2b23d", "#3f6fa8"],
+  // Street and rooftop fixtures: plant, water-tank timber, solar glass,
+  // shelter frames, bench slats and the dark of a signal head or a bin.
+  fixtures: ["#a6bed0", "#8a6a4a", "#2f4560", "#e3ebf2", "#9a7a5c", "#2d3438", "#a9c4cf"],
   trucks: ["#f1e6c6", "#6d7f8f", "#b88a4a"],
 } as const;
