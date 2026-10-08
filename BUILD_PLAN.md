@@ -376,3 +376,13 @@ the detail; what to carry forward:
    unlit: buildings were turned ninety degrees out, so their windows and
    shopfronts sat on the side walls. The rotation convention is now documented
    on the type rather than re-derived at each call site.
+
+### Landmarks, universes and the lived-in city (owner follow-up)
+§75.19–75.24 of `MARKET_CITY.md` have the detail.
+
+- [x] Landmarks baked into one mesh per finish: New York's landmark draw calls 97 → 8, frame 222 → 139, pixel-identical.
+- [x] Universe diff in Tools: which companies each index holds, and an exact decomposition of the gap between the two headlines.
+- [x] Sun and shadows following the simulated clock, placed relative to each city's camera; translucent overlays never cast.
+- [x] Street life: pedestrians, boats, mixed traffic and cloud shade that follows the stated weather. Still, never empty.
+- [x] Street furniture: rooftop tanks, plant and solar; amber-only signals; bus shelters, benches and bins facing their street.
+- [x] City status strip in the footer, restating existing figures in city-game terms.

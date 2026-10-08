@@ -43,6 +43,7 @@ import Dialog from "./Dialog";
 import WatchlistPanel from "./WatchlistPanel";
 import ComparePanel from "./ComparePanel";
 import UniverseDiffPanel from "./UniverseDiffPanel";
+import CityStatus from "./CityStatus";
 import CameraBookmarks from "./CameraBookmarks";
 import DistrictDirectory from "./DistrictDirectory";
 import LandmarkIndex from "./LandmarkIndex";
@@ -890,11 +891,14 @@ function MarketCityView({
                 ? "STALE SNAPSHOT"
                 : "SHARED DATA SNAPSHOT"}
         </span>
-        <span>
-          {listMode
-            ? "Select a company to explore"
-            : "WASD / arrows to pan · Drag to orbit · Scroll to zoom"}
-        </span>
+        <CityStatus
+          snapshot={snapshot}
+          hint={
+            listMode
+              ? "Select a company to explore"
+              : "WASD / arrows to pan · Drag to orbit · Scroll to zoom"
+          }
+        />
         <span>
           {new Date(snapshot.generatedAt).toLocaleString("en-US", {
             month: "short",

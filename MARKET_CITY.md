@@ -3404,6 +3404,21 @@ no fixture had to be re-baked and the city layout is untouched.
 
 ---
 
+## 75.24 City status strip (owner follow-up)
+
+The footer's centre now reads like a city game's status bar: companies housed,
+total value, share rising, traffic, and the session with sun or moon. A small
+toggle swaps it back to the controls hint, remembered per browser. It hides on
+phones, as the hint did.
+
+Every figure restates one the app already computes — value is total market
+cap, rising is the breadth track's advancing share, traffic is the mean
+relative volume the traffic layer already uses — so the strip renames and
+never invents. `tests/city-stats.test.ts` pins each to its source. It lives in
+the existing footer rather than a new panel, so it adds no screen region.
+
+---
+
 # 76. Idea Backlog
 
 Proposals only. Nothing here is approved scope until the owner selects it. Items

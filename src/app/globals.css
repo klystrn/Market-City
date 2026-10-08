@@ -2704,3 +2704,44 @@ button.universe-chip:focus-visible {
     font-size: 13px;
   }
 }
+
+/* City status strip (footer) */
+.city-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.city-status-toggle {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: var(--muted);
+}
+.city-status-toggle:hover,
+.city-status-toggle:focus-visible {
+  background: var(--soft);
+  color: var(--ink);
+}
+.city-stats {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.city-stats > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.city-stats svg {
+  opacity: 0.75;
+}
+@media (max-width: 1100px) {
+  .city-stats > span:nth-child(4) {
+    display: none;
+  }
+}
