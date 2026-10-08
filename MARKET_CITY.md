@@ -3306,6 +3306,43 @@ why the two headlines differ.
 
 ---
 
+## 75.21 Sun and shadows (owner follow-up)
+
+The owner asked for more realism and a city-builder feel, keeping the current
+toy-model style, and selected four pieces: sun shadows, living streets, street
+furniture and a sim-style status strip. This section covers the first.
+
+- **The sun follows the simulated clock, never the market.** `src/domain/sun.ts`
+  is a stylised arc rather than an ephemeris — none of the cities is
+  georeferenced, so there is no true north to measure against. It keeps what a
+  reader notices: low and long-shadowed near the open and the close, highest
+  mid-session, rising on one side and setting on the other, and warmer in
+  colour near the ends of the day. After the close the light is a dim blue moon
+  that casts nothing.
+- **The sun is placed relative to the opening camera.** The city's original
+  fixed light sat almost behind New York's camera, which hides every shadow
+  behind its own building. The first attempt reproduced that faithfully and
+  showed no shadows at all. At midday the sun now stands off to the side, so
+  shadows run across the streets in view; `tests/sun.test.ts` asserts that for
+  every city's opening camera.
+- **Overlays never cast.** Opaque meshes cast and receive; anything translucent
+  (halos, mass columns, trails) does neither, because those measure something
+  and a shadow would make them look like objects. This is decided in one place,
+  `SunLight.tsx`, rather than on every mesh.
+- **Tokyo looked unshadowed and was not.** A tall test pillar threw a long,
+  crisp shadow across it. Tokyo's blocks are low and dense, so near a high noon
+  their shadows land on the neighbouring buildings. Capping the sun at 48°
+  rather than 58° lengthens them by about half.
+- **Cost, and why the overlay understates it.** three.js renders the shadow map
+  before it resets its counters, so `?perf=1` does not count the shadow pass,
+  which re-draws every caster — about 124 meshes on New York. Shadows are the
+  first thing the adaptive monitor gives up (tier 2), use a 2048 map at tier 1,
+  and can be turned off under *Layers & view → Sun shadows*.
+- To keep shadows legible, ambient and sky light dropped from 0.85 to 0.7 and
+  the sun rose from 2.1 to 2.6. Lit faces read as before.
+
+---
+
 # 76. Idea Backlog
 
 Proposals only. Nothing here is approved scope until the owner selects it. Items

@@ -16,6 +16,8 @@ import {
   CircleDashed,
   Ratio,
   BarChart3,
+  SunMedium,
+  Footprints,
 } from "lucide-react";
 import type { MapFeatures } from "@/domain/map-features";
 const options = [
@@ -24,6 +26,8 @@ const options = [
   ["transit", "Transit", TrainFront],
   ["greenery", "Trees", Sprout],
   ["context", "City blocks", Building2],
+  ["shadows", "Sun shadows", SunMedium],
+  ["life", "Street life", Footprints],
   ["mountains", "Mount Fuji", Mountain],
   ["labels", "Company & sector labels", Tag],
   ["signs", "Road signs", Signpost],

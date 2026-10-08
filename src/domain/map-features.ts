@@ -15,6 +15,8 @@ export interface MapFeatures {
   halos: boolean;
   breadthRibbons: boolean;
   massColumns: boolean;
+  shadows: boolean;
+  life: boolean;
 }
 export const defaultMapFeatures: MapFeatures = {
   greenery: true,
@@ -33,4 +35,6 @@ export const defaultMapFeatures: MapFeatures = {
   halos: false,
   breadthRibbons: false,
   massColumns: false,
+  shadows: true,
+  life: true,
 };

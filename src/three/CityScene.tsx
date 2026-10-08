@@ -22,6 +22,7 @@ import Terrain from "./Terrain";
 import CityTerrain from "./CityTerrain";
 import UrbanFabric from "./UrbanFabric";
 import CityLandmarks from "./CityLandmarks";
+import SunLight from "./SunLight";
 import BreadthRibbons from "./BreadthRibbons";
 import MassColumns from "./MassColumns";
 import { plotsFor } from "@/domain/cities/layout-key";
@@ -558,6 +559,7 @@ function CityScene(props: Props) {
           far: 1800,
         }}
         dpr={dpr}
+        shadows
         frameloop={visible ? "demand" : "never"}
         gl={{
           antialias: true,
@@ -571,18 +573,23 @@ function CityScene(props: Props) {
             with the sun low — which is what makes the lit windows and street
             lamps register as lights instead of bright paint. Kept well above
             true darkness so a company's green or red is still legible. */}
-        <ambientLight intensity={night ? 0.26 : props.dark ? 0.95 : 0.85} />
+        <ambientLight intensity={night ? 0.26 : props.dark ? 0.8 : 0.7} />
         <hemisphereLight
           args={[
             night ? "#35456e" : "#ffffff",
             night ? "#161c29" : props.dark ? "#424d48" : "#a2b6a0",
-            night ? 0.4 : 0.85,
+            night ? 0.4 : 0.7,
           ]}
         />
-        <directionalLight
-          position={night ? [-70, 26, 20] : [-35, 65, 35]}
-          intensity={night ? 0.34 : 2.1}
-          color={night ? "#6f86b8" : "#fff1d6"}
+        <SunLight
+          minute={sessionMinute}
+          night={night}
+          plots={plots}
+          cameraOffset={props.city.camera.offset}
+          // The first thing a struggling device gives up: a second pass over
+          // every caster costs as much as the city itself.
+          shadows={props.mapFeatures.shadows && effectiveTier < 2}
+          mapSize={effectiveTier === 0 ? 4096 : 2048}
         />
         <fog
           attach="fog"

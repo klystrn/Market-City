@@ -2435,6 +2435,12 @@ button.landmark-role:focus-visible {
 .feature-halos {
   color: #b5652f;
 }
+.feature-shadows {
+  color: #b7862e;
+}
+.feature-life {
+  color: #5d6f8c;
+}
 @media (max-width: 700px) {
   .compare-panel {
     width: min(620px, 94vw);
